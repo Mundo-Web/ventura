@@ -234,7 +234,11 @@ class ProductsController extends Controller
     $subcategories = SubCategory::all();
     $galery = [];
     $especificacion = [json_decode('{"tittle":"", "specifications":""}', false)];
-    return view('pages.products.save', compact('product', 'atributos', 'valorAtributo', 'categoria', 'tags', 'especificacion', 'subcategories', 'galery'));
+    $distritos  = DB::select('select * from districts where active = ? order by 3', [1]);
+    $provincias = DB::select('select * from provinces where active = ? order by 3', [1]);
+    $departamentos = DB::select('select * from departments where active = ? order by 2', [1]);
+
+    return view('pages.products.save', compact('product', 'atributos', 'valorAtributo', 'categoria', 'tags', 'especificacion', 'subcategories', 'galery', 'distritos', 'provincias', 'departamentos'));
   }
 
   public function edit(string $id)
@@ -251,7 +255,11 @@ class ProductsController extends Controller
     $valoresdeatributo = AttributeProductValues::where("product_id", "=", $id)->get();
     $galery = Galerie::where("product_id", "=", $id)->get();
 
-    return view('pages.products.save', compact('product', 'atributos', 'valorAtributo', 'tags', 'categoria', 'especificacion', 'subcategories', 'galery', 'valoresdeatributo'));
+    $departamentos = DB::select('select * from departments where active = ? order by 2', [1]);
+    $provincias = DB::select('select * from provinces where active = ? order by 3', [1]);
+    $distritos  = DB::select('select * from districts where active = ? order by 3', [1]);
+
+    return view('pages.products.save', compact('product', 'atributos', 'valorAtributo', 'tags', 'categoria', 'especificacion', 'subcategories', 'galery', 'valoresdeatributo', 'departamentos', 'provincias', 'distritos'));
   }
 
   private function saveImg(Request $request, string $field)
@@ -316,6 +324,11 @@ class ProductsController extends Controller
 
       // Imagenes
       $data['descuento'] = $data['descuento'] ?? 0;
+      $data['preciolimpieza'] = $data['preciolimpieza'] ?? 0;
+      $data['precioservicio'] = $data['precioservicio'] ?? 0;
+
+     
+
       if ($request->hasFile('imagen')) {
         $data['imagen'] = $this->saveImg($request, 'imagen');
       }
@@ -325,10 +338,19 @@ class ProductsController extends Controller
       if ($request->hasFile('image_texture')) {
         $data['image_texture'] = $this->saveImg($request, 'image_texture');
       }
+      if ($request->hasFile('imagen_2')) {
+        $data['imagen_2'] = $this->saveImg($request, 'imagen_2');
+      }
+      if ($request->hasFile('imagen_3')) {
+        $data['imagen_3'] = $this->saveImg($request, 'imagen_3');
+      }
+      if ($request->hasFile('imagen_4')) {
+        $data['imagen_4'] = $this->saveImg($request, 'imagen_4');
+      }
       // $data['imagen_2'] = $this->saveImg($request, 'imagen_2');
       // $data['imagen_3'] = $this->saveImg($request, 'imagen_3');
       // $data['imagen_4'] = $this->saveImg($request, 'imagen_4');
-
+        
       foreach ($data as $key => $value) {
         if (strstr($key, '-')) {
           //strpos primera ocurrencia que enuentre
@@ -349,6 +371,19 @@ class ProductsController extends Controller
         if (strtolower($data['recomendar']) == 'on') $data['recomendar'] = 1;
       }
 
+      
+      if (array_key_exists('mascota', $data)) {
+        if (strtolower($data['mascota']) == 'on') $data['mascota'] = 1;
+      }else{
+        $data['mascota'] = 0;
+      }
+
+      if (array_key_exists('mobiliado', $data)) {
+        if (strtolower($data['mobiliado']) == 'on') $data['mobiliado'] = 1;
+      }else{
+        $data['mobiliado'] = 0;
+      }
+    
       $cleanedData = Arr::where($data, function ($value, $key) {
         return !is_null($value);
       });
@@ -356,6 +391,21 @@ class ProductsController extends Controller
       if (!isset($cleanedData['stock'])) {
          $cleanedData['stock'] = 0 ;
       }
+
+       $cleanedData['description'] = $data['description'];
+      // $cleanedData['order'] = $data['order'];
+       $cleanedData['extract'] = $data['extract'];
+      // $cleanedData['especificacion'] = $data['especificacion'];
+       $cleanedData['cuartos'] = $data['cuartos'];
+       $cleanedData['banios'] = $data['banios'];
+       $cleanedData['area'] = $data['area'];
+       $cleanedData['pisos'] = $data['pisos'];
+       $cleanedData['cochera'] = $data['cochera'];
+       $cleanedData['movilidad'] = $data['movilidad'];
+       $cleanedData['incluye'] = $data['incluye'];
+       $cleanedData['no_incluye'] = $data['no_incluye'];
+       $cleanedData['disponible'] = $data['disponible'];
+       $cleanedData['no_disponible'] = $data['no_disponible'];
 
       $slug = strtolower(str_replace(' ', '-', $request->producto . '-' . $request->color));
 
@@ -630,5 +680,17 @@ class ProductsController extends Controller
       $field => $status
     ]);
     return response()->json(['message' => 'registro actualizado']);
+  }
+
+  public function getProvincias($id)
+  {
+      $provincias = DB::table('provinces')->where('department_id', $id)->get();
+      return response()->json($provincias);
+  }
+
+  public function getDistritos($id)
+  {
+      $distritos = DB::table('districts')->where('province_id', $id)->get();
+      return response()->json($distritos);
   }
 }

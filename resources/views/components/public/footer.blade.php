@@ -1,4 +1,4 @@
-<footer class="font-Helvetica_Light bg-[#FFFFFF] mt-5">
+<footer class="bg-[#009A84]">
     <style>
         #modalPoliticasDev #modalTerminosCondiciones #modallinkPoliticasDatos {
             ;
@@ -22,93 +22,94 @@
         }
     </style>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:justify-center w-full px-[5%] py-8 lg:py-16 bg-cover object-cover"
-        style="background-image: url('{{ asset('images/img/fondofooter.png') }}');">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:justify-center w-full px-[5%] py-8 lg:py-16 ">
 
-        <div class="flex flex-col text-white text-base gap-1">
-            <h3 class="font-semibold text-lg tracking-wider text-white pb-3">Contacta con Nosotros</h3>
+        <div class="flex flex-col text-white text-base justify-start items-start gap-5">
+            <img class="h-20 object-contain" src="{{ asset('images/svg/venturalogo2.svg') }}" />
+            <p class="font-FixelText_Light text-sm">Somos una empresa dedicada a la gestión integral de propiedades de
+                lujo en Lima, ofreciendo una experiencia inigualable tanto para huéspedes como para propietarios.</p>
+            <div class="mt-3">
+                <a class="text-sm font-FixelText_Semibold tracking-wide bg-[#73F7AD] border-2 border-[#73F7AD] text-[#009A84] px-3 md:px-6 py-3.5 rounded-2xl">
+                    Solicitar una cita</a>
+            </div>
+        </div>
+
+        <div class="flex flex-col text-sm font-FixelText_Light text-white gap-2 pl-0 md:pl-[10%]">
+            <h3 class="text-xl text-white font-Homie_Bold pb-3">Enlaces</h3>
+            <a href="/">Inicio</a>
+            <a href="#">Nosotros</a>
+            <a href="#">Propiedades</a>
+            <a href="#">Contacto</a>
+        </div>
+
+        <div class="flex flex-col text-sm font-FixelText_Light text-white gap-2">
+            <h3 class="text-xl text-white font-Homie_Bold pb-3">Datos de contacto</h3>
             <p>{{ config('app.name') }}</p>
             <p>{{ $datosgenerales->address }}</p>
-            <p>{{ $datosgenerales->city }} - {{ $datosgenerales->country }}</p>
+            <p> {{ $datosgenerales->city }} - {{ $datosgenerales->country }}</p>
             <p>{{ $datosgenerales->cellphone }}</p>
             <p>{{ $datosgenerales->email }}</p>
         </div>
 
-        <div class="flex flex-col text-white text-base gap-1">
-            <h3 class="font-semibold text-lg tracking-wider text-white pb-3">Información</h3>
-            <a href="/">Inicio</a>
-            <a href="{{ route('Catalogo.jsx') }}">Autoradios</a>
-            <a href="#">Accesorios</a>
-        </div>
-
-        <div class="flex flex-col text-white text-base gap-1">
-            <h3 class="font-semibold text-lg tracking-wider text-white pb-3">Servicio al Cliente</h3>
+        <div class="flex flex-col text-sm font-FixelText_Light text-white gap-2">
+            <h3 class="text-xl text-white font-Homie_Bold pb-3">Aviso legal</h3>
             <a href="/contacto">Contacto</a>
             <a id="linkTerminos">Terminos y condiciones </a>
             <a id="linkPoliticas">Politicas de devolucion </a>
+            <a id="linkPoliticasDatos">Politica de Datos</a>
 
-            <a href="{{ route('librodereclamaciones') }}"><img class="w-24 mt-2"
+            <a href="{{ route('librodereclamaciones') }}"><img class="w-24"
                     src="{{ asset('images/img/reclamaciones.png') }}" /></a>
         </div>
 
-        <div class="flex flex-col text-white text-base gap-1">
-            <h3 class="font-semibold text-lg tracking-wider text-white pb-3">Siguenos en nuestras redes</h3>
-            <div class="flex flex-row gap-4 text-white pt-2">
-                @if ($datosgenerales->facebook)
-                    <a href="{{ $datosgenerales->facebook }}">
-                        <i class="fa-brands fa-facebook fa-2xl"></i>
-                    </a>
-                @endif
-                @if ($datosgenerales->instagram)
-                    <a href="{{ $datosgenerales->instagram }}">
-                        <i class="fa-brands fa-instagram fa-2xl"></i>
-                    </a>
-                @endif
-                @if ($datosgenerales->linkedin)
-                    <a href="{{ $datosgenerales->linkedin }}">
-                        <i class="fa-brands fa-linkedin fa-2xl"></i>
-                    </a>
-                @endif
-                @if ($datosgenerales->tiktok)
-                    <a href="{{ $datosgenerales->tiktok }}">
-                        <i class="fa-brands fa-tiktok fa-2xl"></i>
-                    </a>
-                @endif
-                @if ($datosgenerales->twitter)
-                    <a href="{{ $datosgenerales->twitter }}">
-                        <i class="fa-brands fa-twitter fa-2xl"></i>
-                    </a>
-                @endif
-                @if ($datosgenerales->youtube)
-                    <a href="{{ $datosgenerales->youtube }}">
-                        <i class="fa-brands fa-youtube fa-2xl"></i>
-                    </a>
-                @endif
-            </div>
-        </div>
-
     </div>
 
-    <div class="bg-[#F8F8F8] py-4 flex items-center justify-center">
-        <div class="flex flex-col lg:flex-row justify-between items-center gap-5 w-full px-[5%]">
-            <div class="text-center">
-                <p class="font-normal text-sm text-[#444444]">
-                    Copyright &copy; 2023 {{ config('app.name') }}. Reservados todos los derechos. Powered by <a
-                        href="https://www.mundoweb.pe" target="_blank" class="text-[#006BF6] border-b border-[#006BF6]">
-                        Mundo Web
-                    </a>
-                </p>
-            </div>
-            <div class="flex gap-2 items-center justify-center">
-                <img src="{{ asset('images/svg/visa.svg') }}" alt="visa" class="h-7 md:h-10" />
-                <img src="{{ asset('images/svg/american.svg') }}" alt="american" class="h-7 md:h-10" />
-                <img src="{{ asset('images/svg/mastercad.svg') }}" alt="mastercad" class="h-7 md:h-10" />
-                <img src="{{ asset('images/svg/stripe.svg') }}" alt="stripe" class="h-7 md:h-10" />
-                <img src="{{ asset('images/svg/paypal.svg') }}" alt="paypal" class="h-7 md:h-10" />
-                <img src="{{ asset('images/svg/pay.svg') }}" alt="pay" class="h-7 md:h-10" />
-            </div>
+    <div class="bg-[#009A84] py-5 flex items-center justify-center w-11/12 mx-auto border-t">
+        <div class="flex flex-col lg:flex-row justify-between items-center gap-5 w-full">
+          
+          <div class="text-center">
+            <p class="font-normal text-sm text-white">
+              Copyright &copy; 2023 {{ config('app.name') }}. Reservados todos los derechos. Powered by <a
+                href="https://www.mundoweb.pe" target="_blank" class="text-white border-b border-white"> Mundo Web
+              </a>
+            </p>
+          </div>
+    
+          <div class="flex flex-row gap-4 text-[#ccc]">
+            @if ($datosgenerales->facebook)
+              <a href="{{ $datosgenerales->facebook }}">
+                <img src="{{asset('images/svg/vt_facebook.svg')}}" />
+              </a>
+            @endif
+            @if ($datosgenerales->instagram)
+              <a href="{{ $datosgenerales->instagram }}">
+                <img src="{{asset('images/svg/vt_instagram.svg')}}" />
+              </a>
+            @endif
+            @if ($datosgenerales->linkedin)
+              <a href="{{ $datosgenerales->linkedin }}">
+                <img src="{{asset('images/svg/vt_linkedin.svg')}}" />
+              </a>
+            @endif
+            @if ($datosgenerales->tiktok)
+              <a href="{{ $datosgenerales->tiktok }}">
+                <img src="{{asset('images/svg/vt_tiktok.svg')}}" />
+              </a>
+            @endif
+            {{-- @if ($datosgenerales->twitter)
+              <a href="{{ $datosgenerales->twitter }}">
+                <img src="{{asset('images/svg/vt_facebook.svg')}}" />
+              </a>
+            @endif --}}
+            @if ($datosgenerales->whatsapp)
+              <a href="{{ $datosgenerales->whatsapp }}">
+                <img src="{{asset('images/svg/vt_wsp.svg')}}" />
+              </a>
+            @endif
+          </div>
+          
         </div>
-    </div>
+      </div>
 
     <div id="modalTerminosCondiciones" class="modal" style="max-width: 900px !important;width: 100% !important;  ">
         <!-- Modal body -->
@@ -117,7 +118,7 @@
             <p class="font-Inter_Regular  prose grid grid-cols-1">{!! $terminos->content ?? '' !!}</p>
         </div>
     </div>
-    
+
     <div id="modalPoliticasDev" class="modal" style="max-width: 900px !important; width: 100% !important;  ">
         <!-- Modal body -->
         <div class="p-4 ">
@@ -128,7 +129,7 @@
 
         </div>
     </div>
-    
+
     <div id="modallinkPoliticasDatos" class="modal" style="max-width: 900px !important; width: 100% !important;  ">
         <!-- Modal body -->
         <div class="p-4 ">
@@ -217,7 +218,7 @@
             });
 
 
-            if (!validarEmail($('#emailFooter').val())) {
+            if (!validarEmail($('#email').val())) {
                 return;
             };
             $.ajax({
@@ -241,7 +242,7 @@
 
                     if (isDuplicado) {
                         message =
-                            'El correo que ha ingresado ya existe. Utilice  otra direccion de correo'
+                            'El correo que ha ingresado ya existe. Utilice otra direccion de correo'
                     } else {
                         message = response.responseJSON.message
                     }
@@ -254,11 +255,5 @@
             });
 
         })
-
-
-
-
-
-
     })
 </script>

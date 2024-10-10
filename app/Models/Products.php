@@ -13,6 +13,8 @@ class Products extends Model
     'producto',
     'precio',
     'descuento',
+    'preciolimpieza',
+    'precioservicio',
     'stock',
     'imagen',
     'imagen_2',
@@ -35,7 +37,31 @@ class Products extends Model
     'slug',
     'sku',
     'max_stock', 
-    'precio_reseller'
+    'precio_reseller',
+    'cuartos',
+    'pisos',
+    'movilidad',
+    'banios',
+    'area',
+    'address',
+    'inside',
+    'district',
+    'city',
+    'country',
+    'frecuencia',
+    'cochera',
+    'mascota',
+    'mobiliado',
+    'incluye',
+    'no_incluye',
+    'disponible',
+    'no_disponible',
+    'departamento_id',
+    'provincia_id',
+    'distrito_id',
+
+
+
   ];
 
   public function categoria()
@@ -81,4 +107,6 @@ class Products extends Model
   {
     return $this->hasMany(Wishlist::class, 'product_id');
   }
+
+ 
 }

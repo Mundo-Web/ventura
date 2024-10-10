@@ -9,10 +9,12 @@
           <div class="p-3">
     
             <div class="p-6">
-    
-              {{-- <p class="font-bold">Telefono:</p>
+              <p class="font-bold">Nombre:</p>
+              <p> {{ $message->full_name }} </p>
+              <br>
+              <p class="font-bold">Telefono:</p>
               <p> {{ $message->phone }} </p>
-              <br> --}}
+              <br>
               <p class="font-bold">Correo:</p>
               <p> {{ $message->email }} </p>
               <br>

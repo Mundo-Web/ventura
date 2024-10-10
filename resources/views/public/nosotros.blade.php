@@ -29,137 +29,100 @@
 
 @section('content')
 
-  <main class="z-[15] ">
+  <main class="bg-[#FAFCFE]">
+      <section class="grid grid-cols-1 lg:grid-cols-2 text-left gap-8 xl:gap-16 items-center px-[5%] xl:px-[8%] py-8 lg:py-16">
+        <h2 class="text-4xl lg:text-5xl font-bold text-[#006258] px-0 lg:px-[3%] font-Homie_Bold">
+          Con Ventura, estás donde quieres estar
+        </h2>
+        <p class="text-lg text-[#000929] font-FixelText_Regular">
+          Con 6 años de experiencia gestionando inmuebles en las mejores zonas de Lima, hemos desarrollado un servicio que responde a la creciente demanda de Airbnbs en la ciudad.
+          <br />
+          Somos un equipo comprometido con crear experiencias de alquiler óptimas, garantizando rentabilidad para nuestros propietarios y máximo confort para nuestros huéspedes.
+        </p>
+      </section>
 
-    <section class="bg-[#f1f1f1] ">
-      {{-- <x-swipper-card :items="$slider" /> --}}
-    </section>
+      <section class="flex flex-row justify-center items-center px-[5%] lg:px-[8%]">
+        <img src="{{asset('images/img/vt_nosotros3.png')}}" class="rounded-xl lg:rounded-3xl h-full lg:h-[550px] w-full object-contain" />
+      </section>
 
+      <section class="flex flex-col md:flex-row gap-8 md:gap-16 px-[5%] xl:px-[8%] py-14 lg:py-20 text-center items-start" data-aos="fade-up" data-aos-offset="150">
+        <article class="flex flex-col flex-1 shrink justify-center basis-0 min-w-[240px]">
+            <header class="flex flex-col w-full font-bold text-teal-800">
+                <img loading="lazy" src="{{asset('images/img/flecha.png')}}" alt="Nuestra misión icon" class="object-contain self-center w-16 aspect-square">
+                <div class="flex flex-col mt-6 w-full">
+                    <h2 class="text-base font-FixelText_Bold">Nuestra misión</h2>
+                    <h3 class="text-3xl lg:text-4xl max-w-md mx-auto font-Homie_Bold text-[#002677]">Crear recuerdos inolvidables</h3>
+                </div>
+            </header>
+            <p class="mt-4 text-lg text-[#000929] font-FixelText_Regular">
+                Crear experiencias de alquiler óptimas, garantizando rentabilidad para nuestros propietarios y máximo confort para nuestros huéspedes.
+            </p>
+        </article>
+        <article class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
+            <header class="flex flex-col justify-center w-full font-bold text-teal-800">
+                <img loading="lazy" src="{{asset('images/img/lampara.png')}}" alt="Nuestra meta icon" class="object-contain self-center w-16 aspect-square">
+                <div class="flex flex-col mt-6 w-full">
+                    <h2 class="text-base font-FixelText_Bold">Nuestra meta</h2>
+                    <h3 class="text-3xl lg:text-4xl max-w-md mx-auto font-Homie_Bold text-[#002677]">Líderes en alquileres temporales</h3>
+                </div>
+            </header>
+            <p class="mt-4 text-lg text-[#000929] font-FixelText_Regular">
+                Ser la opción número uno en alquileres temporales en Lima, reconocidos por nuestro compromiso con la calidad y la satisfacción del cliente.
+            </p>
+        </article>
+      </section>
 
+      <section class="flex flex-col md:flex-row gap-10 lg:gap-20 items-center justify-center pl-[5%] xl:pl-[8%] ">
 
-    {{-- seccion Ultimos Productos  --}}
-
-    <section class="w-full px-[8%] py-10 lg:py-20 ">
-      <div class="flex flex-col md:flex-col  w-full gap-3" data-aos="zoom-out-left">
-        <h1 class="text-[22px] md:text-3xl font-semibold font-Inter_Medium  text-[#006BF6]">Sobre nosotros</h1>
-        <h1 class="text-[48px] md:text-3xl font-semibold font-Inter_Medium  text-[#333333] mt-3">{{ $nosotros[2]->titulo }}
-        </h1>
-
-
-      </div>
-      <div class="mt-6  text-justify grid grid-cols-1" id="Aboutus">
-        <div class="col-span-1 text-[18px]">{!! $nosotros[2]->descripcion !!}</div>
-        <div><img src="{{ asset($nosotros[2]->imagen) }}" alt=""></div>
-      </div>
-
-    </section>
-
-
-
-    {{-- seccion Productos populares  --}}
-
-    <section class=" bg-[#F8F8F8]">
-      <div class="w-full px-[5%] py-14 lg:py-20" data-aos="fade-down-left">
-        <div class="pl-10 flex flex-col md:flex-row justify-between w-full gap-3">
-          {{-- <h1 class="text-2xl md:text-3xl font-semibold font-Inter_Medium text-[#323232]">Misión</h1> --}}
-          {{-- <div class="flex  flex-col md:flex-row gap-2 md:gap-8">
-              <a href="/catalogo" class="flex items-center   font-Inter_Medium  hover:text-[#006BF6] ">Todos</a>
-              @foreach ($categoriasAll as $item)
-                <a href="/catalogo/{{ $item->id }}"
-                  class="flex items-center font-Inter_Medium  hover:text-[#006BF6]  transition ease-out duration-300 transform  ">{{ $item->name }}
-                </a>
-              @endforeach
-            </div> --}}
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2  gap-16 mt-14 w-full px-10 ">
-          <div><img src="{{ asset($nosotros[0]->imagen) }}" alt=""></div>
-          <div class="flex flex-col content-center text-center justify-center gap-16">
-            <div class="flex flex-col items-center justify-center">
-              <div class="rounded-full w-10 h-10 bg-[#006BF5] flex items-center justify-center mb-4">
-                <img src="images/idea.png" alt="">
+          <div class="w-full lg:w-3/5 flex flex-col gap-5 xl:max-w-xl mx-auto py-8 lg:py-16 pr-[5%] order-2 md:order-1">
+            <h2 class="text-4xl lg:text-5xl font-Homie_Bold text-[#006258]">
+              Conoce a Nuestro Equipo
+            </h2>
+            <p class="text-lg text-[#000929] font-FixelText_Regular">
+              Somos un equipo apasionado y comprometido con la excelencia. Cada miembro de nuestro equipo aporta su experiencia y dedicación para asegurar que cada estancia sea perfecta y cada propiedad alcance su máximo potencial.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-10 mt-5">
+              <div class="flex flex-col gap-2">
+                <h2 class="text-4xl lg:text-5xl font-FixelText_Bold text-[#002677]">
+                  90%
+                </h2>
+                <p class="text-sm text-[#009A84] font-FixelText_Medium">Tasa de Ocupación</p>
               </div>
-              <h1 class="text-2xl md:text-3xl font-semibold font-Inter_Medium text-[#323232]">Nuestra Misión</h1>
-              <div class="text-justify">{!! $nosotros[0]->descripcion !!}</div>
-            </div>
 
-
-            <div class="flex flex-col items-center justify-center">
-              <div class="rounded-full w-10 h-10 bg-[#006BF5] flex items-center justify-center"><img src="images/idea.png"
-                  alt="">
+              <div class="flex flex-col gap-2">
+                <h2 class="text-4xl lg:text-5xl font-FixelText_Bold text-[#002677]">
+                  95%
+                </h2>
+                <p class="text-sm text-[#009A84] font-FixelText_Medium">Clientes Satisfechos</p>
               </div>
-              <h1 class="text-2xl md:text-3xl font-semibold font-Inter_Medium text-[#323232]">Nuestra Visión</h1>
-              <div class=" text-justify">{!! $nosotros[3]->descripcion !!}</div>
+
+              <div class="flex flex-col gap-2">
+                <h2 class="text-4xl lg:text-5xl font-FixelText_Bold text-[#002677]">
+                  +20%
+                </h2>
+                <p class="text-sm text-[#009A84] font-FixelText_Medium">Crecimiento Anual</p>
+              </div>
             </div>
-
-
           </div>
 
-        </div>
-
-      </div>
-    </section>
-
-
-
-    <section class="w-full px-[5%] py-7 lg:py-14" data-aos="fade-up" data-aos-offset="150">
-      <div class="grid grid-cols-1 md:grid-cols-2 w-full">
-        <div class=" flex flex-col md:flex-col  w-full gap-3 px-10">
-          {{-- <h1 class="text-[22px] md:text-3xl font-semibold font-Inter_Medium  text-[#006BF6]">Nuestro sello de Garantia
-          </h1> --}}
-          <h1 class="text-[48px] md:text-3xl font-semibold font-Inter_Medium  text-[#006BF6] mb-3">
-
-            {{ $nosotros[1]->titulo }}
-          </h1>
-          <div class=" flex flex-col align-items-end  text-justify">{!! $nosotros[1]->descripcion !!}</div>
-
-        </div>
-
-        <div class="px-10"><img src="{{ asset($nosotros[1]->imagen) }}" alt="" class="object-cover"></div>
-
-
-      </div>
-
-
-    </section>
-
-
-    @if ($benefit->count() > 0)
-      <section class="py-10 lg:py-13 bg-[#F8F8F8] w-full px[5%]" data-aos="zoom-out-right">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 ">
-          @foreach ($benefit as $item)
-            <div class="flex flex-col items-center w-full gap-1 justify-center text-center px-[10%] xl:px-[18%]">
-              <img src="{{ asset($item->icono) }}" alt="">
-              <h4 class="text-xl font-bold font-Inter_Medium"> {{ $item->titulo }} </h4>
-              <div class="text-lg leading-8 text-[#444444] font-Inter_Medium">{!! $item->descripcionshort !!}</div>
+          <div class="bg-[#5BE3A4] w-[80%] sm:w-1/2 ml-auto lg:w-2/5 h-[480px] lg:min-h-svh relative order-1 md:order-2">
+            <div class="absolute inset-0 flex justify-center items-center -translate-x-10 lg:-translate-x-1/4">
+              <img class="h-[500px] lg:h-full py-[5%] lg:py-[10%] object-contain" src="{{asset('images/img/vt_nosotros2.png')}}" />  
             </div>
-          @endforeach
-        </div>
+          </div>
+
+          
       </section>
-    @endif
-
-
-
-
-
   </main>
-  {{-- modalOfertas --}}
-
-
-
-  <!-- Modal toggle -->
-
 
   <!-- Main modal -->
+  
   {{-- 
   <div id="modalofertas" class="modal">
-
     <!-- Modal body -->
     <div class="p-1 ">
       <x-swipper-card-ofertas :items="$popups" id="modalOfertas" />
     </div>
-
-
   </div> --}}
 
 

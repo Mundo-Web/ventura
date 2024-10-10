@@ -222,31 +222,111 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
   }, {});
 
   const categoryDetails = categories.find(category => category.id === Number(selected_category));
-
+  const imgcatalogo = 'images/img/portadacatalogo.png';
   console.log(categoryDetails);
 
   return (<>
    <div>
-      <section
-            class="flex relative flex-col justify-center items-center px-[5%] py-28 text-base font-medium min-h-[345px] text-neutral-900 max-md:py-24">
-            <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/1f15375dac970433a2abe3921fa2c31e35c32f7b26a37b841431aaba1861d380?placeholderIfAbsent=true&apiKey=72fae0f4c808496790606e16dad566da"
-                alt="" class="object-cover absolute inset-0 size-full opacity-15" />
-            <div class="flex relative flex-col max-w-full w-[499px]">
-                <h2 class="self-center text-[#FD1F4A] font-Helvetica_Medium">Catálogo</h2>
-                <h3 class="mt-3 text-5xl text-center max-md:max-w-full font-Helvetica_Medium">{categoryDetails?.name ?? "Todas las categorías"}</h3>
-                <p class="mt-3 text-lg font-light text-center max-md:max-w-full ">
-                 {categoryDetails?.description ?? "Explora nuestro catálogo completo de productos cuidadosamente seleccionados para ofrecerte la mejor calidad y variedad."} 
-                </p>
-            </div>
-      </section>
+
+   <section className="flex flex-col lg:flex-row gap-3 lg:gap-10 justify-center items-center px-[5%] lg:pl-[5%] lg:pr-0 bg-[#5BE3A4]">
       
-    <form className="flex flex-col lg:flex-row gap-6  mx-auto font-Helvetica_Light font-bold w-full p-5 lg:p-10">
+        <div className="w-full lg:w-[55%] text-[#151515] flex flex-col justify-center items-center gap-2 md:gap-10">
+            <div className="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 lg:pt-0 xl:max-w-4xl">
+              <h1 className="text-[#F8FCFF] font-Homie_Bold text-3xl">
+                Propiedades que inspiran, experiencias que  marcan la diferencia.
+              </h1>
+
+            </div>
+
+            <div className="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 md:pt-0">
+             
+              <div className="px-0 w-full z-10">
+                
+               
+                <div className="bg-white rounded-t-lg inline-block w-auto md:max-w-[388px]">
+                  <div className="flex justify-between items-center">
+                    <button
+                      className="px-10 py-3 text-[#009A84] font-FixelText_Semibold border-b-[2.5px] border-[#009A84] focus:outline-none tab-button flex-1"
+                      onclick="showTab('tab1')">
+                      Elige unas Fechas
+                    </button>
+                  </div>
+                </div>
+                
+              
+                <div id="tab1" className="flex flex-col md:flex-row py-4 px-4 tab-content bg-white justify-between items-center gap-5 rounded-b-lg md:rounded-tr-lg w-full">
+                  
+                  <div className="w-full">
+                    <div className="relative w-full text-left">
+                      <div className="group">
+                        <div>
+                          <select name="departamento_id" id="departamento_id2"
+                            className="w-full py-3 px-5 text-text18 text-[#000929] border-0">
+                            <option value="">Ubicacion</option>
+
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="w-[0.5px] h-[50px] bg-[#E0DEF7] hidden md:block">
+                  </div>
+
+                  <div className="w-full">
+                    <div className="relative w-full text-left">
+                      <div className="group">
+                        <div>
+                          <select name="categoria_id" id="categoria_id2"
+                            className="w-full py-3 px-5 text-text18 text-[#000929] border-0">
+                            <option value="">Categorias</option>
+
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div className="w-[0.5px] h-[50px] bg-[#E0DEF7] hidden md:block">
+                  </div>
+    
+                  <div className="flex justify-center items-center md:w-full">
+                    <div className="flex flex-row-reverse 2md:flex-row justify-center items-center gap-5">
+                      <div className="flex justify-start items-center w-full">
+                        <button id="linkExplirarAlquileres"
+                          className="bg-[#009A84] rounded-2xl font-FixelText_Semibold text-base text-white px-10 py-3 text-center">
+                          <span className="flex w-full">Buscar</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                
+              </div>
+              <p className="font-FixelText_Regular underline text-sm text-white ">
+                Propietario, anuncia tu propiedad gratis
+              </p>
+
+            </div>
+        </div>
+
+       
+        <div className="w-full lg:w-[45%] ">
+          <div className="w-full h-full flex flex-row items-center justify-center">
+              <img src={imgcatalogo} className="min-h-[400px] object-contain xl:h-full object-bottom" />
+          </div>
+        </div>
+
+    </section>  
+      
+    <form className="flex flex-col lg:flex-row gap-6 w-full px-[5%] lg:px-[8%]">
       {/* sticky */}
-      <section className="hidden lg:flex md:flex-col gap-4 md:basis-3/12 bg-white p-6 rounded-lg h-max top-2">
+      {/* <section className="hidden lg:flex md:flex-col gap-4 md:basis-3/12 bg-white p-6 rounded-lg h-max top-2">
         <FilterContainer setFilter={setFilter} filter={filter} minPrice={minPrice ?? 0} maxPrice={maxPrice ?? 0} categories={categories} tags={tags} attribute_values={Object.values(attributes)} selected_category={selected_category} tag_id={tag_id} />
-      </section>
-      <section className="flex flex-col gap-6 md:basis-9/12">
+      </section> */}
+      <section className="flex flex-col gap-6 md:basis-full py-6">
+        
         <div className="w-full bg-white rounded-lg font-medium flex flex-row justify-between items-center px-2 py-3">
           <div className='flex flex-col xl:flex-row  justify-start xl:justify-between items-start gap-2 '>
             <span className="font-normal text-[17px] text-[#666666] xl:ml-3">
@@ -255,12 +335,15 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
             <button type="button" className='lg:hidden text-[#006BF6]' onClick={() => setShowModal(true)}> Mostrar Filtros</button>
           </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:pr-4">
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-8">
           {items.map((item, i) => <ProductCard key={`product-${item.id}`} item={item} bgcolor={'bg-white'} is_reseller={is_proveedor.current} />)}
         </div>
+
         <div className="w-full font-medium flex flex-row justify-center items-center">
           <FilterPagination current={currentPage} setCurrent={setCurrentPage} pages={Math.ceil(totalCount / take)} />
         </div>
+
       </section>
       {/* modal */}
 
@@ -279,6 +362,29 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
 
 
     </form>
+
+    <section className="flex flex-col justify-center items-center px-[5%] xl:px-[8%] py-14 w-full bg-[#73F7AD] mt-8 lg:mt-16">
+          <div className="flex flex-col max-w-xl">
+            
+            <div className="flex flex-col w-full text-center gap-5 text-[#006258]">
+              <h2 className="text-4xl font-Homie_Bold">¿Quieres que pongamos tu propiedad en alquiler?</h2>
+              <p className="text-base font-FixelText_Regular text-[#000929]">Comparte aquí tu correo electrónico y te daremos más información.</p>
+            </div>
+
+            <div className="flex flex-col mt-8 w-full gap-4">
+              <div className="flex flex-col w-full rounded-lg">
+                <form className="flex flex-row gap-5 justify-end px-5 py-3.5 w-full bg-white rounded-2xl">
+                  <input placeholder="Introduce tu correo electrónico" type="email" id="email" name="email" class="w-full px-4 py-2 text-sm font-FixelText_Regular focus:border-0 focus:ring-0 text-[#006258] placeholder:text-[#00625852] border border-transparent rounded-xl" aria-label="Introduce tu correo electrónico" required />
+                  <button type="submit" className="self-end px-10 py-3 text-base font-FixelText_Semibold text-center text-[#73F7AD] bg-[#009A84] rounded-lg">Enviar</button>
+                </form>
+              </div>
+              <p class="text-base text-center font-FixelText_Regular text-[#000929]">
+                Únete a <strong>10,000+</strong> propietarios más en nuestra comunidad inmobiliaria.
+              </p>
+            </div>
+
+          </div>
+      </section> 
 
     </div>
   </>)

@@ -29,11 +29,12 @@ export default {
             },
 
             fontFamily: {
-                Helvetica_Bold: ["Helvetica_Bold"],
-                Helvetica_Heavy: ["Helvetica_Heavy"],
-                Helvetica_Black: ["Helvetica_Black"],
-                Helvetica_Light: ["Helvetica_Light"],
-                Helvetica_Medium: ["Helvetica_Medium"],
+                Homie_Bold: ["Homie_Bold"],
+                FixelText_Bold: ["FixelText-Bold"],
+                FixelText_Semibold: ["FixelText-Semibold"],
+                FixelText_Regular: ["FixelText-Regular"],
+                FixelText_Medium: ["FixelText-Medium"],
+                FixelText_Light: ["FixelText-Light"],
             },
 
             screens: {

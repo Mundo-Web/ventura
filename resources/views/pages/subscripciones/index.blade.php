@@ -26,8 +26,9 @@
           <table id="tabladatos" class="display text-lg" style="width:100%">
             <thead>
               <tr>
-                <th>Nombre</th>
+                {{-- <th>Nombre</th> --}}
                 <th>Correo</th>
+                <th>Registrado</th>
                 {{-- <th>Telefono</th> --}}
                 {{-- <th>Acción</th> --}}
 
@@ -37,11 +38,12 @@
 
               @foreach ($subscripciones as $item)
                 <tr>
-                  <td>
+                  {{-- <td>
                     {{ $item->tipo }}
 
-                  </td>
+                  </td> --}}
                   <td>{{ $item->email }}</td>
+                  <td>{{  $item->created_at->format('Y-m-d') }}</td>
 
                 </tr>
               @endforeach
@@ -49,8 +51,9 @@
             </tbody>
             <tfoot>
               <tr>
-                <th>Nombre</th>
+                {{-- <th>Nombre</th> --}}
                 <th>Correo</th>
+                <th>Registrado</th>
                 {{-- <th>Telefono</th> --}}
                 {{-- <th>Acción</th> --}}
 

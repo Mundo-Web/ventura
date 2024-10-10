@@ -6,144 +6,90 @@
 
 @section('content')
 
+<main class="bg-[#FAFCFE]">
+    <section class="grid grid-cols-1 text-center gap-8 items-center max-w-4xl mx-auto px-[5%] py-8 lg:py-16">
+      <h2 class="text-4xl lg:text-5xl font-bold text-[#006258] px-0 lg:px-[3%] font-Homie_Bold">
+        ¿Tienes un viaje en mente? Escríbenos.
+      </h2>
+      <p class="text-lg text-[#000929] font-FixelText_Regular">
+        ¿Tienes un viaje? Escríbenos si necesitas nuestra ayuda? No dudes en contactarnos.
+      </p>
+    </section>
+      
+    <section class="flex flex-col md:flex-row px-[5%] lg:px-[8%] pb-8 lg:pb-16">
+      
+        <div class="flex flex-col p-10 w-full md:w-1/2 bg-white shadow-lg">
+          <div class="flex flex-col w-full">
+            <h2 class="text-3xl font-Homie_Bold text-[#002677] ">
+              ¿Tienes alguna pregunta o necesitas más información?
+            </h2>
+            <p class="mt-4 text-base font-FixelText_Regular text-[#000929]">
+              Llena este formulario y nos pondremos en contacto contigo.
+            </p>
+          </div>
+          <form id="formContactos" class="flex flex-col mt-6 w-full text-sm ">
+            @csrf
+            <div class="flex flex-col w-full gap-4">
+              
+              <input id="name" name="name" type="text" class="px-4 py-3.5 text-sm font-FixelText_Regular focus:border-[#006258] focus:ring-[#006258] text-[#006258] placeholder:text-[#00625852] border border-[#00625852] rounded-xl" placeholder="Nombre completo" aria-label="Nombre completo">
+             
+              <input id="phone" name="phone" type="tel" class="px-4 py-3.5 text-sm font-FixelText_Regular focus:border-[#006258] focus:ring-[#006258] text-[#006258] placeholder:text-[#00625852] border border-[#00625852] rounded-xl" placeholder="Teléfono" aria-label="Teléfono">
+              
+              <input id="email" name="email" type="email" class="px-4 py-3.5 text-sm font-FixelText_Regular focus:border-[#006258] focus:ring-[#006258] text-[#006258] placeholder:text-[#00625852] border border-[#00625852] rounded-xl" placeholder="E-mail" aria-label="E-mail">
+             
+              <textarea id="message" name="message" class="px-4 py-3.5 text-sm font-FixelText_Regular focus:border-[#006258] focus:ring-[#006258] text-[#006258] placeholder:text-[#00625852] border border-[#00625852] rounded-xl" placeholder="Mensaje" aria-label="Mensaje" rows="6"></textarea>
+            </div>
+            <button type="submit" class="px-4 py-3.5 mt-10 w-full font-FixelText_Medium text-emerald-300 bg-[#006258] rounded-xl ">
+              Enviar solicitud
+            </button>
+          </form>
+        </div>
 
-
-    <main>
-
-        <section
-            class="flex relative flex-col justify-center items-center px-[5%] py-28 text-base font-medium min-h-[345px] text-neutral-900 max-md:py-24">
-            <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/1f15375dac970433a2abe3921fa2c31e35c32f7b26a37b841431aaba1861d380?placeholderIfAbsent=true&apiKey=72fae0f4c808496790606e16dad566da"
-                alt="" class="object-cover absolute inset-0 size-full opacity-15" />
-            <div class="flex relative flex-col max-w-full w-[499px]">
-                <h2 class="self-center text-[#FD1F4A] font-Helvetica_Medium">Contacto</h2>
-                <h3 class="mt-3 text-5xl text-center max-md:max-w-full font-Helvetica_Medium">Comunícate</h3>
-                <p class="mt-3 text-lg font-light text-center max-md:max-w-full ">
-                    Donec vehicula, lectus vel pharetra semper, justo massa pharetra nunc, non venenatis ante augue quis
-                    est.
+        <div class="flex flex-col p-10  w-full md:w-1/2 bg-[#5BE3A5] shadow-lg">
+          <div class="flex flex-col w-full">
+            <h2 class="text-3xl font-Homie_Bold text-[#006258]">¡Conversemos!</h2>
+            <p class="mt-4 text-base font-FixelText_Regular text-[#006258]">
+              Para cualquier duda o consulta,  ponte en contacto con nosotros.
+            </p>
+          </div>
+          <div class="flex flex-col justify-center mt-10 w-full  ">
+            <div class="flex gap-2 items-start w-full  ">
+              <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/7388d919c59dee11fd9f6e8a75c13b4530cc9dfa75881918c7d01a1d3a23dd4a?placeholderIfAbsent=true&apiKey=5531072f5ff9482693929f17ec98446f" class="object-contain shrink-0 w-6 aspect-square" alt="Icono de dirección">
+              <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
+                <h3 class="text-lg font-FixelText_Bold text-[#006258]">Dirección</h3>
+                <p class="mt-2 text-base font-FixelText_Regular text-[#006258]">
+                  Av. Javier Prado 4311, San Isidro, Lima
                 </p>
+              </div>
             </div>
-        </section>
-
-
-        <section class="flex flex-col mt-8 lg:mt-16 font-Helvetica_Light">
-            <div class="flex flex-wrap gap-10 items-start px-[5%] lg:px-[8%] w-full">
-                <div class="flex flex-col grow shrink min-w-[240px] w-[390px] max-md:max-w-full">
-                    <header class="flex flex-col max-w-full text-neutral-900 w-[488px]">
-                        <h1 class="text-5xl font-medium max-md:max-w-full font-Helvetica_Medium">A nuestro amable equipo le
-                            encantaría saber de
-                            usted</h1>
-                        <p class="mt-3 text-base font-light max-md:max-w-full">Donec vehicula, lectus vel pharetra semper,
-                            justo massa pharetra nunc, non venenatis ante augue quis est.</p>
-                    </header>
-                    <aside class="flex flex-col mt-12 max-w-full w-full max-md:mt-10">
-                        <div class="flex flex-col w-full">
-                            <h2 class="text-xl font-medium text-[#FD1F4A] font-Helvetica_Medium">Horario de oficina</h2>
-                            <p class="flex flex-col mt-2 max-w-full text-base font-light text-neutral-900 w-full">
-                                @if ($general->schedule)
-                                    <span>{{ $general->schedule }}</span>
-                                @endif
-                            </p>
-                        </div>
-                        <div class="flex flex-col mt-8 w-full">
-                            <h2 class="text-xl font-medium text-[#FD1F4A] font-Helvetica_Medium">Nuestra dirección</h2>
-                            <address class="flex flex-col mt-2 max-w-full text-base font-light text-neutral-900 w-full">
-                                @if ($general->address && is_null($general->inside))
-                                    <span>{{ $general->address }}</span>
-                                @elseif(is_null($general->address) && $general->inside)
-                                    <span>{{ $general->inside }}</span>
-                                @elseif($general->address && $general->inside)
-                                    <span>{{ $general->address }}, {{ $general->inside }}</span>
-                                @endif
-
-                                @if ($general->district && is_null($general->city))
-                                    <span>{{ $general->district }}</span>
-                                @elseif(is_null($general->district) && $general->city)
-                                    <span>{{ $general->city }}</span>
-                                @elseif($general->district && $general->city)
-                                    <span>{{ $general->district }}, {{ $general->city }}</span>
-                                @endif
-
-                            </address>
-                        </div>
-                        <div class="flex flex-col mt-8 w-full">
-                            <h2 class="text-xl font-medium text-[#FD1F4A] font-Helvetica_Medium">Ponerse en contacto</h2>
-                            <p class="flex flex-col mt-2 max-w-full text-base font-light text-neutral-900 w-full">
-                                @if ($general->cellphone)
-                                    <a href="tel:+51{{ $general->cellphone }}">{{ $general->cellphone }}</a>
-                                @endif
-
-                                @if ($general->office_phone)
-                                    <a href="tel:+51{{ $general->office_phone }}">{{ $general->office_phone }}</a>
-                                @endif
-                            </p>
-                        </div>
-                    </aside>
-                </div>
-                <div class="flex flex-col grow shrink justify-center px-0 lg:px-10 min-w-[240px] w-[494px]">
-                    <header class="flex flex-col w-full text-neutral-900 max-md:max-w-full">
-                        <h2 class="text-3xl font-medium max-md:max-w-full font-Helvetica_Medium">Ponerse en contacto</h2>
-                        <p class="mt-4 text-base font-light max-md:max-w-full">Donec vehicula, lectus vel pharetra semper,
-                            justo massa pharetra nunc, non venenatis ante augue quis est.</p>
-                    </header>
-                    <form class="flex flex-col mt-12 w-full max-md:mt-10 max-md:max-w-full" id="formContactos">
-                        <div class="flex flex-wrap gap-4 items-start w-full text-neutral-900 max-md:max-w-full">
-                            <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
-                                <label for="nombre" class="text-[15px] font-medium font-Helvetica_Medium">Nombre</label>
-                                <input id="nombre" type="text" placeholder="Ingresa tu nombre" name="name"
-                                    class="px-4 py-3 mt-1.5 w-full text-base font-light bg-white rounded-lg border border-gray-300 border-solid shadow-sm"
-                                    aria-label="Ingresa tu nombre">
-                            </div>
-                            <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
-                                <label for="apellido" class="text-[15px] font-medium font-Helvetica_Medium">Apellido</label>
-                                <input id="apellido" type="text" placeholder="Ingresa tu apellido" name="lastname"
-                                    class="px-4 py-3 mt-1.5 w-full text-base font-light bg-white rounded-lg border border-gray-300 border-solid shadow-sm"
-                                    aria-label="Ingresa tu apellido">
-                            </div>
-                        </div>
-                        <div class="flex flex-col mt-6 w-full text-neutral-900 max-md:max-w-full">
-                            <label for="email" class="text-[15px] font-medium font-Helvetica_Medium">E-mail</label>
-                            <input id="email" type="email" placeholder="Ingresa tu dirección de correo electrónico"
-                                name="email"
-                                class="px-4 py-3 mt-1.5 w-full text-base font-light bg-white rounded-lg border border-gray-300 border-solid shadow-sm max-md:max-w-full"
-                                aria-label="Ingresa tu dirección de correo electrónico">
-                        </div>
-                        <div class="flex flex-col mt-6 w-full whitespace-nowrap text-neutral-900 max-md:max-w-full">
-                            <label for="telefono"
-                                class="text-[15px] font-medium max-md:max-w-full font-Helvetica_Medium">Telefono</label>
-                            <input id="telefono" type="tel" placeholder="+51..." name="phone"
-                                class="px-4 py-3 mt-1.5 w-full text-base font-light bg-white rounded-lg border border-gray-300 border-solid shadow-sm max-md:max-w-full"
-                                aria-label="Ingresa tu número de teléfono">
-                        </div>
-                        <div class="flex flex-col mt-6 w-full text-neutral-900 max-md:max-w-full">
-                            <label for="mensaje"
-                                class="text-[15px] font-medium max-md:max-w-full font-Helvetica_Medium">Escribe un
-                                mensaje</label>
-                            <textarea id="mensaje" placeholder="Escríbenos tu pregunta aquí" name="message"
-                                class="px-4 py-3 mt-1.5 w-full text-base font-light bg-white rounded-lg border border-gray-300 border-solid shadow-sm max-md:max-w-full"
-                                rows="3" aria-label="Escribe tu mensaje"></textarea>
-                        </div>
-                        <div class="flex flex-wrap gap-3 items-center mt-6 w-full max-md:max-w-full">
-                            <input type="checkbox" id="privacy-policy" required
-                                class="w-5 h-5 bg-white rounded-md border border-gray-300 border-solid">
-                            <label for="privacy-policy"
-                                class="text-[15px] font-light text-neutral-900 font-Helvetica_Light">Usted acepta nuestra
-                                amigable política de privacidad.</label>
-                        </div>
-                        <button type="submit"
-                            class="font-Helvetica_Medium tracking-wider gap-2.5 self-stretch px-4 py-3 mt-8 w-full text-base font-bold text-center text-white bg-[#FD1F4A] rounded-3xl min-h-[43px] max-md:max-w-full">Enviar
-                            mensaje</button>
-                    </form>
-                </div>
+            <div class="flex gap-2 items-start mt-8 w-full  ">
+              <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/28c08956308dba13fe6918220b69d1d0e8fed9b19a8686d7356c5093422416a4?placeholderIfAbsent=true&apiKey=5531072f5ff9482693929f17ec98446f" class="object-contain shrink-0 w-6 aspect-square" alt="Icono de teléfono">
+              <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
+                <h3 class="text-lg font-FixelText_Bold text-[#006258]">Número de Teléfono</h3>
+                <p class="mt-2 text-base font-FixelText_Regular text-[#006258]">+51 999 999 999</p>
+              </div>
             </div>
-            <div class="flex flex-row items-start justify-start">
-                <img loading="lazy" src="{{ asset('images/img/fondofwc.png') }}"
-                    class="object-contain self-center mt-10 lg:-mt-20 max-w-full aspect-[1.84] shadow-[-179px_91px_56px_rgba(0,0,0,0)] w-full lg:w-2/3 "
-                    alt="">
+            <div class="flex gap-2 items-start mt-8 w-full  ">
+              <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/e4f85ab0ed4ff97e4609f5e5dc192004d79a8a8397e167c1b3102ce0ce71c2b8?placeholderIfAbsent=true&apiKey=5531072f5ff9482693929f17ec98446f" class="object-contain shrink-0 w-6 aspect-square" alt="Icono de correo electrónico">
+              <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
+                <h3 class="text-lg font-FixelText_Bold text-[#006258]">Correo Electrónico</h3>
+                <p class="mt-2 text-base font-FixelText_Regular text-[#006258]">info@ventura.com.pe</p>
+              </div>
             </div>
-        </section>
-
-    </main>
+            <div class="flex gap-2 items-start mt-8 w-full  ">
+              <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/e2334e3b241e3cdd0330278aa70a2b9d920a8810f5c206d3b353885072c2192e?placeholderIfAbsent=true&apiKey=5531072f5ff9482693929f17ec98446f" class="object-contain shrink-0 w-6 aspect-square" alt="Icono de horario de atención">
+              <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
+                <h3 class="text-lg font-FixelText_Bold text-[#006258]">Horario de Atención</h3>
+                <p class="mt-2 text-base font-FixelText_Regular text-[#006258]">
+                  Lunes a Sábados: 9:00 AM - 6:00 PM
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+    </section>
+  </main>
 
 
 @section('scripts_importados')
@@ -177,7 +123,7 @@
 
             event.preventDefault();
             let formDataArray = $(this).serializeArray();
-
+            
             if (!validarEmail($('#email').val())) {
                 btnEnviar.prop('disabled', false);
                 btnEnviar.text('Enviar Mensaje');

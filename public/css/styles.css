@@ -1206,28 +1206,32 @@ border-radius: 1rem;
 -o-border-radius: 1rem;
 }
 
-    @font-face {
-    font-family: "Helvetica_Bold";
-    src: url("/fonts/helvetica_bold.woff") format("woff");
-    }
-    
-    @font-face {
-    font-family: "Helvetica_Heavy";
-    src: url("/fonts/helvetica_heavy.woff") format("woff");
-    }
-    
-    @font-face {
-    font-family: "Helvetica_Black";
-    src: url("/fonts/helvetica_black.woff") format("woff");
-    }
-    
-    @font-face {
-    font-family: "Helvetica_Light";
-    src: url("/fonts/helvetica_light.woff") format("woff");
-    }
-    
-    @font-face {
-    font-family: "Helvetica_Medium";
-    src: url("/fonts/helvetica_medium.woff") format("woff");
-    }
-    
+@font-face {
+font-family: "Homie_Bold";
+src: url("/fonts/Homie-Bold.woff") format("woff");
+}
+
+@font-face {
+font-family: "FixelText-Bold";
+src: url("/fonts/FixelText-Bold.woff2") format("woff2");
+}
+
+@font-face {
+font-family: "FixelText-Semibold";
+src: url("/fonts/FixelText-Semibold.woff2") format("woff2");
+}
+
+@font-face {
+font-family: "FixelText-Regular";
+src: url("/fonts/FixelText-Regular.woff2") format("woff2");
+}
+
+@font-face {
+font-family: "FixelText-Medium";
+src: url("/fonts/FixelText-Medium.woff2") format("woff2");
+}
+
+@font-face {
+font-family: "FixelText-Light";
+src: url("/fonts/FixelText-Light.woff2") format("woff2");
+}

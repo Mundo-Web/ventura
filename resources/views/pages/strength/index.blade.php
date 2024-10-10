@@ -23,9 +23,9 @@
             <thead>
               <tr>
                 <th>Titulo </th>
-                <th>Descripcion</th>
-                <th>Icono</th>
-                <th>Imagen</th>
+                {{-- <th>Descripcion</th> --}}
+                {{-- <th>Icono</th>
+                <th>Imagen</th> --}}
                 <th>Visible</th>
                 <th>Acciones</th>
               </tr>
@@ -34,11 +34,11 @@
 
               @foreach ($strength as $item)
                 <tr>
-                  <td>{{ $item->titulo }}</td>
-                  <td>{{ $item->descripcion }}</td>
-                  <td class="px-3 py-2"><img class="w-20" src="{{ asset($item->icono) }}" alt=""></td>
+                  <td>{{ Str::limit($item->titulo, 150)}}</td>
+                  {{-- <td>{!! Str::limit($item->descripcion, 150) !!}</td> --}}
+                  {{-- <td class="px-3 py-2"><img class="w-20" src="{{ asset($item->icono) }}" alt=""></td>
 
-                  <td class="px-3 py-2"><img class="w-20" src="{{ asset($item->imagen) }}" alt=""></td>
+                  <td class="px-3 py-2"><img class="w-20" src="{{ asset($item->imagen) }}" alt=""></td> --}}
 
                   <td>
                     <form method="POST" action="">
@@ -80,9 +80,9 @@
             <tfoot>
               <tr>
                 <th>Titulo </th>
-                <th>Descripcion</th>
-                <th>Icono</th>
-                <th>Imagen</th>
+                {{-- <th>Descripcion</th> --}}
+                {{-- <th>Icono</th>
+                <th>Imagen</th> --}}
                 <th>Visible</th>
                 <th>Acciones</th>
               </tr>

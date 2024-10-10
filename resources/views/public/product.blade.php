@@ -97,9 +97,10 @@
   @endphp
   {{-- @component('components.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
   @endcomponent --}}
+
   <main class="font-Inter_Regular" id="mainSection">
         @csrf
-        <section class="w-full px-[5%] md:px-[8%]">
+        {{-- <section class="w-full px-[5%] ">
             <div class="grid grid-cols-1 2md:grid-cols-2 gap-10 md:gap-16 pt-8 lg:pt-16">
 
                 <div class="flex flex-col justify-start items-center gap-5">
@@ -131,17 +132,7 @@
                     <div class="flex flex-col">
                         <h3 class="font-Helvetica_Medium text-4xl text-[#111111] font-normal tracking-tight">
                             {{ $product->producto }}</h3>
-                        {{-- <p class="font-Inter_Regular text-base gap-2">Disponibilidad:
-                            @if ($product->stock == 0)
-                                <span class="text-[#f6000c]">No hay Stock disponible</span>
-                            @else
-                                <span class="text-[#006BF6]">Quedan {{ round((float) $product->stock) }} en stock</span>
-                            @endif
-                        </p> --}}
-
-                        {{-- <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
-                            <div class="bg-blue-600 h-1.5 rounded-full" style="width: {{ $stock }}%"></div>
-                        </div> --}}
+              
                     </div>
 
                     <div class="flex flex-col gap-3">
@@ -193,33 +184,6 @@
                             </div>
 
                     @endif
-                    {{-- @if (!$product->attributes->isEmpty())
-                        <div class="flex flex-col gap-8 mt-4 font-Inter_Regular text-lg">
-                            @php
-                                $groupedAttributes = $product->attributes->groupBy('titulo');
-                            @endphp
-
-                            @foreach ($groupedAttributes as $titulo => $items)
-                                <div class="flex flex-row gap-3 text-center text-base font-Inter_Medium">
-                                    <span>{{ $titulo }}:</span>
-                                    @foreach ($items as $item)
-                                        @php
-                                            // Encuentra el objeto en $valorAtributo que tiene el id igual a $item->pivot->attribute_value_id
-                                            $atributo = $valorAtributo->firstWhere(
-                                                'id',
-                                                $item->pivot->attribute_value_id,
-                                            );
-                                        @endphp
-                                        @if ($atributo)
-                                            <!-- Muestra el valor del atributo encontrado -->
-                                            <span
-                                                class="bg-[#006BF6] text-white rounded-md px-5 text-base">{{ $atributo->valor }}</span>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif --}}
 
                     @if (!$especificaciones->isEmpty())
                         <p class="font-Inter_Medium text-base gap-2 ">Especificaciones: </p>
@@ -289,91 +253,363 @@
                     </div>
                 </div>
             </div>
+        </section> --}}
+
+        <section class="flex flex-row gap-1 lg:gap-3 w-full px-[5%] mt-8 lg:mt-14" aria-label="Image Gallery">
+          <div class="w-1/3">
+            @if ($product->imagen_2)
+              <img id="collage1_previewer" loading="lazy" src="{{ asset($product->imagen_2) }}" class="object-cover w-full rounded-xl aspect-[0.7]" alt="Gallery image 1" />
+            @else
+              <img id="collage1_previewer"
+                    src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
+                    class="object-cover w-full rounded-xl aspect-[0.7]" />
+            @endif
+          </div>
+          
+          <div class="flex flex-col  w-1/3 gap-1 lg:gap-3">
+            @if ($product->imagen_3)
+              <img id="collage2_previewer" loading="lazy" src="{{ asset($product->imagen_3) }}" class="object-cover flex-1 w-full rounded-xl aspect-[1.45]" alt="Gallery image 2" />
+            @else
+              <img id="collage2_previewer"
+                src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
+                class="object-cover flex-1 w-full rounded-xl aspect-[1.45]" />
+            @endif
+
+            @if($product->imagen_4)
+              <img id="collage3_previewer" loading="lazy" src="{{ asset($product->imagen_4) }}" class="object-cover flex-1 w-full rounded-xl aspect-[1.45]" alt="Gallery image 3" />
+            @else
+                <img id="collage3_previewer"
+                    src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
+                    class="object-cover flex-1 w-full rounded-xl aspect-[1.45]" />
+            @endif
+          </div>
+
+          <div class="w-1/3">
+            @if($product->image_texture)
+              <img id="collage4_previewer" loading="lazy" src="{{ asset($product->image_texture) }}" class="object-cover w-full rounded-xl aspect-[0.7]" alt="Gallery image 4" />
+            @else
+                <img id="collage4_previewer"
+                src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
+                class="object-cover w-full rounded-xl aspect-[0.7]" />
+            @endif
+          </div>
         </section>
 
+        <section class="flex flex-col lg:flex-row gap-10 justify-between items-start px-[5%] mt-8 lg:mt-16">
+          
+          <div class="flex flex-col min-w-[240px] w-full max-w-4xl">
 
-        <section class="w-full px-[5%] md:px-[8%] py-12 lg:py-20">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              <div class="flex flex-col gap-4 justify-center">
-                   <h3 class="font-Helvetica_Medium text-4xl text-[#111111] font-normal tracking-tight">
-                            Llamadas, mensajes, música y mucho más ¡Actualiza tu auto!</h3>
-                   <p class="font-medium text-base font-Helvetica_Light w-full text-[#444]">
-                            Apple CarPlay & Android Auto hace que resulte más fácil que nunca navegar, comunicarse y 
-                            reproducir música en la carretera. Solo tienes que conectar tu iPhone para ver todo lo 
-                            que quieras en la amplia pantalla táctil.
-                    </p>  
-                    <img src={{ asset('images/img/logosandroid.png') }} class="w-1/2 h-auto object-contain mt-2"/>      
-              </div>
+            <div class="flex flex-col justify-center bg-white rounded-2xl">
+              <div class="flex flex-col w-full">
 
-              <div>
-                    <img src={{ asset('images/img/portadaproducto.png') }} class="w-full h-96 object-contain mt-2"/>      
-              </div>
-            </div>
-        </section>
+                <nav class="flex flex-wrap gap-10 justify-between items-start w-full text-base whitespace-nowrap min-h-[24px]">
+                  <ul class="flex overflow-hidden items-center list-none gap-1 font-FixelText_Regular">
+                    <li class="self-stretch my-auto text-slate-950 text-opacity-30">Inicio</li>
+                    <li class="overflow-hidden self-stretch px-2 my-auto text-slate-950 text-opacity-20">/</li>
+                    <li class="self-stretch my-auto text-[#002677]">Departamento</li>
+                  </ul>
+                  <img loading="lazy" src="{{asset('images/svg/compartir.svg')}}" class="object-contain shrink-0 w-6 aspect-square" alt="" />
+                </nav>
 
+                <article class="flex flex-col items-start mt-5 w-full">
+                  <header class="flex flex-col">
+                    <h1 class="text-3xl font-Homie_Bold text-[#006258]">{{ $product->producto }}</h1>
+                    <p class="mt-2.5 text-base font-FixelText_Regular text-slate-950 text-opacity-50">{{$product->address}}, {{$product->inside}}</p>
+                    <p class="mt-2.5 text-base font-FixelText_Regular text-slate-950 text-opacity-50">
+                      @php
+                          $locations = [];
 
-         <section class="w-full px-[5%] md:px-[8%] py-12 lg:py-20 bg-[#F5F5F7] space-y-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-10">
-              <div class="order-2 lg:order-1">
-                    <img src={{ asset('images/img/portadaproducto1.png') }} class="w-full h-80 lg:h-96 object-contain mt-2"/>      
-              </div>
+                          if (!empty($departamento->description)) {
+                              $locations[] = $departamento->description;
+                          }
 
-              <div class="flex flex-col gap-4 justify-center order-1 lg:order-2">
-                   <h3 class="font-Helvetica_Medium text-4xl text-[#111111] font-normal tracking-tight">
-                            Disfrute de sus aplicaciones favoritas</h3>
-                   <p class="font-medium text-base font-Helvetica_Light w-full text-[#444]">
-                            ¿Le gusta utilizar Spotify, Apple Music o cualquier otra plataforma en línea? 
-                            ¿Navegas con Waze o Google maps?. Apple CarPlay & Android Auto funciona con las 
-                            aplicaciones de su smartphone, para que pueda disfrutar de un entretenimiento sin 
-                            límites mientras conduce.
-                    </p>   
-              </div>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-10">
-              <div class="flex flex-col gap-4 justify-center">
-                   <h3 class="font-Helvetica_Medium text-4xl text-[#111111] font-normal tracking-tight">
-                            ¿Necesitas instalación?</h3>
-                   <p class="font-medium text-base font-Helvetica_Light w-full text-[#444]">
-                            Contamos con Talleres especializados ubicados en los puntos más céntricos de Lima y 
-                            Provincias para asegurar su correcta instalación y funcionamiento.
-                    </p>  
-                    <div class="mt-3">
-                      <a 
-                        class="bg-[#FD1F4A] px-5 py-3  text-white text-center rounded-full font-Helvetica_Medium tracking-wide text-base hover:bg-[#e61e45]">
-                         Ver Talleres Autorizados            
-                      </a>                          
-                    </div> 
-              </div>
+                          if (!empty($provincia->description)) {
+                              $locations[] = $provincia->description;
+                          }
 
-              <div>
-                    <img src={{ asset('images/img/portadaproducto2.png') }} class="w-full h-80 lg:h-96 object-contain mt-2"/>      
+                          if (!empty($distrito->description)) {
+                              $locations[] = $distrito->description;
+                          }
+
+                          $locationsString = implode(', ', $locations);
+                      @endphp
+                        {{ $locationsString }}
+                      </p>
+                  </header>
+                  @if ($product->sku)
+                  <div class="flex items-center px-3 py-1.5 mt-5 text-sm text-[#002677] border border-[#002677] border-solid bg-[#002677] bg-opacity-10 rounded-[43px]">
+                    <span class="font-FixelText_Regular"># Cod. inmueble  {{ $product->sku }}</span>
+                  </div>
+                  @endif
+                </article>
+
               </div>
             </div>
-        </section>
 
+            <div class="flex flex-col justify-center p-8 text-xs font-medium text-center bg-white rounded-2xl  text-slate-950 max-md:px-5" aria-label="Property Features">
+              <div class="flex flex-wrap gap-4 justify-between items-start w-full font-FixelText_Medium">
+                @if(!empty($product->area))
+                  <div class="flex flex-col items-center min-h-[50px] w-[60px]">
+                    <img loading="lazy" src="{{asset('images/svg/area.svg')}}" class="object-contain w-6 aspect-square" alt="Area icon" />
+                    <p class="mt-1.5">{{$product->area}} m²</p>
+                  </div>
+                @endif
 
-
-
-        <section class="bg-white py-10 lg:py-14">
-            <div class="w-full px-[5%] md:px-[8%]">
-                <div class="flex flex-col">
-                    <h3 class="text-lg font-Helvetica_Light tracking-tight text-[#FD1F4A]">Apúrate que se acaban</h3>
-                    <h1 class="text-4xl font-Helvetica_Medium tracking-tight">También te puede interesar</h1>
+                @if(!empty($product->cuartos))  
+                <div class="flex flex-col items-center min-h-[50px] w-[60px]">
+                  <img loading="lazy" src="{{asset('images/svg/cuartos.svg')}}" class="object-contain w-6 aspect-square" alt="Bedroom icon" />
+                  <p class="mt-1.5">{{$product->cuartos}} cuartos</p>
                 </div>
-                <div class="grid grid-cols-4 gap-4 mt-14 w-full">
-                    @foreach ($ProdComplementarios->take(4) as $item)
-                        {{-- <x-product.container-combinalo width="" height="h-[400px]" bgcolor="bg-[#FFFFFF]"
-              textpx="text-[20px]" :item="$item" /> --}}
-                        <x-product.container width="col-span-1 " bgcolor="bg-[#FFFFFF]" :item="$item" />
-                    @endforeach
+                @endif
+
+                @if(!empty($product->banios))  
+                <div class="flex flex-col min-h-[50px] w-[60px]">
+                  <img loading="lazy" src="{{asset('images/svg/banios.svg')}}" class="object-contain self-center w-6 aspect-square" alt="Bathroom icon" />
+                  <p class="mt-1.5">{{$product->banios}} baños</p>
                 </div>
+                @endif
+
+                @if(!empty($product->cochera))  
+                <div class="flex flex-col items-center min-h-[50px] w-[60px]">
+                  <img loading="lazy" src="{{asset('images/svg/cochera.svg')}}" class="object-contain w-6 aspect-square" alt="Parking space icon" />
+                  <p class="mt-1.5">{{$product->cochera}} espacios</p>
+                </div>
+                @endif
+
+                @if(!empty($product->pisos))  
+                <div class="flex flex-col items-center min-h-[50px] w-[60px]">
+                  <img loading="lazy" src="{{asset('images/svg/piso.svg')}}" class="object-contain w-6 aspect-square" alt="Floor level icon" />
+                  <p class="mt-1.5">{{$product->pisos}}º piso</p>
+                </div>
+                @endif
+
+                @if($product->mascota)  
+                <div class="flex flex-col items-center whitespace-nowrap min-h-[50px] w-[60px]">
+                  <img loading="lazy" src="{{asset('images/svg/mascota.svg')}}" class="object-contain w-6 aspect-square" alt="Pet friendly icon" />
+                  <p class="mt-1.5">Mascota</p>
+                </div>
+                @endif
+
+                @if($product->mobiliado)  
+                <div class="flex flex-col items-center whitespace-nowrap min-h-[50px] w-[60px]">
+                  <img loading="lazy" src="{{asset('images/svg/mobiliado.svg')}}" class="object-contain w-6 aspect-square" alt="Furnished icon" />
+                  <p class="mt-1.5">Mobiliado</p>
+                </div>
+                @endif
+                
+                @if(!empty($product->movilidad))  
+                <div class="flex flex-col items-center whitespace-nowrap min-h-[50px] w-[60px]">
+                  <img loading="lazy" src="{{asset('images/svg/movilidad.svg')}}" class="object-contain w-6 aspect-square" alt="Proximity icon" />
+                  <p class="mt-1.5">{{$product->movilidad}}</p>
+                </div>
+                @endif
+              </div>
             </div>
+
+
+            <section class="flex flex-col bg-white rounded-2xl">
+              @if ($product->description)
+                <div class="flex flex-col w-full">
+                  <header class="flex gap-4 items-center self-start">
+                    <div class="flex gap-1.5 items-center self-stretch p-3 my-auto w-10 h-10 bg-emerald-300 rounded-3xl">
+                      <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/c687d39e503ce7592bc6e5025bf338b8588a42a5f15e6d7869d3331e3572af84?placeholderIfAbsent=true&apiKey=5531072f5ff9482693929f17ec98446f" class="object-contain aspect-square w-[18px]" alt="" />
+                    </div>
+                    <h2 class="self-stretch my-auto text-2xl font-Homie_Bold text-[#006258]">Acerca de esta propiedad</h2>
+                  </header>
+                  <div class="flex-1 shrink gap-2.5 pl-14 mt-4 w-full font-FixelText_Regular text-base leading-6 text-[#000929]">
+                      {!! $product->description !!} 
+                  </div>
+                </div>
+              @endif
+
+              @if (!$especificaciones->isEmpty())          
+                <section class="flex flex-col p-4 gap-4 mt-10 w-full text-teal-800 bg-white rounded-3xl max-md:max-w-full">
+                  @foreach ($especificaciones as $item)
+                    <div class="flex flex-col w-full max-md:max-w-full">
+                      <h3 class="text-lg font-Homie_Bold text-[#006258]"> {{ $item->tittle }}</h3>
+                      <p class="mt-1 font-FixelText_Regular text-base leading-6 text-[#000929]">
+                        {{ $item->specifications }}
+                      </p>
+                    </div>
+                  @endforeach
+                </section>
+              @endif
+
+              @php
+                $incluyef = strip_tags($product->incluye);  
+                $noincluyef = strip_tags($product->no_incluye);  
+              @endphp
+              @if ( $incluyef !== '' ||  $noincluyef !== '')
+                <section class="flex flex-col mt-10 w-full max-md:max-w-full">
+                  <header class="flex gap-4 items-center self-start">
+                    <div class="flex gap-1.5 items-center self-stretch p-3 my-auto w-10 h-10 bg-emerald-300 rounded-3xl">
+                      <img loading="lazy" src="{{asset('images/img/iconoproduct.png')}}" class="object-contain aspect-square w-[18px]" alt="" />
+                    </div>
+                    <h2 class="self-stretch my-auto text-2xl font-Homie_Bold text-[#006258]">Inmueble</h2>
+                  </header>
+                  <div class="flex-1 shrink gap-2.5 pl-14 mt-4 w-full text-base leading-6 max-md:pl-5 max-md:max-w-full">
+                     @if (!is_null($product->incluye) && $incluyef !== '')
+                      <h3 class="font-bold leading-6 text-[#006258] font-FixelText_Semibold ">Incluye</h3>
+                      <p class="font-FixelText_Regular text-base leading-6 text-[#000929]">
+                        {!! $product->incluye !!} 
+                      </p>
+                     @endif
+                     @if (!is_null($product->no_incluye) && $noincluyef !== '')
+                      <h3 class="font-bold leading-6 text-[#006258] font-FixelText_Semibold  mt-4">No Incluye</h3>
+                      <p class="font-FixelText_Regular text-base leading-6 text-[#000929]">
+                        {!! $product->no_incluye !!} 
+                      </p>
+                    @endif
+                  </div>
+                </section>
+              @endif
+              
+              @php
+                $disponiblef = strip_tags($product->disponible);  
+                $nodisponiblef = strip_tags($product->no_disponible);  
+              @endphp  
+              @if ( $disponiblef !== '' ||  $nodisponiblef !== '')
+                <section class="flex flex-col mt-10 w-full max-md:max-w-full">
+                  <header class="flex gap-4 items-center self-start">
+                    <div class="flex gap-1.5 items-center self-stretch p-3 my-auto w-10 h-10 bg-emerald-300 rounded-3xl">
+                      <img loading="lazy" src="{{asset('images/img/iconoproduct.png')}}" class="object-contain aspect-square w-[18px]" alt="" />
+                    </div>
+                    <h2 class="self-stretch my-auto text-2xl font-Homie_Bold text-[#006258]">Condominio</h2>
+                  </header>
+                  <div class="flex-1 shrink gap-2.5 pl-14 mt-4 w-full text-base leading-6 text-slate-950 max-md:pl-5 max-md:max-w-full">
+                    @if (!is_null($product->disponible) && $disponiblef !== '')
+                      <h3 class="font-bold leading-5 text-[#006258] font-FixelText_Semibold">Disponible</h3>
+                      <p class="font-FixelText_Regular text-base leading-6 text-[#000929]">
+                        {!! $product->disponible !!} 
+                      </p>
+                    @endif
+                    @if (!is_null($product->no_disponible) && $nodisponiblef !== '')
+                      <h3 class="font-bold leading-5 text-[#006258] font-FixelText_Semibold  mt-4">Indisponible</h3>
+                      <p class="font-FixelText_Regular text-base leading-6 text-[#000929]">
+                        {!! $product->no_disponible !!} 
+                      </p>
+                    @endif  
+                    <h3 class="font-bold leading-5 text-[#006258] font-FixelText_Semibold mt-4">¿Te gustó el condominio?</h3>
+                    <p class="font-FixelText_Regular text-base leading-6 text-[#000929]">
+                      Obtenga más información y vea si hay otros apartamentos disponibles allí.
+                    </p>
+                  </div>
+                </section>
+              @endif
+              <button class="gap-2.5 self-stretch font-FixelText_Semibold tracking-wide px-6 py-3 mt-10 w-full text-base font-bold text-[#73F7AD] bg-[#009A84] rounded-xl min-h-[40px] max-md:px-5 max-md:max-w-full">
+                Conocer Departamento
+              </button>
+            </section>
+
+          </div>
+
+          <div class="flex flex-col sticky top-0 justify-center rounded-2xl w-full lg:w-[400px] ">
+                <section class="flex flex-col p-0 lg:p-6 bg-white rounded-2xl">
+                  <h2 class="gap-10 self-stretch w-full text-lg font-FixelText_Bold text-[#006258]">S/ 333,00 / noche</h2>
+                  <div class="flex flex-row gap-4 items-start mt-4 w-full font-medium px-4 justify-center">
+                      <div class="flex flex-col w-1/2">
+                          <label for="arrival-date" class="text-sm font-FixelText_Medium text-[#000929]">Llegada</label>
+                          <div class="flex gap-3 justify-center items-center px-4 py-1 mt-2 w-full text-sm rounded-lg border border-solid border-teal-600 border-opacity-30">
+                              <input type="date" id="arrival-date" class="flex-1 shrink self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30" value="2024-07-13" aria-label="Fecha de llegada" />
+                          </div>
+                      </div>
+                      <div class="flex flex-col w-1/2">
+                          <label for="departure-date" class="text-sm font-FixelText_Medium text-[#000929]">Salida</label>
+                          <div class="flex gap-3 justify-center items-center px-4 py-1 mt-2 w-full text-sm rounded-lg border border-solid border-teal-600 border-opacity-30 text-teal-800 text-opacity-30">
+                              <input type="date" id="departure-date" class="flex-1 shrink self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30" value="2024-07-13" aria-label="Fecha de salida" />
+                          </div>
+                      </div>
+                  </div>
+                  <div class="flex gap-3 items-center mt-8 w-full text-sm font-medium text-center text-teal-800">
+                      <div class="flex justify-center items-center cursor-pointer rounded-l-3xl">
+                          <button class="py-2.5 px-5 text-lg font-Helvetica_Bold rounded-full bg-[#009A84] m-1 text-white" id=disminuir
+                              type="button">-</button>
+                      </div>
+                      <div id=cantidadSpan class="flex-1 shrink gap-2.5 font-FixelText_Semibold self-stretch p-4 h-full rounded-lg border border-teal-600 border-solid bg-slate-50 min-w-[140px]">
+                        <span>1</span> personas
+                      </div>
+                      <div class="flex justify-center items-center cursor-pointer rounded-full">
+                        <button class="py-2.5 px-[18px] text-lg font-Helvetica_Bold rounded-full bg-[#009A84] m-1 text-white" id=aumentar
+                            type="button">+</button>
+                      </div>
+                  </div>
+
+                  <section class="flex flex-col mt-8 w-full">
+                      <div class="flex flex-col p-3 w-full text-base font-bold text-[#006258] rounded-lg bg-slate-50">
+                          <h3 class="text-[#006258] font-FixelText_Bold text-base">Resumen</h3>
+                          <div class="flex flex-col pb-3 mt-4 w-full border-b border-[#006258] font-FixelText_Regular text-[#000929] text-opacity-50">
+                              <div class="flex gap-10 justify-between items-center w-full">
+                                  <div class="flex gap-1 items-center self-stretch my-auto">
+                                      <span>S/ 333 x 7 noches</span>
+                                      <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" />
+                                  </div>
+                                  <span class="self-stretch my-auto">S/ 2.331</span>
+                              </div>
+                              @if ($product->preciolimpieza)
+                                <div class="flex gap-10 justify-between items-center mt-3 w-full">
+                                  <div class="flex gap-1 items-center self-stretch my-auto">
+                                      <span>Tasa de limpieza</span>
+                                      <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" />
+                                  </div>
+                                  <span class="self-stretch my-auto">S/ {{$product->preciolimpieza}}</span>
+                                </div>
+                              @endif
+                              @if ($product->precioservicio)
+                              <div class="flex gap-10 justify-between items-center mt-3 w-full">
+                                  <div class="flex gap-1 items-center self-stretch my-auto">
+                                      <span>Tasa de servicio</span>
+                                      <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" />
+                                  </div>
+                                  <span class="self-stretch my-auto">S/ {{$product->precioservicio}}</span>
+                              </div>
+                              @endif
+                          </div>
+                          <div class="flex gap-10 justify-between items-center mt-4 w-full text-lg font-FixelText_Bold">
+                              <span class="self-stretch my-auto">Total</span>
+                              <span class="self-stretch my-auto">S/ 2.511</span>
+                          </div>
+                      </div>
+                      <p class="self-center mt-2 text-xs font-medium text-center text-slate-950 font-FixelText_Medium">
+                          Aún no se te cobrará
+                      </p>
+                  </section>
+                  <div class="flex flex-col mt-8 w-full text-sm font-bold">
+                      <button class="gap-2.5 self-stretch px-6 py-3 w-full font-FixelText_Semibold text-base text-[#73F7AD] bg-[#009A84] rounded-xl">
+                          Reservar ahora
+                      </button>
+                      {{-- <button class="gap-2.5 self-stretch px-6 py-3 mt-3 w-full text-teal-600 whitespace-nowrap rounded-xl border border-teal-600 border-solid">
+                          Descartar
+                      </button> --}}
+                  </div>
+                </section>
+          </div>
+          
         </section>
 
 
 
-    </main>
+        <section class="w-full px-[5%] py-12 overflow-visible mt-4 lg:mt-8" style="overflow-x: visible">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-10">
+            <div class="flex flex-col gap-3 max-w-2xl">
+              <h1 class="text-3xl lg:text-4xl font-Homie_Bold text-[#002677]">Nuestras propiedades</h1>
+              <p class="text-lg text-[#000929] font-FixelText_Regular">Conoce acá todas las propiedades exclusivas que  tenemos disponibles. 
+                Disfruta de una estadía  perfecta en las mejores zonas de Lima.</p>
+            </div>
+            <div>
+              <a href="/catalogo" class="bg-[#00897B] text-[#73F7AD] px-4 py-4 rounded-xl font-FixelText_Semibold">
+                Ver todos los departamentos</a>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:flex-row gap-4 lg:gap-8 mt-7 w-full">
+            @foreach ($ProdComplementarios->take(3) as $item)      
+               <x-product.container width="col-span-1 " bgcolor="bg-[#FFFFFF]" :item="$item" />
+            @endforeach
+          </div>
+        </section>
+
+  </main>
+
+
 
 @section('scripts_importados')
   <script>

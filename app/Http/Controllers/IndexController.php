@@ -23,11 +23,13 @@ use App\Models\Testimony;
 use App\Models\Category;
 use App\Models\ClientLogos;
 use App\Models\Department;
+use App\Models\District;
 use App\Models\Galerie;
 use App\Models\Offer;
 use App\Models\PolyticsCondition;
 use App\Models\Popup;
 use App\Models\Price;
+use App\Models\Province;
 use App\Models\Sale;
 use App\Models\Specifications;
 use App\Models\Status;
@@ -94,12 +96,12 @@ class IndexController extends Controller
     $testimonie = Testimony::where('status', '=', 1)->where('visible', '=', 1)->get();
     $slider = Slider::where('status', '=', 1)->where('visible', '=', 1)->get();
     $category = Category::where('status', '=', 1)->where('destacar', '=', 1)->get();
-
+    $general = General::first();
     $logos = ClientLogos::where('status', '=', 1)->get();
     $categoriasindex = Category::where('status', '=', 1)->where('destacar', '=', 1)->get();
 
 
-    return view('public.index', compact('url_env', 'popups', 'banners', 'blogs', 'categoriasAll', 'productosPupulares', 'ultimosProductos', 'productos', 'destacados', 'descuentos', 'general', 'benefit', 'faqs', 'testimonie', 'slider', 'categorias', 'categoriasindex','logos'));
+    return view('public.index', compact('general','url_env', 'popups', 'banners', 'blogs', 'categoriasAll', 'productosPupulares', 'ultimosProductos', 'productos', 'destacados', 'descuentos', 'general', 'benefit', 'faqs', 'testimonie', 'slider', 'categorias', 'categoriasindex','logos'));
   }
 
   public function catalogo(Request $request, string $id_cat = null)
@@ -705,6 +707,10 @@ class IndexController extends Controller
       }
     }
 
+    $departamento = Department::where('id', $product->departamento_id)->first();
+    $provincia = Province::where('id', $product->provincia_id)->first();
+    $distrito = District::where('id', $product->distrito_id)->first();
+
     $combo = Offer::select([
       DB::raw('DISTINCT offers.*')
     ])
@@ -716,7 +722,7 @@ class IndexController extends Controller
 
     if (!$combo) $combo = new Offer();
 
-    return view('public.product', compact('is_reseller', 'atributos', 'isWhishList', 'testimonios', 'general', 'valorAtributo', 'ProdComplementarios', 'productosConGalerias', 'especificaciones', 'url_env', 'product', 'capitalizeFirstLetter', 'categorias', 'destacados', 'otherProducts', 'galery', 'combo', 'valoresdeatributo'));
+    return view('public.product', compact('departamento', 'provincia', 'distrito', 'is_reseller', 'atributos', 'isWhishList', 'testimonios', 'general', 'valorAtributo', 'ProdComplementarios', 'productosConGalerias', 'especificaciones', 'url_env', 'product', 'capitalizeFirstLetter', 'categorias', 'destacados', 'otherProducts', 'galery', 'combo', 'valoresdeatributo'));
   }
 
   public function wishListAdd(Request $request)
