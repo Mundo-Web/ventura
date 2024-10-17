@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use GuzzleHttp\Client;
 use App\Helpers\EmailConfig;
 use App\Http\Requests\StoreIndexRequest;
 use App\Http\Requests\UpdateIndexRequest;
@@ -39,6 +39,7 @@ use App\Models\User;
 use App\Models\UserDetails;
 use App\Models\Wishlist;
 use Attribute;
+use Carbon\Carbon;
 use Culqi\Culqi;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -47,6 +48,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
@@ -55,6 +57,9 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use phpseclib3\File\ASN1\Maps\AttributeValue;
 use SoDe\Extend\Response;
+use Exception;
+use Kigkonsult\Icalcreator\Ical;
+use SoDe\Extend\Fetch;
 
 use function PHPUnit\Framework\isNull;
 
@@ -634,8 +639,123 @@ class IndexController extends Controller
     return view('public.404');
   }
 
+  public function getPrices(Request $request){
+    
+      $client = new Client();
+      
+      $listings = [
+        [
+            'id' => $request['id'],
+            'pms' => 'airbnb'
+        ]
+      ];
+      
+      $checkin = $request->input('checkin');
+      $checkout = $request->input('checkout');
+      
+      if (!$request['id'] || !$checkin || !$checkout) {
+        return response()->json([
+            'error' => 'Faltan datos importantes.',
+        ], 400);
+      }
+
+      try {
+        $response = $client->post('https://api.pricelabs.co/v1/listing_prices', [
+            'headers' => [
+                'X-API-Key' => 'eKmVICRiQkJJvNMZTrTWknRjvYPH34uHRJSgyeEc',
+                'Content-Type' => 'application/json',
+            ],
+            'json' => ['listings' => $listings]
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+        
+        // Preparar fechas para la comparación
+        $checkinDate = new \DateTime($checkin);
+        $checkoutDate = new \DateTime($checkout);
+        $checkoutDate->modify('-1 day');
+
+        // Inicializar variable para sumar el costo total
+        $totalCost = 0;
+        
+
+        // Iterar sobre los datos recibidos en $data
+         if (!empty($data[0]['data'])) {
+          foreach ($data[0]['data'] as $dayData) {
+              $dayDate = new \DateTime($dayData['date']);
+              
+              // Verificar si la fecha del día está dentro del rango (incluyendo checkin y checkout)
+              if ($dayDate >= $checkinDate && $dayDate <= $checkoutDate) {
+                  // Sumar el precio de ese día al total
+                  $totalCost += $dayData['price'];
+              }
+          }
+        }
+
+        return response()->json([
+          'success' => true,
+          'message' => 'Datos recibidos correctamente.',
+          'data' => [
+              'productSku' => $request['id'],
+              'checkin' => $checkin,
+              'checkout' => $checkout,
+              'totalCost' => $totalCost,
+              'datos' => $data,
+              
+          ]
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Solicitud fallida',
+            'desc' => $e->getMessage(),
+        ], 400);
+    }
+
+  }
+
+
   public function producto(string $id)
   {
+        $icalUrl = 'https://www.airbnb.com/calendar/ical/21905805.ics?s=83a28ecbe024328cb3f3a29d66833b99';
+
+        // Obtener el contenido del archivo .ics
+        $icalContent = file_get_contents($icalUrl);
+
+        // Dividir el contenido del archivo en líneas
+        $lines = explode("\n", $icalContent);
+
+        $disabledDates = [];
+        $startDate = null;
+        $endDate = null;
+
+        // Procesar las líneas del archivo .ics
+        foreach ($lines as $line) {
+            $line = trim($line); // Eliminar espacios en blanco
+
+            // Buscar las líneas que contienen las fechas de inicio (DTSTART) y fin (DTEND)
+            if (strpos($line, 'DTSTART') === 0) {
+                // Extraer la fecha de inicio
+                $startDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
+            } elseif (strpos($line, 'DTEND') === 0) {
+                // Extraer la fecha de fin
+                $endDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
+                $endDate->subDay(); // Restar un día porque el check-out ocurre en esta fecha
+            }
+
+            // Si tenemos las fechas de inicio y fin, generar las fechas entre ese rango
+            if ($startDate && $endDate) {
+                while ($startDate->lte($endDate)) {
+                    $disabledDates[] = $startDate->format('d/m/Y');
+                    $startDate->addDay();
+                }
+
+                // Reiniciar las variables para el siguiente evento
+                $startDate = null;
+                $endDate = null;
+            }
+        }
+
 
     
     $is_reseller = false; 
@@ -648,6 +768,9 @@ class IndexController extends Controller
     // $productos = Products::where('id', '=', $id)->first();
     // $especificaciones = Specifications::where('product_id', '=', $id)->get();
     $product = Products::findOrFail($id);
+
+
+
     $especificaciones = Specifications::where('product_id', '=', $id)
       ->where(function ($query) {
         $query->whereNotNull('tittle')
@@ -722,7 +845,7 @@ class IndexController extends Controller
 
     if (!$combo) $combo = new Offer();
 
-    return view('public.product', compact('departamento', 'provincia', 'distrito', 'is_reseller', 'atributos', 'isWhishList', 'testimonios', 'general', 'valorAtributo', 'ProdComplementarios', 'productosConGalerias', 'especificaciones', 'url_env', 'product', 'capitalizeFirstLetter', 'categorias', 'destacados', 'otherProducts', 'galery', 'combo', 'valoresdeatributo'));
+    return view('public.product', compact('disabledDates', 'departamento', 'provincia', 'distrito', 'is_reseller', 'atributos', 'isWhishList', 'testimonios', 'general', 'valorAtributo', 'ProdComplementarios', 'productosConGalerias', 'especificaciones', 'url_env', 'product', 'capitalizeFirstLetter', 'categorias', 'destacados', 'otherProducts', 'galery', 'combo', 'valoresdeatributo'));
   }
 
   public function wishListAdd(Request $request)

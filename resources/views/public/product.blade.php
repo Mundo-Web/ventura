@@ -500,25 +500,27 @@
                 Conocer Departamento
               </button>
             </section>
-
+          
           </div>
+
+          
 
           <div class="flex flex-col sticky top-0 justify-center rounded-2xl w-full lg:w-[400px] ">
                 <section class="flex flex-col p-0 lg:p-6 bg-white rounded-2xl">
-                  <h2 class="gap-10 self-stretch w-full text-lg font-FixelText_Bold text-[#006258]">S/ 333,00 / noche</h2>
+                  {{-- <h2 class="gap-10 self-stretch w-full text-lg font-FixelText_Bold text-[#006258]">S/ 333,00 / noche</h2> --}}
                   <div class="flex flex-row gap-4 items-start mt-4 w-full font-medium px-4 justify-center">
-                      <div class="flex flex-col w-1/2">
-                          <label for="arrival-date" class="text-sm font-FixelText_Medium text-[#000929]">Llegada</label>
+                      <div class="flex flex-col w-full">
+                          <label for="arrival-date" class="text-lg font-FixelText_Medium text-[#000929]">Seleccione fechas</label>
                           <div class="flex gap-3 justify-center items-center px-4 py-1 mt-2 w-full text-sm rounded-lg border border-solid border-teal-600 border-opacity-30">
-                              <input type="date" id="arrival-date" class="flex-1 shrink self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30" value="2024-07-13" aria-label="Fecha de llegada" />
+                              <input type="text" id="arrival-date" class="flex-1 shrink font-FixelText_Medium self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30" value="2024-07-13" aria-label="Fecha de llegada" />
                           </div>
                       </div>
-                      <div class="flex flex-col w-1/2">
+                      {{-- <div class="flex flex-col w-1/2">
                           <label for="departure-date" class="text-sm font-FixelText_Medium text-[#000929]">Salida</label>
                           <div class="flex gap-3 justify-center items-center px-4 py-1 mt-2 w-full text-sm rounded-lg border border-solid border-teal-600 border-opacity-30 text-teal-800 text-opacity-30">
                               <input type="date" id="departure-date" class="flex-1 shrink self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30" value="2024-07-13" aria-label="Fecha de salida" />
                           </div>
-                      </div>
+                      </div> --}}
                   </div>
                   <div class="flex gap-3 items-center mt-8 w-full text-sm font-medium text-center text-teal-800">
                       <div class="flex justify-center items-center cursor-pointer rounded-l-3xl">
@@ -534,16 +536,19 @@
                       </div>
                   </div>
 
+                  {{-- <a id="cotizar" data-product-sku="{{ $product->sku }}" class="bg-green-500 p-2 text-white my-2">Calcular</a> --}}
+
                   <section class="flex flex-col mt-8 w-full">
                       <div class="flex flex-col p-3 w-full text-base font-bold text-[#006258] rounded-lg bg-slate-50">
                           <h3 class="text-[#006258] font-FixelText_Bold text-base">Resumen</h3>
                           <div class="flex flex-col pb-3 mt-4 w-full border-b border-[#006258] font-FixelText_Regular text-[#000929] text-opacity-50">
                               <div class="flex gap-10 justify-between items-center w-full">
                                   <div class="flex gap-1 items-center self-stretch my-auto">
-                                      <span>S/ 333 x 7 noches</span>
+                                      <span id="cantidadnoches">0</span>noches
                                       <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" />
                                   </div>
-                                  <span class="self-stretch my-auto">S/ 2.331</span>
+                                  
+                                  <span  class="self-stretch my-auto">S/ <b id="costonoches">0.00</b></span>
                               </div>
                               @if ($product->preciolimpieza)
                                 <div class="flex gap-10 justify-between items-center mt-3 w-full">
@@ -554,7 +559,7 @@
                                   <span class="self-stretch my-auto">S/ {{$product->preciolimpieza}}</span>
                                 </div>
                               @endif
-                              @if ($product->precioservicio)
+                              {{-- @if ($product->precioservicio)
                               <div class="flex gap-10 justify-between items-center mt-3 w-full">
                                   <div class="flex gap-1 items-center self-stretch my-auto">
                                       <span>Tasa de servicio</span>
@@ -562,11 +567,11 @@
                                   </div>
                                   <span class="self-stretch my-auto">S/ {{$product->precioservicio}}</span>
                               </div>
-                              @endif
+                              @endif --}}
                           </div>
                           <div class="flex gap-10 justify-between items-center mt-4 w-full text-lg font-FixelText_Bold">
                               <span class="self-stretch my-auto">Total</span>
-                              <span class="self-stretch my-auto">S/ 2.511</span>
+                              <span class="self-stretch my-auto">S/ <b id="costototal">0.00</b></span>
                           </div>
                       </div>
                       <p class="self-center mt-2 text-xs font-medium text-center text-slate-950 font-FixelText_Medium">
@@ -574,9 +579,11 @@
                       </p>
                   </section>
                   <div class="flex flex-col mt-8 w-full text-sm font-bold">
-                      <button class="gap-2.5 self-stretch px-6 py-3 w-full font-FixelText_Semibold text-base text-[#73F7AD] bg-[#009A84] rounded-xl">
+                    @if ($product->status == 1 && $product->visible == 1)
+                      <button href="{{route('carrito')}}" id="btnAgregarCarritoPr" data-id="{{ $product->id }}" class="gap-2.5 self-stretch px-6 py-3 w-full font-FixelText_Semibold text-base text-[#73F7AD] bg-[#009A84] rounded-xl">
                           Reservar ahora
                       </button>
+                    @endif
                       {{-- <button class="gap-2.5 self-stretch px-6 py-3 mt-3 w-full text-teal-600 whitespace-nowrap rounded-xl border border-teal-600 border-solid">
                           Descartar
                       </button> --}}
@@ -612,6 +619,174 @@
 
 
 @section('scripts_importados')
+
+    <script>
+      let disabledDates = @json($disabledDates);
+      let formattedDisabledDates = disabledDates.map(date => moment(date, 'DD/MM/YYYY'));
+      $('#arrival-date').daterangepicker({
+          locale: {
+              format: 'DD/MM/YYYY' 
+          },
+          startDate: moment(), 
+          endDate: moment(), 
+          minDate: moment(),
+          maxDate: moment().add(9, 'months'),
+          minSpan: {
+            days: 1  // Mínimo 2 noches, es decir, 1 día de diferencia entre start y end
+          },
+          isInvalidDate: function(date) {
+            // Verificar si la fecha está en las fechas bloqueadas
+            return formattedDisabledDates.some(blockedDate => 
+                date.isSame(blockedDate, 'day')
+            );
+        }
+      }, function(start, end) {
+          let nights = end.diff(start, 'days');
+
+        // Verificar si el rango de fechas seleccionado incluye fechas reservadas
+        let rangeBlocked = false;
+
+        for (let m = start.clone(); m.isBefore(end); m.add(1, 'days')) {
+            if (formattedDisabledDates.some(blockedDate => m.isSame(blockedDate, 'day'))) {
+                rangeBlocked = true;
+                break;
+            }
+        }
+
+        if (rangeBlocked) {
+            alert('No se puede seleccionar un rango que incluya fechas reservadas.');
+            $('#arrival-date').data('daterangepicker').setStartDate(start);
+            $('#arrival-date').data('daterangepicker').setEndDate(start.clone().add(1, 'days'));
+            $('#arrival-date').val('Fecha Inicio - Fecha Fin');
+            return; // Salir para no seguir con la ejecución
+        }
+
+        // Actualizar el input solo si la selección es válida
+        if (nights > 1) {
+            $('#arrival-date').val(start.format('DD/MM/YYYY') + ' - ' + end.clone().subtract(1, 'days').format('DD/MM/YYYY'));
+            
+            $('#arrival-date').data('checkin', start.format('YYYY-MM-DD'));
+            $('#arrival-date').data('checkout', end.clone().format('YYYY-MM-DD'));
+
+            $('#cantidadnoches').text(nights);
+        } else {
+            $('#arrival-date').val(start.format('DD/MM/YYYY') + ' - Fecha Fin');
+            $('#arrival-date').data('daterangepicker').setEndDate(start.clone().add(1, 'days')); 
+
+            $('#arrival-date').data('checkin', start.format('YYYY-MM-DD'));
+            $('#arrival-date').data('checkout', start.clone().add(1, 'days').format('YYYY-MM-DD'));
+
+            $('#cantidadnoches').text(1);  
+        }
+
+         
+        cotizarPrecios();
+        
+      });
+      
+      $('#arrival-date').val('Fecha Inicio - Fecha Fin');
+
+
+      function cotizarPrecios() {
+        let productSku = '21905805';
+        let checkin = $('#arrival-date').data('checkin');
+        let checkout = $('#arrival-date').data('checkout');
+
+        if (!checkin || !checkout) {
+            Swal.fire({
+                title: 'Selección Fallida',
+                text: 'Por favor, selecciona un rango de fechas válido.',
+                icon: 'warning',
+            });
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('producto.prices') }}",
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+            data: JSON.stringify({
+                id: productSku, // SKU del producto
+                checkin: checkin, // Fecha de llegada
+                checkout: checkout // Fecha de salida
+            }),
+            success: function(response) {
+                if(response) {
+                    $('#costonoches').text(response.data.totalCost);
+                    let total = response.data.totalCost + {{ $product->preciolimpieza ?? 0.00 }};
+                    $('#costototal').text(total);
+
+                } else {
+                    $('#costonoches').text('0.00');
+                }
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error inesperado.',
+                    icon: 'error',
+                });
+            }
+        });
+    }
+  </script>
+
+  <script>
+    
+    $('#cotizar').on('click', function(event) {
+        event.preventDefault();
+        
+        //let productSku = $(this).data('product-sku');
+        let productSku = '21905805';
+        let checkin = $('#arrival-date').data('checkin');
+        let checkout = $('#arrival-date').data('checkout');
+
+        if (!checkin || !checkout) {
+            Swal.fire({
+                title: 'Selección Fallida',
+                text: 'Por favor, selecciona un rango de fechas válido.',
+                icon: 'warning',
+            });
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('producto.prices') }}",
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+            data: JSON.stringify({
+                id: productSku, 
+                checkin: checkin, 
+                checkout: checkout 
+            }),
+            success: function(response) {
+              
+              if(response) {
+               $('#costonoches').text(response.data.totalCost);
+              } else {
+               $('#costonoches').text('0.00');  
+              }
+            },
+            error: function(xhr) {
+               
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error inesperado.',
+                    icon: 'error',
+                });
+            }
+        });
+    });
+
+  </script>
+  
+
   <script>
     var headerServices = new Swiper(".productos-relacionados", {
       slidesPerView: 4,

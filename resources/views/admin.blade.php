@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>BoostPeru</title>
+  <title>Ventura</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,6 +48,11 @@
   <!-- Sweetalert -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  
+  <!-- fullcalendar -->
+  {{-- <script src="{{ asset('fullcalendar/index.global.min.js') }}"></script> --}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/0.0.3/ical.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>  
 
   <!-- TinyMCE -->
   <script src="https://cdn.tiny.cloud/1/ghrt2o720w7v1cwfkm9r7pl85ultx89hqfla88bsjvt0m6zc/tinymce/7/tinymce.min.js"

@@ -33,9 +33,10 @@
       </x-breadcrumb>
 
       <div class="flex md:gap-20 flex-col md:flex-row">
-        <div class="flex justify-between items-center md:basis-8/12 w-full md:w-auto">
+        
+        <div class="flex justify-between items-start md:basis-8/12 w-full md:w-auto">
           <x-ecommerce.gateway.container completed="{{ 2 }}">
-            <div class="flex flex-col gap-5 mt-4 font-Helvetica_Medium">
+            <div class="flex flex-col gap-5 mt-4 font-FixelText_Semibold">
               <div>
                 <div class="flex flex-col gap-8">
 
@@ -52,7 +53,7 @@
                               class="text-red-500">*</span></label>
                           <input id="email" type="email" placeholder="Correo electrónico" required=""
                             name="email" value="{{ auth()->check() ? auth()->user()->email : '' }}"
-                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#FD1F4A] focus:border-[#FD1F4A] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
+                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#00897b] focus:border-[#00897b] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
                             required>
                         </div>
                         <div class="basis-1/3 flex flex-col gap-2">
@@ -60,7 +61,7 @@
                               class="text-red-500">*</span></label>
                           <input id="celular" type="text" placeholder="(+51) 000 000 000" name="phone"
                             value="{{ auth()->check() ? auth()->user()->phone : '' }}"
-                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#FD1F4A] focus:border-[#FD1F4A] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl"
+                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#00897b] focus:border-[#00897b] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl"
                             required>
                         </div>
                       </div>
@@ -70,7 +71,7 @@
                               class="text-red-500">*</span></label>
                           <input id="nombre" type="text" placeholder="Nombre" name="nombre"
                             value="{{ auth()->check() ? auth()->user()->name : '' }}"
-                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#FD1F4A] focus:border-[#FD1F4A] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
+                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#00897b] focus:border-[#00897b] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
                             required>
                         </div>
                         <div class="basis-1/2 flex flex-col gap-2">
@@ -78,7 +79,7 @@
                               class="text-red-500">*</span></label>
                           <input id="apellidos" type="text" placeholder="Apellido" name="apellidos"
                             value="{{ auth()->check() ? auth()->user()->lastname : '' }}"
-                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#FD1F4A] focus:border-[#FD1F4A] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
+                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#00897b] focus:border-[#00897b] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
                             required>
 
                         </div>
@@ -87,7 +88,7 @@
                       </div>
 
                       <div class="basis-2/3 flex flex-row gap-2 ">
-                        <input id="termsandconditions" type="checkbox" required class="border-2 rounded-sm w-5 h-5 text-[#FD1F4A] ring-0 focus:ring-0" />
+                        <input id="termsandconditions" type="checkbox" required class="border-2 rounded-sm w-5 h-5 text-[#00897b] ring-0 focus:ring-0" />
                         <label for="termsandconditions" class="font-medium text-sm text-[#6C7275]">Estoy de acuerdo con
                           los <a class="font-bold" href="{{ route('terms_condition') }}" target="_blanck">terminos y
                             condiciones</a></label>
@@ -96,7 +97,7 @@
                     </div>
                   </div>
 
-                  <div class="flex flex-col gap-5 pb-10 w-full">
+                  <div class="hidden flex-col gap-5 pb-10 w-full">
                     <h2 class="font-semibold text-[20px] text-[#151515]">
                       Dirección de envío
                     </h2>
@@ -105,7 +106,7 @@
                         <input type="radio" name="envio" id="recoger-option" value="recoger" class="hidden peer"
                           required @if (!$hasDefaultAddress) checked @endif>
                         <label for="recoger-option"
-                          class="border inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-3 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-[#FD1F4A] hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                          class="border inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-3 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-[#00897b] hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                           <div class="block">
                             <svg class="w-6 h-6 mb-2 text-gray-800 dark:text-white" aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -124,7 +125,7 @@
                         <input type="radio" name="envio" id="express-option" value="express" class="hidden peer"
                           @if ($hasDefaultAddress) checked @endif>
                         <label for="express-option"
-                          class="border inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-3 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-[#FD1F4A] hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                          class="border inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-3 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-[#00897b] hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                           <div class="block">
                             <svg class="w-6 h-6 mb-2 text-gray-800 dark:text-white" aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -151,7 +152,7 @@
                               <div class="w-full">
                                 <div class="dropdown w-full">
                                   <select id="addresses"
-                                    class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#FD1F4A] focus:border-[#FD1F4A] block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 select2-hidden-accessible"
+                                    class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#00897b] focus:border-[#00897b] block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 select2-hidden-accessible"
                                     data-address>
                                     <option value>Agregar una nueva direccion</option>
                                     @foreach ($addresses as $address)
@@ -174,7 +175,7 @@
                                 <!-- combo -->
                                 <div class="dropdown w-full">
                                   <select name="departamento_id" id="departamento_id"
-                                    class="selectpicker mt-1 h-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#FD1F4A] focus:border-[#FD1F4A] block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 select2-hidden-accessible"
+                                    class="selectpicker mt-1 h-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#00897b] focus:border-[#00897b] block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 select2-hidden-accessible"
                                     data-address>
                                     <option value="" data-select2-id="select2-data-2-4o85">Seleccione un
                                       departamento</option>
@@ -240,7 +241,7 @@
 
                           <input id="nombre_calle" type="text" name="dir_av_calle"
                             placeholder="Ingresa el nombre de la calle"
-                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#FD1F4A] focus:border-[#FD1F4A] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
+                            class="w-full py-3 px-4 focus:outline-none focus:ring-[#00897b] focus:border-[#00897b] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
                             data-address>
                         </div>
                       </div>
@@ -251,7 +252,7 @@
                                 class="text-red-500">*</span></label>
                             <input id="numero_calle" name="dir_numero" type="text"
                               placeholder="Ingresa el número de la callle"
-                              class="w-full py-3 px-4 focus:outline-none focus:ring-[#FD1F4A] focus:border-[#FD1F4A] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
+                              class="w-full py-3 px-4 focus:outline-none focus:ring-[#00897b] focus:border-[#00897b] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
                               data-address>
                           </div>
 
@@ -262,7 +263,7 @@
                               (opcional)</label>
                             <input id="direccion" type="text" name="dir_bloq_lote"
                               placeholder="Ejem. Casa 3, Dpto 101"
-                              class="w-full py-3 px-4 focus:outline-none focus:ring-[#FD1F4A] focus:border-[#FD1F4A] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]">
+                              class="w-full py-3 px-4 focus:outline-none focus:ring-[#00897b] focus:border-[#00897b] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]">
                           </div>
                         </div>
                       </div>
@@ -276,9 +277,10 @@
             </div>
           </x-ecommerce.gateway.container>
         </div>
+
         <div
-          class="basis-4/12 flex flex-col justify-start gap-0 py-4 order-1 2md:order-2 2md:sticky font-Helvetica_Medium top-4 h-min border rounded-md">
-          <h2 class="font-semibold text-[20px] text-[#151515] px-4">
+          class="basis-4/12 flex flex-col justify-start gap-0 py-4 order-1 2md:order-2 2md:sticky font-FixelText_Semibold top-4 h-min border rounded-md">
+          <h2 class="font-semibold font-Homie_Bold text-[20px] text-[#151515] px-4">
             Resumen del pedido
           </h2>
           <div class="p-4 pb-0">
@@ -303,7 +305,7 @@
           </div>
           <div class="p-4">
             <div class="font-poppins flex flex-col gap-5">
-              <div class="text-[#141718] flex justify-between items-center border-b-[1px] border-[#E8ECEF] pb-5">
+              <div class="text-[#141718] hidden justify-between items-center border-b-[1px] border-[#E8ECEF] pb-5">
                 <p class="font-normal text-[16px]">Envío</p>
                 <p id="precioEnvio" class="font-semibold text-[16px]">Gratis</p>
               </div>
@@ -320,10 +322,11 @@
               </div>
 
               <button id="btnPagar"
-                class="text-white bg-[#FD1F4A] tracking-wider w-full py-3 rounded-3xl cursor-pointer font-semibold text-lg inline-block text-center">Pagar</button>
+                class="text-white bg-[#00897b] tracking-wider w-full py-3 rounded-2xl cursor-pointer font-semibold text-lg inline-block text-center">Pagar reservación</button>
             </div>
           </div>
         </div>
+
       </div>
     </form>
   </main>
@@ -343,6 +346,8 @@
             _token: $('[name="_token"]').val(),
             cart: carrito.map((x) => ({
               id: x.id,
+              checkin: x.checkin,
+              checkout: x.checkout,
               quantity: x.cantidad,
               isCombo: x.isCombo || false
             })),
@@ -355,8 +360,6 @@
               doc_type: $('#tipo-comprobante').val() ?? 'nota_venta',
               razon_fact: $('#razonFact').val(),
               direccion_fact: $('#direccionFact').val(),
-
-
             },
             address: null,
             saveAddress: !Boolean($('#addresses').val()),
@@ -553,7 +556,7 @@
 
 
       Culqi.settings({
-        title: 'Boost .its more',
+        title: 'Ventura',
         currency: 'PEN',
         amount: Math.round((precioProductos + precioEnvio) * 100),
       });
@@ -720,13 +723,15 @@
     const getTotalPrice = () => {
       const carrito = Local.get('carrito') ?? []
       const productPrice = carrito.reduce((total, x) => {
-        let price = Number(x.precio) * x.cantidad
-        if (Number(x.descuento)) {
-          price = Number(x.descuento) * x.cantidad
-        }
+        //let price = (Number(x.costototal) + Number(x.preciolimpieza)) * x.cantidad
+        let price = Number(x.costototal) + Number(x.preciolimpieza)
+        //if (Number(x.descuento)) {
+        //  price = Number(x.descuento) * x.cantidad
+        //}
         total += price
         return total
       }, 0)
+  
       return productPrice
     }
 
@@ -742,6 +747,7 @@
 
 
 @section('scripts_importados')
+
   <script>
     const svgVisa = `<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 48 48">
                     <path fill="#1565C0" d="M45,35c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4V13c0-2.209,1.791-4,4-4h34c2.209,0,4,1.791,4,4V35z"></path><path fill="#FFF" d="M15.186 19l-2.626 7.832c0 0-.667-3.313-.733-3.729-1.495-3.411-3.701-3.221-3.701-3.221L10.726 30v-.002h3.161L18.258 19H15.186zM17.689 30L20.56 30 22.296 19 19.389 19zM38.008 19h-3.021l-4.71 11h2.852l.588-1.571h3.596L37.619 30h2.613L38.008 19zM34.513 26.328l1.563-4.157.818 4.157H34.513zM26.369 22.206c0-.606.498-1.057 1.926-1.057.928 0 1.991.674 1.991.674l.466-2.309c0 0-1.358-.515-2.691-.515-3.019 0-4.576 1.444-4.576 3.272 0 3.306 3.979 2.853 3.979 4.551 0 .291-.231.964-1.888.964-1.662 0-2.759-.609-2.759-.609l-.495 2.216c0 0 1.063.606 3.117.606 2.059 0 4.915-1.54 4.915-3.752C30.354 23.586 26.369 23.394 26.369 22.206z"></path><path fill="#FFC107" d="M12.212,24.945l-0.966-4.748c0,0-0.437-1.029-1.573-1.029c-1.136,0-4.44,0-4.44,0S10.894,20.84,12.212,24.945z"></path>
@@ -779,6 +785,7 @@
 
     })
   </script>
+
   <script>
     $('#pagarProductos').on('click', function(e) {
       console.log('pagando servicio');
@@ -818,7 +825,8 @@
       });
     })
   </script>
-  <script>
+
+  {{-- <script>
     // let articulosCarrito = [];
     let checkedRadio = false
 
@@ -967,7 +975,8 @@
     //   $('#check').prop('checked', false);
 
     // })
-  </script>
+  </script> --}}
+
 @stop
 
 @stop

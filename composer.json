@@ -14,6 +14,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^1.3",
         "intervention/image": "*",
+        "kigkonsult/icalcreator": "^2.41",
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^4.2",
         "laravel/sanctum": "^3.3",
@@ -23,6 +24,7 @@
         "phpmailer/phpmailer": "^6.9",
         "rmccue/requests": "^2.0",
         "sode/extend": "dev-master",
+        "spatie/icalendar-generator": "^2.8",
         "spatie/laravel-permission": "^6.7"
     },
     "require-dev": {

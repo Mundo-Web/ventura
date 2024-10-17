@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>BoostPeru</title>
+  <title>Ventura</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,6 +44,17 @@
   <!-- Sweetalert -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/1.4.0/ical.min.js"></script>
+  {{-- <script src="{{ asset('js/fullcalendar/icalendar/index.global.min.js') }}"></script> --}}
+  <script src="{{ asset('js/fullcalendar/core/index.global.min.js') }}"></script>
+  <script src="{{ asset('js/fullcalendar/index.global.min.js') }}"></script>
+  <script src="{{ asset('js/fullcalendar/daygrid/index.global.min.js') }}"></script>
+  <script src="{{ asset('js/fullcalendar/google-calendar/index.global.min.js') }}"></script>
+ 
+  {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/0.0.3/ical.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.1.0/daygrid/main.min.js"></script> --}}
+  
 
   <!-- TinyMCE -->
   <script src="https://cdn.tiny.cloud/1/ghrt2o720w7v1cwfkm9r7pl85ultx89hqfla88bsjvt0m6zc/tinymce/7/tinymce.min.js"

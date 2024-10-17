@@ -81,6 +81,7 @@ Route::post('/procesar/pago', [IndexController::class, 'procesarPago'])->name('p
 Route::get('/agradecimiento', [IndexController::class, 'agradecimiento'])->name('agradecimiento');
 /* Catálogo y producto */
 Route::get('/producto/{id}', [IndexController::class, 'producto'])->name('producto');
+Route::post('/producto/prices', [IndexController::class, 'getPrices'])->name('producto.prices');
 // Route::get('/catalogo', [IndexController::class, 'catalogo'])->name('catalogo.all');
 // Route::get('/catalogo/{category}', [IndexController::class, 'catalogo'])->name('catalogo');
 // Route::get('/catalogo/{category}/{subcategory}', [IndexController::class, 'catalogo'])->name('catalogo.sub');
@@ -217,6 +218,7 @@ Route::middleware(['auth:sanctum', 'verified', 'can:Admin'])->group(function () 
         //Productos
         Route::resource('/products', ProductsController::class);
         Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
+        Route::post('/products/sync', [ProductsController::class, 'synchronization'])->name('products.synchronization');
         Route::post('/products/updateVisible', [ProductsController::class, 'updateVisible'])->name('products.updateVisible');
         Route::post('/products/borrar', [ProductsController::class, 'borrar'])->name('products.borrar');
         /* depa - prov - district */

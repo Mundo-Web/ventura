@@ -19,12 +19,45 @@
   <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
 
     <section class="py-4 border-b border-slate-100 dark:border-slate-700">
-      <a href="{{ route('products.create') }}"
+      <a id="sincronizar" href="{{ route('products.synchronization') }}"
         class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm">
-        Agregar producto
+        Sincronizar departamentos
       </a>
     </section>
 
+<script>
+  
+  $('#sincronizar').on('click', function(event) {
+      event.preventDefault();
+      console.log('Sincronizando departamentos...');
+
+      $.ajax({
+          url: "{{ route('products.synchronization') }}",
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': '{{ csrf_token() }}',
+
+          },
+          success: function() {
+              // Mostrar mensaje de éxito usando SweetAlert
+              Swal.fire({
+                  title: 'Departamentos sincronizados exitosamente',
+                  icon: 'success',
+              });
+          },
+          error: function(xhr) {
+              // Mostrar mensaje de error usando SweetAlert
+              Swal.fire({
+                  title: 'Error',
+                  text: 'Ocurrió un error inesperado.',
+                  icon: 'error',
+              });
+          }
+      });
+  });
+
+</script>
 
     <div
       class="col-span-full xl:col-span-8 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">

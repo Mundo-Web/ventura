@@ -32,7 +32,9 @@
 
                   <div class="col-span-5 md:col-span-5">
 
-                    <label for="producto">Producto <span class="text-red-500 font-bold">*</span></label>
+                    <label for="producto">Producto 
+                      <span class="text-red-500 font-bold">*</span>
+                    </label>
 
                     <div class="relative mb-2  mt-2">
                       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -336,7 +338,9 @@
                 </div>
                 <div class="md:col-span-5 flex justify-between gap-4">
                   <div class="w-full">
-                    <label for="precio">Precio <span class="text-red-500 font-bold">*</span></label>
+                    <label for="precio">Precio 
+                      {{-- <span class="text-red-500 font-bold">*</span> --}}
+                    </label>
                     <div class="relative mb-2  mt-2">
                       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <i class="text-lg text-gray-500 dark:text-gray-400 fas fa-money-bill"></i>
@@ -344,7 +348,7 @@
                       <input type="number" id="precio" name="precio" value="{{ $product->precio }}"
                         step="0.1"
                         class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="precio" required>
+                        placeholder="precio">
                     </div>
 
                   </div>
@@ -590,7 +594,8 @@
                       placeholder="Costo por articulo">
                   </div>
                 </div> --}}
-                <div class="md:col-span-5">
+                
+                {{-- <div class="md:col-span-5">
                   <label for="sku">Código inmobiliario</label>
                   <div class="relative mb-2  mt-2">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -602,15 +607,17 @@
                       class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Sku">
                   </div>
-                </div>
+                </div> --}}
 
                 <div class="md:col-span-5">
-                  <label for="categoria_id">Categoria <span class="text-red-500 font-bold">*</span></label>
+                  <label for="categoria_id">Categoria 
+                    {{-- <span class="text-red-500 font-bold">*</span> --}}
+                  </label>
                   <div class="relative mb-2  mt-2">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                       <i class="text-lg text-gray-500 dark:text-gray-400 fas fa-folder"></i>
                     </div>
-                    <select id="categoria_id" name="categoria_id" required
+                    <select id="categoria_id" name="categoria_id"
                       class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                       <option value="">Seleccionar Categoria </option>
                       @foreach ($categoria as $item)
@@ -621,7 +628,21 @@
                   </div>
                 </div>
 
-                <div class="md:col-span-5">
+                <div class="md:col-span-5 mt-2">
+                  <label for="idcalendar">ID de Calendario Google</label>
+                  <div class="relative mb-2">
+                      <div
+                          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                          <i class="fa-solid fa-calendar-days"></i>
+                      </div>
+                      <input type="text" id="idcalendar" name="idcalendar"
+                          value="{{ $product->idcalendar }}"
+                          class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Id de calendario google">
+                  </div>
+                </div>
+
+                {{-- <div class="md:col-span-5">
                   <label for="subcategory_id">Subcategoria</label>
                   <div class="relative mb-2  mt-2">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -637,7 +658,7 @@
                       @endforeach
                     </select>
                   </div>
-                </div>
+                </div> --}}
 
                 <div class="md:col-span-5 mt-2">
                   <div class=" flex items-end justify-between gap-2 ">
@@ -795,6 +816,8 @@
 
           </div>
 
+          
+
           <div class="md:col-span-5 text-right mt-6 flex justify-between px-4 pb-4">
             <div class="inline-flex items-end">
               <a href="{{ route('products.index') }}"
@@ -807,6 +830,13 @@
             </div>
           </div>
 
+
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-2 p-3 ">
+              <div class="col-span-5">
+                <div id='calendar'></div>
+              </div>
+          </div>  
+
         </div>
 
 
@@ -817,12 +847,25 @@
 
 
   </div>
-  {{-- <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable/build/umd/index.min.js"></script>
-  <script>
-    const sortable = new Draggable.Sortable(document.getElementById('imagenes_sortable'), {
-      draggable: '[id^="galery_container"]',
-    });
-  </script> --}}
+ 
+   <script>
+      console.log(FullCalendar);
+      //plugins: ['dayGrid', 'iCalendar'],
+      document.addEventListener('DOMContentLoaded', function() {
+        let calendarEl = document.getElementById('calendar');
+        let calendar = new FullCalendar.Calendar(calendarEl, {
+          googleCalendarApiKey: '{{ env('GOOGLE_CALENDAR_API_KEY') }}',
+          initialView: 'dayGridMonth',
+          locale: 'es',
+          events: {
+            googleCalendarId: '63euvbsfmfgad9uilis3850v2mb74fsl@import.calendar.google.com',
+            className: 'gcal-event' 
+          }
+          
+        });
+        calendar.render();
+      });
+    </script>
 
   <script>
     $('#tags_id').select2({
@@ -882,20 +925,6 @@
     $('document').ready(function() {
       let valorInput = $('[id="specifications"]').length / 2
 
-      // tinymce.init({
-      //   selector: 'textarea#description',
-      //   height: 300,
-      //   plugins: [
-      //     'advlist', 'autolink', 'lists', 'link', 'charmap', 'preview',
-      //     'searchreplace', 'visualblocks', 'code', 'fullscreen',
-      //     'insertdatetime', 'table'
-      //   ],
-      //   toolbar: 'undo redo | blocks | ' +
-      //     'bold italic backcolor | alignleft aligncenter ' +
-      //     'alignright alignjustify | bullist numlist outdent indent | ' +
-      //     'removeformat | help',
-      //   content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px;}'
-      // });
 
       $("#AddEspecifiacion").on('click', function(e) {
         e.preventDefault()

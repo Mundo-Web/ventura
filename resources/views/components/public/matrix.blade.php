@@ -24,6 +24,9 @@
   <link rel="stylesheet" href="{{ asset('css/styles.css') }}" />
 
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   {{-- <script src="https://cdn.sode.me/extends/notify.extend.min.js"></script> --}}
   {{-- public\js\notify.extend.min.js  --}}
@@ -52,6 +55,12 @@
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <script src="/js/tippy.all.min.js"></script>
   <script src="/js/cookies.extend.js"></script>
+
+  {{--daterange --}}
+  {{-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script> --}}
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
 
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="{{ asset('js/functions.js') }}?v={{ uniqid() }}"></script>

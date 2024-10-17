@@ -21,7 +21,7 @@
             </div>
         </section> --}}
 
-    <section class="font-poppins my-8 md:my-16">
+    <section class="font-FixelText_Semibold my-8 md:my-16">
       <div class="flex flex-col gap-12 md:flex-row md:gap-16 lg:gap-28 w-full md:w-11/12 mx-auto">
         <x-side-section-dashboard :user="$user" />
 

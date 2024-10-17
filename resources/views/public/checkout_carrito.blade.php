@@ -37,19 +37,20 @@
           <x-ecommerce.gateway.container>
             <div class="flex flex-col 2lg:flex-row pb-5  border-[#E8ECEF] gap-5">
               <table>
-                <tbody id="itemsCarritoCheck">
+                <tbody id="itemsCarritoCheck" >
 
                 </tbody>
               </table>
             </div>
           </x-ecommerce.gateway.container>
         </div>
+
         <div class="basis-4/12 flex flex-col justify-start gap-5">
-          <h2 class="font-semibold text-[20px] tracking-wide text-[#151515] font-Helvetica_Medium">
-            Resumen de la compra
+          <h2 class="font-semibold font-Homie_Bold text-2xl tracking-normal text-[#151515]">
+            Resumen de pago
           </h2>
           <div>
-            <div class="flex flex-col gap-5 font-Helvetica_Medium">
+            <div class="flex flex-col gap-5 font-FixelText_Semibold">
               <div class="text-[#151515] flex justify-between items-center">
                 <p class="text-[14px] font-semibold">Subtotal</p>
                 <span id="itemSubtotal" class="font-semibold text-[14px]">s/ 114.00</span>
@@ -59,13 +60,14 @@
                 <span id="itemTotal" class="font-semibold text-[20px]">s/ 0.00</span>
               </div>
               <a id="btnSiguiente" href="/pago"
-                class="text-white bg-[#FD1F4A] w-full py-3 rounded-3xl cursor-pointer tracking-wider font-semibold text-lg inline-block text-center">Siguiente</a>
+                class="text-white bg-[#00897b] w-full py-3 rounded-2xl cursor-pointer font-FixelText_Semibold tracking-wider font-semibold text-lg inline-block text-center">Siguiente</a>
             </div>
           </div>
         </div>
+
       </div>
-      @if ($destacados->count() > 0)
-        <h1 class="text-2xl md:text-3xl font-semibold font-Helvetica_Medium text-[#323232] mb-2 mt-4">Aprovecha estas ofertas
+      {{-- @if ($destacados->count() > 0)
+        <h1 class="text-2xl md:text-3xl font-semibold font-FixelText_Semibold text-[#323232] mb-2 mt-4">Aprovecha estas ofertas
           especiales
           antes de completar tu compra</h1>
         <div class="relative">
@@ -86,7 +88,7 @@
           </div>
         </div>
 
-      @endif
+      @endif --}}
 
     </section>
   </main>

@@ -22,6 +22,15 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use SoDe\Extend\JSON;
 use Illuminate\Support\Facades\Auth;
+use SoDe\Extend\Fetch;
+use SoDe\Extend\Response;
+use SoDe\Extend\Text;
+use Exception;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Event;
+use Illuminate\Support\Facades\Storage;
 
 use function PHPUnit\Framework\isNull;
 
@@ -53,9 +62,6 @@ class ProductsController extends Controller
     // dump($user->hasRole('Reseller'));
 
     $user = false;
-   
-
-    
     
     $response =  new dxResponse();
     try {
@@ -241,6 +247,73 @@ class ProductsController extends Controller
     return view('pages.products.save', compact('product', 'atributos', 'valorAtributo', 'categoria', 'tags', 'especificacion', 'subcategories', 'galery', 'distritos', 'provincias', 'departamentos'));
   }
 
+  public function synchronization(Request $request)
+  {
+      try {
+          // Realizar solicitud GET a la API
+          $response = Http::withHeaders([
+              'Content-Type' => 'application/json',
+              'X-API-Key' => 'eKmVICRiQkJJvNMZTrTWknRjvYPH34uHRJSgyeEc'
+          ])->get('https://api.pricelabs.co/v1/listings');
+
+          // Decodificar la respuesta JSON
+          $data = $response->json();
+          // dd($data);
+          // Verificar si la solicitud fue exitosa
+          if (!$response->successful()) {
+              throw new Exception($data['message'] ?? 'Ocurrió un error inesperado al recuperar los datos.');
+          }
+
+          // Recorrer los departamentos y sincronizar con la base de datos
+          foreach ($data['listings'] as $departamento) {
+             
+                  // Verificar si el departamento ya existe en la base de datos
+                  $existingDept = Products::where('sku', $departamento['id'])->first();
+                  
+                  if ($existingDept) {
+                      // Actualizar el departamento existente
+                      $existingDept->update([
+                          'producto' => $departamento['name'],
+                          'cuartos' => $departamento['no_of_bedrooms'],
+                          'pms' => $departamento['pms'],
+                          'preciobase' => $departamento['base'] ?? 0,
+                          'preciomin' => $departamento['min']?? 0,
+                      ]);
+                  } else {
+
+                      $calendar = Calendar::create($departamento['name'] . ' Calendar');
+                      $calendarPath = 'public/calendars/' . $departamento['id'] . '.ics';
+                      Storage::put($calendarPath, $calendar->get());
+                      
+                      // Crear un nuevo departamento
+                      Products::create([
+                            'sku' => $departamento['id'],
+                            'producto' => $departamento['name'],
+                            'cuartos' => $departamento['no_of_bedrooms'],
+                            'pms' => $departamento['pms'],
+                            'preciobase' => $departamento['base'] ?? 0,
+                            'preciomin' => $departamento['min'] ?? 0,
+                            'categoria_id' => 1,
+                            'calendar_url' => Storage::url($calendarPath)
+                        ]);
+
+                    
+                  } 
+          }
+          
+          //return redirect()->route('products.index');
+          return response()->json(['message' => 'Departamentos sincronizados exitosamente'], 200);
+          
+      } catch (Exception $e) {
+          // Manejar errores
+          return response()->json(['error' => $e->getMessage()], 500);
+      }
+  }
+
+
+  
+
+
   public function edit(string $id)
   {
 
@@ -318,7 +391,7 @@ class ProductsController extends Controller
 
       $request->validate([
         'producto' => 'required',
-        'precio' => 'min:0|required|numeric',
+        //'precio' => 'min:0|required|numeric',
         // 'descuento' => 'lt:' . $request->input('precio'),
       ]);
 

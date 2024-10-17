@@ -13,6 +13,8 @@ import 'aos/dist/aos.css'
 import Aos from 'aos';
 Aos.init();
 
+import dayGridPlugin from '@fullcalendar/daygrid';
+import iCalendarPlugin from '@fullcalendar/icalendar';
 
 
 

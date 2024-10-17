@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use SoDe\Extend\JSON;
 use SoDe\Extend\Response;
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Event;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
@@ -40,11 +43,12 @@ class PaymentController extends Controller
         
         
       }else{
-        $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'descuento'])
+        $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'descuento', 'preciolimpieza', 'sku'])
         ->whereIn('id', array_map(fn($x) => $x['id'], $products))
         ->get();
       }
 
+      
 
       $offersJpa = [];
       if (count($offers) > 0) {
@@ -53,16 +57,66 @@ class PaymentController extends Controller
           ->get();
       }
 
-
+      $totalXReserva = [];
       $totalCost = 0;
       foreach ($productsJpa as $productJpa) {
         $key = array_search($productJpa->id, array_column($body['cart'], 'id'));
-        if ($productJpa->descuento > 0) {
-          $totalCost += $productJpa->descuento * $body['cart'][$key]['quantity'];
-        } else {
-          $totalCost += $productJpa->precio * $body['cart'][$key]['quantity'];
+        $checkin = $body['cart'][$key]['checkin']; 
+        $checkout = $body['cart'][$key]['checkout'];
+        
+        if (!$checkin || !$checkout) {
+          continue;
         }
+
+        $client = new \GuzzleHttp\Client();
+
+        $listings = [
+          [
+              'id' => $productJpa->sku, 
+              'pms' => 'airbnb', 
+          ]
+        ];
+
+        try {
+              $responsePL = $client->post('https://api.pricelabs.co/v1/listing_prices', [
+                  'headers' => [
+                      'X-API-Key' => 'eKmVICRiQkJJvNMZTrTWknRjvYPH34uHRJSgyeEc',
+                      'Content-Type' => 'application/json',
+                  ],
+                  'json' => ['listings' => $listings]
+              ]);
+      
+              $data = json_decode($responsePL->getBody(), true);
+       
+              $checkinDate = new \DateTime($checkin);
+              $checkoutDate = new \DateTime($checkout);
+              $checkoutDate->modify('-1 day'); 
+             
+             
+              $productCost = 0;
+      
+              if (!empty($data[0]['data'])) {
+                  foreach ($data[0]['data'] as $dayData) {
+                      $dayDate = new \DateTime($dayData['date']);
+
+                      if ($dayDate >= $checkinDate && $dayDate <= $checkoutDate) {
+                          
+                          $productCost += $dayData['price'];
+                      }
+                  }
+              }
+
+              
+              $totalCost += ($productCost + $productJpa->preciolimpieza) * $body['cart'][$key]['quantity'];
+              $totalXReserva[$productJpa->id] = $productCost + $productJpa->preciolimpieza;
+
+          } catch (\Exception $e) {
+              continue;
+          }
+
       }
+
+      
 
       foreach ($offersJpa as $offerJpa) {
         $key = array_search($offerJpa->id, array_column($body['cart'], 'id'));
@@ -128,7 +182,8 @@ class PaymentController extends Controller
       foreach ($productsJpa as $productJpa) {
         $key = array_search($productJpa->id, array_column($body['cart'], 'id'));
         $quantity = $body['cart'][$key]['quantity'];
-        $price = $productJpa->descuento > 0 ? $productJpa->descuento : $productJpa->precio;
+        //$price = $productJpa->descuento > 0 ? $productJpa->descuento : $productJpa->precio;
+        $price = $totalXReserva[$productJpa->id]; 
 
         SaleDetail::create([
           'sale_id' => $sale->id,
@@ -163,9 +218,6 @@ class PaymentController extends Controller
         ]);
       }
 
-
-
-
       $config = [
         "amount" => round($totalCost * 100),
         "capture" => true,
@@ -198,6 +250,58 @@ class PaymentController extends Controller
         'reference_code' => $charge?->reference_code ?? null,
         'amount' => $totalCost
       ];
+
+     
+      
+      foreach ($productsJpa as $productJpa) {
+
+        $key = array_search($productJpa->id, array_column($body['cart'], 'id'));
+        $checkin = $body['cart'][$key]['checkin'];
+        $checkout = $body['cart'][$key]['checkout'];
+
+        $checkinDate = new \DateTime($checkin);
+        $checkoutDate = new \DateTime($checkout);
+        $checkoutDate->modify('-1 day');
+        
+        if (!$checkin || !$checkout) {
+            continue;
+        }
+
+        $calendarPath = 'public/calendars/' . $productJpa->sku . '.ics';
+
+        DB::table('events')->insert([
+          'product_id' => $productJpa->id,
+          'sku' => $productJpa->sku,
+          'checkin' => $checkin,
+          'checkout' => $checkout,
+          'description' => 'Reserva realizada por ' . $sale->name . ' ' . $sale->lastname,
+        ]);
+
+        $eventos = DB::table('events')
+        ->where('product_id', $productJpa->id)
+        ->get();
+
+        $calendar = Calendar::create($productJpa->producto . ' Calendar');
+        
+        foreach ($eventos as $evento) {
+
+          $checkinDate = new \DateTime($evento->checkin);
+          $checkoutDate = new \DateTime($evento->checkout);
+          $checkoutDate->modify('-1 day');
+
+          $event = Event::create('Reserva para ' . $productJpa->producto)
+              ->startsAt($checkinDate)
+              ->endsAt($checkoutDate)
+              ->description($evento->description);
+  
+          $calendar->event($event);
+        }
+
+        // Guardar el calendario actualizado
+        Storage::put($calendarPath, $calendar->get());
+ 
+      }
+
 
       $sale->status_id = 3;
       $sale->status_message = 'La venta se ha generado y ha sido pagada';

@@ -17,6 +17,7 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
+        "@fullcalendar/icalendar": "^6.1.15",
         "@inertiajs/react": "^1.1.0",
         "@preline/select": "^2.3.0",
         "@tailwindcss/line-clamp": "^0.4.4",
@@ -28,6 +29,8 @@
         "flatpickr": "^4.6.13",
         "flowbite": "^2.4.1",
         "fs": "^0.0.1-security",
+        "fullcalendar": "^6.1.15",
+        "ical.js": "^1.5.0",
         "jsencrypt": "^3.3.2",
         "laravel-mix": "^6.0.49",
         "laravel-vite-plugin": "^1.0.4",

@@ -208,7 +208,7 @@
                     </span></a>
             </li>
 
-            @if ($tags->count() > 0)
+            {{-- @if ($tags->count() > 0)
                 @foreach ($tags as $item)
                     <li>
                         <a href="/catalogo?tag={{ $item->id }}"
@@ -219,7 +219,7 @@
 
                     </li>
                 @endforeach
-            @endif
+            @endif --}}
         </ul>
     </nav>
 </div>
@@ -276,28 +276,28 @@
                         <div class="md:hidden"><i class="fa-solid fa-user text-xl"></i></div>
                       </a>
                     @else
-                      <div class=" relative md:inline-flex" x-data="{ open: false }">
+                      <div class=" relative md:inline-flex font-FixelText_Semibold" x-data="{ open: false }">
                           <button class="inline-flex justify-center items-center group" aria-haspopup="true"
                               @click.prevent="open = !open" :aria-expanded="open">
                               <div class="flex items-center truncate ">
-                              <span id="usernamelogin" class="truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:opacity-75 dark:group-hover:text-slate-200">
+                              <span id="usernamelogin" class="text-white  truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:opacity-75 dark:group-hover:text-slate-200">
       
                               </span>
-                              <i class="fas fa-angle-down ms-2"></i>
+                              <i class="fas fa-angle-down ms-2 text-white"></i>
                               </div>
                           </button>
                           <div
-                              class="origin-top-right z-10 text-red-600 bg-red-100 absolute top-full min-w-44  dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                              class="origin-top-right z-10 text-[#73F7AD] bg-[#00897b] absolute top-full min-w-44  dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1"
                               @click.outside="open = false" @keydown.escape.window="open = false" x-show="open">
                               <ul>
-                              <li class=" hover:bg-rose-700 hover:text-white transition duration-100 ease-in">
+                              <li class=" hover:bg-[#00897b] hover:text-white transition duration-100 ease-in">
                                   <a class="font-medium text-sm  flex items-center py-1 px-3 " href="/micuenta" @click="open = false"
                                   @focus="open = true" @focusout="open = false">Mi
                                   Cuenta</a>
                               </li>
       
-                              <li class=" hover:bg-rose-700 hover:text-white transition duration-100 ease-in">
-                                  <form method="POST" action="{{ route('logout') }}" x-data>
+                              <li class=" hover:bg-[#00897b] hover:text-white transition duration-100 ease-in">
+                                  <form method="POST" action="{{ route('logout') }}" class="m-0" x-data>
                                   @csrf
                                   <button type="submit" class="font-medium text-sm  flex items-center py-1 px-3"
                                       @click.prevent="$root.submit(); open = false">
@@ -348,14 +348,14 @@
 
                     <a href="/register" class="hidden md:flex text-sm font-FixelText_Semibold tracking-wide bg-[#73F7AD] border-2 border-[#73F7AD] text-white px-3 md:px-6 py-3.5 leading-none rounded-2xl">Inscribirse</a>
                 
-                    {{-- <div class="flex justify-center items-center">
+                    <div class="flex justify-center items-center">
                         <div id="open-cart" class="relative inline-block cursor-pointer pr-3">
                             <span id="itemsCount"
-                                class="bg-[#EB5D2C] text-xs font-medium text-white text-center px-[7px] py-[2px]  rounded-full absolute bottom-0 right-0 ml-3">0</span>
+                                class="bg-[#00897b] border border-[#73F7AD] text-xs font-medium text-white text-center px-[7px] py-[2px]  rounded-full absolute bottom-0 right-0 ml-3">0</span>
                             <img src="{{ asset('images/svg/bag_boost.svg') }}"
                                 class="bg-white rounded-lg p-1 max-w-full h-auto cursor-pointer" />
                         </div>
-                    </div> --}}
+                    </div>
             </div>
         </div>
     </div>    
@@ -377,7 +377,7 @@
     <div class="p-4 flex flex-col h-[90vh] justify-between gap-2">
         <div class="flex flex-col">
             <div class="flex justify-between ">
-                <h2 class="font-semibold font-Helvetica_Medium text-[28px] text-[#151515] pb-5">Carrito</h2>
+                <h2 class="font-semibold font-FixelText_Semibold text-[28px] text-[#151515] pb-5">Carrito</h2>
                 <div id="close-cart" class="cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
@@ -395,18 +395,29 @@
         </div>
         <div class="flex flex-col gap-2 pt-2">
             <div class="text-[#111111]  text-xl flex justify-between items-center">
-                <p class="font-Helvetica_Medium font-semibold">Total</p>
-                <p class="font-Helvetica_Medium font-semibold" id="itemsTotal">S/ 0.00</p>
+                <p class="font-FixelText_Regular font-semibold">Total</p>
+                <p class="font-FixelText_Regular font-semibold" id="itemsTotal">S/ 0.00</p>
             </div>
             <div>
                 <a href="/carrito"
-                    class="font-normal font-Helvetica_Medium text-lg bg-[#FD1F4A]  py-3 px-5 rounded-2xl text-white cursor-pointer w-full inline-block text-center">Ir al
-                    Carrito</a>
+                    class="font-normal font-FixelText_Semibold text-lg bg-[#00897B]  py-3 px-5 rounded-2xl text-white cursor-pointer w-full inline-block text-center">Ir al
+                    carrito</a>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+    $('#open-cart').on('click', () => {
+        $('#cart-modal').modal({
+            showClose: false,
+            fadeDuration: 100
+        })
+    })
+    $('#close-cart').on('click', () => {
+        $('.jquery-modal.blocker.current').trigger('click')
+    })
+</script>
 
 <script>
   @auth
@@ -498,18 +509,6 @@
 </script>
 
 <script>
-    $('#open-cart').on('click', () => {
-        $('#cart-modal').modal({
-            showClose: false,
-            fadeDuration: 100
-        })
-    })
-    $('#close-cart').on('click', () => {
-        $('.jquery-modal.blocker.current').trigger('click')
-    })
-</script>
-
-<script>
     function mostrarTotalItems() {
         let articulos = Local.get('carrito')
         let contarArticulos = articulos.reduce((total, articulo) => {
@@ -518,6 +517,7 @@
 
         $('#itemsCount').text(contarArticulos)
     }
+
     $(document).ready(function() {
         if ({{ $isIndex ? 1 : 0 }}) {
             $(window).scroll(function() {
@@ -718,6 +718,7 @@
         }
     });
 </script>
+
 <script>
     $(document).ready(function() {
         $(document).on('mouseenter', '.other-class', function() {
@@ -778,8 +779,6 @@
         }
     });
 
-
-
     function cerrar() {
         console.log('cerrando')
         let padre = document.getElementById('productos-link-h');
@@ -788,6 +787,9 @@
     }
 
     function agregarAlCarrito(item, cantidad) {
+        let costototal = $('#costonoches').text();
+        let checkin = $('#arrival-date').data('checkin');
+        let checkout = $('#arrival-date').data('checkout');
         $.ajax({
 
             url: `{{ route('carrito.buscarProducto') }}`,
@@ -805,6 +807,7 @@
                     descuento,
                     precio,
                     imagen,
+                    preciolimpieza,
                     color,
                     precio_reseller
                 } = success.data
@@ -821,9 +824,13 @@
                     producto,
                     isCombo: false,
                     descuento,
+                    preciolimpieza,
                     precio,
                     imagen,
                     cantidad,
+                    checkin,
+                    checkout,
+                    costototal,
                     color
 
                 }
@@ -831,20 +838,28 @@
                     .isCombo ==
                     false, )
                 if (existeArticulo) {
-                    //sumar al articulo actual 
-                    const prodRepetido = articulosCarrito.map(item => {
-                        if (item.id === detalleProducto.id && item.isCombo == false) {
-                            item.cantidad += Number(detalleProducto.cantidad);
+                    //sumar al articulo actual
+                   
+                    //const prodRepetido = articulosCarrito.map(item => {
+                    //    if (item.id === detalleProducto.id && item.isCombo == false) {
+                    //        item.cantidad += Number(detalleProducto.cantidad);
                             // retorna el objeto actualizado 
-                        }
-                        return item; // retorna los objetos que no son duplicados 
-
-
-                    });
+                    //    }
+                    //    return item; // retorna los objetos que no son duplicados 
+                    //});
+                    tipoalerta = "warning";
+                    titulo = "Reserva existente";
+                    mensaje = "Ya existe una reserva en proceso para esta propiedad";
+                  
                 } else {
+                    
                     articulosCarrito = [...articulosCarrito, detalleProducto]
-
+                    tipoalerta = "success"
+                    titulo = "Reserva agregada";
+                    mensaje = "Reserva se agregó correctamente al carrito";
                 }
+
+                console.log(articulosCarrito);   
 
                 Local.set('carrito', articulosCarrito)
                 let itemsCarrito = $('#itemsCarrito')
@@ -856,9 +871,9 @@
 
                 Notify.add({
                     icon: '/images/svg/Boost.svg',
-                    title: 'Producto agregado',
-                    body: 'El producto se agregó correctamente al carrito',
-                    type: 'success',
+                    title: titulo,
+                    body: mensaje,
+                    type: tipoalerta,
                 })
 
                 /* Swal.fire({
@@ -880,13 +895,15 @@
         let url = window.location.href;
         let partesURL = url.split('/');
         let productoEncontrado = partesURL.find(parte => parte === 'producto');
-
+       
         let item
         let cantidad
 
 
         item = partesURL[partesURL.length - 1]
-        cantidad = Number($('#cantidadSpan span').text())
+        
+        //cantidad = Number($('#cantidadSpan span').text())
+        cantidad = 1;
         item = $(this).data('id')
 
         try {
@@ -910,10 +927,7 @@
             console.log(error)
 
         }
-
-
     })
 
-    
 </script>
 

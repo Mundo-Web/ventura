@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('sku')->nullable();
             $table->string('producto');
+            $table->string('pms')->nullable();
             $table->string('extract')->nullable();
             $table->text('description')->nullable();
             $table->decimal('precio', 12, 2)->default(0);
             $table->decimal('descuento', 12, 2)->default(0);
+            $table->decimal('preciomin', 12, 2)->default(0)->nullable();
+            $table->decimal('preciobase', 12, 2)->default(0)->nullable();
             $table->decimal('preciolimpieza', 12, 2)->default(0);
             $table->decimal('precioservicio', 12, 2)->default(0);
             $table->decimal('stock', 12, 2)->default(0);
@@ -25,7 +29,7 @@ return new class extends Migration
             $table->string('peso')->nullable();
             $table->string('imagen')->nullable();
             $table->json('atributes')->nullable();
-            $table->string('sku')->nullable();
+           
             $table->boolean('destacar')->default(false);
             $table->boolean('recomendar')->default(false);
             $table->unsignedBigInteger('categoria_id')->nullable();
@@ -41,6 +45,9 @@ return new class extends Migration
             $table->string('district')->nullable();
             $table->string('city')->nullable();
             $table->string('country')->nullable();
+
+            $table->string('calendar_url')->nullable();
+            $table->string('airbnb_url')->nullable();
 
             $table->string('frecuencia')->nullable();
             $table->integer('cochera')->nullable();

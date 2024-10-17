@@ -12,9 +12,12 @@ class Products extends Model
   protected $fillable = [
     'producto',
     'precio',
+    'pms',
     'descuento',
     'preciolimpieza',
     'precioservicio',
+    'preciobase',
+    'preciomin',
     'stock',
     'imagen',
     'imagen_2',
@@ -59,11 +62,19 @@ class Products extends Model
     'departamento_id',
     'provincia_id',
     'distrito_id',
+    'calendar_url',
+    'airbnb_url',
 
 
 
   ];
+  
+  public function events()
+  {
+    return $this->hasMany(Event::class);
+  }
 
+  
   public function categoria()
   {
     return Category::find($this->categoria_id);
