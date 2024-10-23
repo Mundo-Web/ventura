@@ -642,7 +642,7 @@
                   </div>
                 </div>
 
-                {{-- <div class="md:col-span-5">
+                {{-- <div class="md:col-span-">
                   <label for="subcategory_id">Subcategoria</label>
                   <div class="relative mb-2  mt-2">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
