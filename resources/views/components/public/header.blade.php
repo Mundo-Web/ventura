@@ -847,7 +847,7 @@
                     //    }
                     //    return item; // retorna los objetos que no son duplicados 
                     //});
-                    tipoalerta = "warning";
+                    tipoalerta = "danger";
                     titulo = "Reserva existente";
                     mensaje = "Ya existe una reserva en proceso para esta propiedad";
                   

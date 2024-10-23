@@ -653,8 +653,13 @@
             }
         }
 
+
         if (rangeBlocked) {
-            alert('No se puede seleccionar un rango que incluya fechas reservadas.');
+            Swal.fire({
+                title: 'Selección Fallida',
+                text: 'No se puede seleccionar un rango que incluya fechas reservadas.',
+                icon: 'warning',
+            });
             $('#arrival-date').data('daterangepicker').setStartDate(start);
             $('#arrival-date').data('daterangepicker').setEndDate(start.clone().add(1, 'days'));
             $('#arrival-date').val('Fecha Inicio - Fecha Fin');
@@ -688,7 +693,7 @@
 
 
       function cotizarPrecios() {
-        let productSku = '21905805';
+        let productSku = @json($product->sku);
         let checkin = $('#arrival-date').data('checkin');
         let checkout = $('#arrival-date').data('checkout');
 
@@ -733,59 +738,6 @@
         });
     }
   </script>
-
-  <script>
-    
-    $('#cotizar').on('click', function(event) {
-        event.preventDefault();
-        
-        //let productSku = $(this).data('product-sku');
-        let productSku = '21905805';
-        let checkin = $('#arrival-date').data('checkin');
-        let checkout = $('#arrival-date').data('checkout');
-
-        if (!checkin || !checkout) {
-            Swal.fire({
-                title: 'Selección Fallida',
-                text: 'Por favor, selecciona un rango de fechas válido.',
-                icon: 'warning',
-            });
-            return;
-        }
-
-        $.ajax({
-            url: "{{ route('producto.prices') }}",
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            },
-            data: JSON.stringify({
-                id: productSku, 
-                checkin: checkin, 
-                checkout: checkout 
-            }),
-            success: function(response) {
-              
-              if(response) {
-               $('#costonoches').text(response.data.totalCost);
-              } else {
-               $('#costonoches').text('0.00');  
-              }
-            },
-            error: function(xhr) {
-               
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Ocurrió un error inesperado.',
-                    icon: 'error',
-                });
-            }
-        });
-    });
-
-  </script>
-  
 
   <script>
     var headerServices = new Swiper(".productos-relacionados", {

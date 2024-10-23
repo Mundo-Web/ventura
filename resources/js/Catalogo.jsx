@@ -232,11 +232,12 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
       
         <div className="w-full lg:w-[55%] text-[#151515] flex flex-col justify-center items-center gap-2 md:gap-10">
             <div className="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 lg:pt-0 xl:max-w-4xl">
-              <h1 className="text-[#F8FCFF] font-Homie_Bold text-3xl">
+              <h1 className="text-[#F8FCFF] font-Homie_Bold text-5xl lg:text-6xl">
                 Propiedades que inspiran, experiencias que  marcan la diferencia.
               </h1>
 
             </div>
+          {/*
 
             <div className="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 md:pt-0">
              
@@ -309,12 +310,14 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
               </p>
 
             </div>
+
+          */}
         </div>
 
        
         <div className="w-full lg:w-[45%] ">
           <div className="w-full h-full flex flex-row items-center justify-center">
-              <img src={imgcatalogo} className="min-h-[400px] object-contain xl:h-full object-bottom" />
+              <img src={imgcatalogo} className="h-[200px] lg:min-h-[400px] object-contain xl:h-full object-bottom" />
           </div>
         </div>
 

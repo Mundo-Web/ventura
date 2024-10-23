@@ -32,15 +32,15 @@
       <!-- Primer div -->
         <div class="w-full lg:w-[55%] text-[#151515] flex flex-col justify-center items-center gap-2 md:gap-10">
             <div class="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 lg:pt-0 xl:max-w-3xl">
-              <h1 class="text-[#F8FCFF] font-Homie_Bold text-4xl xl:text-5xl">
+              <h1 class="text-[#F8FCFF] font-Homie_Bold text-5xl xl:text-6xl">
                 Propiedades que inspiran, experiencias que  marcan la diferencia.
               </h1>
-              <p class="text-[#F8FCFF] text-base font-FixelText_Regular">
-                  Ahora puedes disfrutar de Lima de la mejor  manera a través de nuestras propiedades  exclusivas.
+              <p class="text-[#F8FCFF] text-lg font-FixelText_Regular">
+                Ahora puedes disfrutar de Lima de la mejor  manera a través de nuestras propiedades  exclusivas.
               </p>
             </div>
 
-            <div class="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 md:pt-0">
+            {{-- <div class="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 md:pt-0">
               <!--  -->
               <div class="px-0 w-full z-10">
                 
@@ -112,7 +112,7 @@
                 Propietario, anuncia tu propiedad gratis
               </p>
 
-            </div>
+            </div> --}}
         </div>
 
         <!-- Segundo div -->

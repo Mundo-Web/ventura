@@ -662,7 +662,7 @@ class IndexController extends Controller
       try {
         $response = $client->post('https://api.pricelabs.co/v1/listing_prices', [
             'headers' => [
-                'X-API-Key' => 'eKmVICRiQkJJvNMZTrTWknRjvYPH34uHRJSgyeEc',
+                'X-API-Key' => env('PRICELABS_API_KEY'),
                 'Content-Type' => 'application/json',
             ],
             'json' => ['listings' => $listings]
@@ -716,45 +716,59 @@ class IndexController extends Controller
 
 
   public function producto(string $id)
-  {
-        $icalUrl = 'https://www.airbnb.com/calendar/ical/21905805.ics?s=83a28ecbe024328cb3f3a29d66833b99';
-
-        // Obtener el contenido del archivo .ics
-        $icalContent = file_get_contents($icalUrl);
-
-        // Dividir el contenido del archivo en líneas
-        $lines = explode("\n", $icalContent);
+  {     
+        $product = Products::findOrFail($id);
 
         $disabledDates = [];
         $startDate = null;
         $endDate = null;
 
+        $icalUrl =  $product->airbnb_url;
+          
+        if ($icalUrl) {
+          // Si hay un URL válido, obtenemos el contenido del archivo .ics
+          $icalContent = file_get_contents($icalUrl);
+         
+          $lines = explode("\n", $icalContent);
+
         // Procesar las líneas del archivo .ics
-        foreach ($lines as $line) {
-            $line = trim($line); // Eliminar espacios en blanco
+          foreach ($lines as $line) {
+              $line = trim($line); // Eliminar espacios en blanco
 
-            // Buscar las líneas que contienen las fechas de inicio (DTSTART) y fin (DTEND)
-            if (strpos($line, 'DTSTART') === 0) {
-                // Extraer la fecha de inicio
-                $startDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
-            } elseif (strpos($line, 'DTEND') === 0) {
-                // Extraer la fecha de fin
-                $endDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
-                $endDate->subDay(); // Restar un día porque el check-out ocurre en esta fecha
-            }
+              // Buscar las líneas que contienen las fechas de inicio (DTSTART) y fin (DTEND)
+              if (strpos($line, 'DTSTART') === 0) {
+                  // Extraer la fecha de inicio
+                  $startDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
+              } elseif (strpos($line, 'DTEND') === 0) {
+                  // Extraer la fecha de fin
+                  $endDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
+                  $endDate->subDay(); // Restar un día porque el check-out ocurre en esta fecha
+              }
 
-            // Si tenemos las fechas de inicio y fin, generar las fechas entre ese rango
-            if ($startDate && $endDate) {
-                while ($startDate->lte($endDate)) {
-                    $disabledDates[] = $startDate->format('d/m/Y');
-                    $startDate->addDay();
-                }
+              // Si tenemos las fechas de inicio y fin, generar las fechas entre ese rango
+              if ($startDate && $endDate) {
+                  while ($startDate->lte($endDate)) {
+                      $disabledDates[] = $startDate->format('d/m/Y');
+                      $startDate->addDay();
+                  }
 
-                // Reiniciar las variables para el siguiente evento
-                $startDate = null;
-                $endDate = null;
-            }
+                  // Reiniciar las variables para el siguiente evento
+                  $startDate = null;
+                  $endDate = null;
+              }
+          }
+        } else {
+          
+          $startDate = Carbon::now();
+          $endDate = Carbon::now()->addYears(5); // Puedes ajustar este rango según tus necesidades
+
+          while ($startDate->lte($endDate)) {
+              $disabledDates[] = $startDate->format('d/m/Y');
+              $startDate->addDay();
+          }
         }
+        
+        
 
 
     
@@ -767,9 +781,6 @@ class IndexController extends Controller
 
     // $productos = Products::where('id', '=', $id)->first();
     // $especificaciones = Specifications::where('product_id', '=', $id)->get();
-    $product = Products::findOrFail($id);
-
-
 
     $especificaciones = Specifications::where('product_id', '=', $id)
       ->where(function ($query) {

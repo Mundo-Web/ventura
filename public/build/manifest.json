@@ -49,7 +49,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-6uwgxnKX.css",
+    "file": "assets/app-_m0FKPQy.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
@@ -93,7 +93,7 @@
     "src": "resources/js/Admin/Products.jsx"
   },
   "resources/js/Catalogo.jsx": {
-    "file": "assets/Catalogo-Q5RrxXC-.js",
+    "file": "assets/Catalogo-7mfX_Rid.js",
     "imports": [
       "resources/js/components/Filter/FilterContainer.jsx",
       "resources/js/Utils/ReactAppend.jsx",

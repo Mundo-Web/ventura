@@ -7,7 +7,7 @@ class Notify {
         e.style.gap = '10px';
         e.style.padding = 0;
         e.style.bottom = '20px';
-        e.style.left = '20px';
+        e.style.right = '20px';
         e.style.spacing = '5px';
         e.style.height = 'max-content';
         e.style.zIndex = 999999;

@@ -629,16 +629,16 @@
                 </div>
 
                 <div class="md:col-span-5 mt-2">
-                  <label for="idcalendar">ID de Calendario Google</label>
+                  <label for="airbnb_url">Ical Calendario Airbnb</label>
                   <div class="relative mb-2">
                       <div
                           class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                           <i class="fa-solid fa-calendar-days"></i>
                       </div>
-                      <input type="text" id="idcalendar" name="idcalendar"
-                          value="{{ $product->idcalendar }}"
+                      <input type="text" id="airbnb_url" name="airbnb_url"
+                          value="{{ $product->airbnb_url }}"
                           class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="Id de calendario google">
+                          placeholder="Ical Calendario Airbnb">
                   </div>
                 </div>
 
