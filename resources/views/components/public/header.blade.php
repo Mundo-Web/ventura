@@ -395,8 +395,8 @@
         </div>
         <div class="flex flex-col gap-2 pt-2">
             <div class="text-[#111111]  text-xl flex justify-between items-center">
-                <p class="font-FixelText_Regular font-semibold">Total</p>
-                <p class="font-FixelText_Regular font-semibold" id="itemsTotal">S/ 0.00</p>
+                <p class="font-FixelText_Bold font-semibold">Total</p>
+                <p class="font-FixelText_Bold font-semibold" id="itemsTotal">S/ 0.00</p>
             </div>
             <div>
                 <a href="/carrito"
@@ -687,17 +687,17 @@
             }
         });
 
-        document.addEventListener('click', function(event) {
-            var input = document.getElementById('buscarproducto');
-            var resultados = document.getElementById('resultados');
-            var isClickInsideInput = input.contains(event.target);
-            var isClickInsideResultados = resultados.contains(event.target);
+        // document.addEventListener('click', function(event) {
+        //     var input = document.getElementById('buscarproducto');
+        //     var resultados = document.getElementById('resultados');
+        //     var isClickInsideInput = input.contains(event.target);
+        //     var isClickInsideResultados = resultados.contains(event.target);
 
-            if (!isClickInsideInput && !isClickInsideResultados) {
-                input.value = '';
-                $('#resultados').empty();
-            }
-        });
+        //     if (!isClickInsideInput && !isClickInsideResultados) {
+        //         input.value = '';
+        //         $('#resultados').empty();
+        //     }
+        // });
     });
 </script>
 
@@ -786,10 +786,11 @@
         padre.innerHTML = '';
     }
 
-    function agregarAlCarrito(item, cantidad) {
-        let costototal = $('#costonoches').text();
+    function agregarAlCarrito(item, cantidad, servicios) {
+        let costototal = costoTotalFinal;
         let checkin = $('#arrival-date').data('checkin');
         let checkout = $('#arrival-date').data('checkout');
+       
         $.ajax({
 
             url: `{{ route('carrito.buscarProducto') }}`,
@@ -797,7 +798,8 @@
             data: {
                 _token: $('input[name="_token"]').val(),
                 id: item,
-                cantidad
+                cantidad,
+                servicios
 
             },
             success: function(success) {
@@ -819,6 +821,9 @@
                 }
 
                 let cantidad = Number(success.cantidad)
+                let services = success.servicios
+                let nombresServicios = success.nombresServicios
+                
                 let detalleProducto = {
                     id,
                     producto,
@@ -831,7 +836,9 @@
                     checkin,
                     checkout,
                     costototal,
-                    color
+                    color,
+                    services,
+                    nombresServicios
 
                 }
                 let existeArticulo = articulosCarrito.some(item => item.id === detalleProducto.id && item
@@ -840,26 +847,28 @@
                 if (existeArticulo) {
                     //sumar al articulo actual
                    
-                    //const prodRepetido = articulosCarrito.map(item => {
+                    // const prodRepetido = articulosCarrito.map(item => {
                     //    if (item.id === detalleProducto.id && item.isCombo == false) {
-                    //        item.cantidad += Number(detalleProducto.cantidad);
-                            // retorna el objeto actualizado 
+                    //        item.cantidad += Number(detalleProducto.cantidad);     
                     //    }
                     //    return item; // retorna los objetos que no son duplicados 
-                    //});
-                    tipoalerta = "danger";
-                    titulo = "Reserva existente";
+                    // });
+                    articulosCarrito = articulosCarrito.filter(item => !(item.id === detalleProducto.id && item.isCombo == false));
+                    articulosCarrito = [...articulosCarrito, detalleProducto];
+
+                    tipoalerta = "warning";
+                    titulo = "Reserva actualizada";
                     mensaje = "Ya existe una reserva en proceso para esta propiedad";
                   
                 } else {
-                    
+                   
                     articulosCarrito = [...articulosCarrito, detalleProducto]
                     tipoalerta = "success"
                     titulo = "Reserva agregada";
                     mensaje = "Reserva se agregó correctamente al carrito";
                 }
 
-                console.log(articulosCarrito);   
+                // console.log(articulosCarrito);   
 
                 Local.set('carrito', articulosCarrito)
                 let itemsCarrito = $('#itemsCarrito')
@@ -868,6 +877,7 @@
                 limpiarHTML()
                 PintarCarrito()
                 mostrarTotalItems()
+                
 
                 Notify.add({
                     icon: '/images/svg/Boost.svg',
@@ -896,9 +906,21 @@
         let partesURL = url.split('/');
         let productoEncontrado = partesURL.find(parte => parte === 'producto');
        
+        let checkin = $('#arrival-date').data('checkin');
+        let checkout = $('#arrival-date').data('checkout');
+
+        if (!checkin || !checkout) {
+            Swal.fire({
+                title: 'Selección Fallida',
+                text: 'Por favor, selecciona un rango de fechas válido.',
+                icon: 'warning',
+            });
+            return;
+        }
+
         let item
         let cantidad
-
+        
 
         item = partesURL[partesURL.length - 1]
         
@@ -907,7 +929,7 @@
         item = $(this).data('id')
 
         try {
-            agregarAlCarrito(item, cantidad)
+            agregarAlCarrito(item, cantidad, serviciosExtras)
 
         } catch (error) {
             console.log(error)

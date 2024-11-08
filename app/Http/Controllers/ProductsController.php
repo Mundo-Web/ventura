@@ -8,6 +8,7 @@ use App\Models\Attributes;
 use App\Models\AttributesValues;
 use App\Models\Category;
 use App\Models\dxDataGrid;
+use App\Models\ExtraService;
 use App\Models\Galerie;
 use App\Models\Products;
 use App\Models\Specifications;
@@ -240,11 +241,12 @@ class ProductsController extends Controller
     $subcategories = SubCategory::all();
     $galery = [];
     $especificacion = [json_decode('{"tittle":"", "specifications":""}', false)];
+    $servicios = [json_decode('{"service":"", "price":""}', false)];
     $distritos  = DB::select('select * from districts where active = ? order by 3', [1]);
     $provincias = DB::select('select * from provinces where active = ? order by 3', [1]);
     $departamentos = DB::select('select * from departments where active = ? order by 2', [1]);
 
-    return view('pages.products.save', compact('product', 'atributos', 'valorAtributo', 'categoria', 'tags', 'especificacion', 'subcategories', 'galery', 'distritos', 'provincias', 'departamentos'));
+    return view('pages.products.save', compact('servicios','product', 'atributos', 'valorAtributo', 'categoria', 'tags', 'especificacion', 'subcategories', 'galery', 'distritos', 'provincias', 'departamentos'));
   }
 
   public function synchronization(Request $request)
@@ -322,6 +324,8 @@ class ProductsController extends Controller
     $valorAtributo = AttributesValues::where("status", "=", true)->get();
     $especificacion = Specifications::where("product_id", "=", $id)->get();
     if ($especificacion->count() == 0) $especificacion = [json_decode('{"tittle":"", "specifications":""}', false)];
+    $servicios = ExtraService::where("product_id", "=", $id)->get();
+    if ($servicios->count() == 0) $servicios = [json_decode('{"service":"", "price":""}', false)];
     $tags = Tag::where('status', 1)->get();
     $categoria = Category::all();
     $subcategories = SubCategory::all();
@@ -332,7 +336,7 @@ class ProductsController extends Controller
     $provincias = DB::select('select * from provinces where active = ? order by 3', [1]);
     $distritos  = DB::select('select * from districts where active = ? order by 3', [1]);
 
-    return view('pages.products.save', compact('product', 'atributos', 'valorAtributo', 'tags', 'categoria', 'especificacion', 'subcategories', 'galery', 'valoresdeatributo', 'departamentos', 'provincias', 'distritos'));
+    return view('pages.products.save', compact('servicios','product', 'atributos', 'valorAtributo', 'tags', 'categoria', 'especificacion', 'subcategories', 'galery', 'valoresdeatributo', 'departamentos', 'provincias', 'distritos'));
   }
 
   private function saveImg(Request $request, string $field)
@@ -383,6 +387,7 @@ class ProductsController extends Controller
     
     try {
       $especificaciones = [];
+      $extraservice = [];
       $data = $request->all();
       
       $atributos = null;
@@ -433,6 +438,19 @@ class ProductsController extends Controller
           } elseif (strpos($key, 'specifications-') === 0) {
             $num = substr($key, strrpos($key, '-') + 1); // Obtener el número de la especificación
             $especificaciones[$num]['specifications'] = $value; // Agregar las especificaciones al array asociativo
+          }
+        }
+      }
+
+      foreach ($data as $key => $value) {
+        if (strstr($key, '-')) {
+          //strpos primera ocurrencia que enuentre
+          if (strpos($key, 'service-') === 0) {
+            $num = substr($key, strrpos($key, '-') + 1); // Obtener el número de la especificación
+            $extraservice[$num]['service'] = $value; // Agregar el título al array asociativo
+          } elseif (strpos($key, 'price-') === 0) {
+            $num = substr($key, strrpos($key, '-') + 1); // Obtener el número de la especificación
+            $extraservice[$num]['price'] = $value; // Agregar las especificaciones al array asociativo
           }
         }
       }
@@ -519,6 +537,7 @@ class ProductsController extends Controller
       }
 
       $this->GuardarEspecificaciones($producto->id, $especificaciones);
+      $this->GuardarExtraService($producto->id, $extraservice);
       $producto->tags()->sync($tagsSeleccionados);
 
       Galerie::where('product_id', $producto->id)->delete();
@@ -566,6 +585,16 @@ class ProductsController extends Controller
       if (!$value['tittle'] || !$value['specifications']) continue;
       $value['product_id'] = $id;
       Specifications::create($value);
+    }
+  }
+
+  private function GuardarExtraService($id, $especificaciones)
+  {
+    ExtraService::where('product_id', $id)->delete();
+    foreach ($especificaciones as $value) {
+      if (!$value['service'] || !$value['price']) continue;
+      $value['product_id'] = $id;
+      ExtraService::create($value);
     }
   }
 

@@ -420,6 +420,16 @@ cuentas.forEach((cuenta) => {
 
 
 
+
+
+
+
+function formatDate(dateString) {
+  const [year, month, day] = dateString.split('-');
+  return `${day}/${month}/${year}`;
+}
+
+
 function PintarCarrito() {
   
 
@@ -427,7 +437,15 @@ function PintarCarrito() {
   let itemsCarritoCheck = $('#itemsCarritoCheck')
 
   articulosCarrito.forEach(element => {
+
+    const formattedCheckin = formatDate(element.checkin);
+    const formattedCheckout = formatDate(element.checkout);
+    let nombresServicios = '';
     
+    if (element.nombresServicios && element.nombresServicios.length > 0) {
+        nombresServicios = element.nombresServicios.join(', '); 
+    }
+
     let plantilla = `<tr class=" font-FixelText_Regular border-b">
           <td class="p-2 w-24">
             <img src="${appUrl}/${element.imagen}" class="block bg-[#F3F5F7] rounded-md p-0 w-24 object-contain" alt="producto" onerror="this.onerror=null;this.src='/images/img/noimagen.jpg';"  style="width: 100px; height: 75px; object-fit: contain; object-position: center;" />
@@ -437,11 +455,17 @@ function PintarCarrito() {
             <p class="limited-text font-semibold text-[14px] text-[#151515] mb-1">
               ${element.producto}
             </p>
+            <p class="font-semibold text-[12px] text-[#151515]">
+                Ingreso: ${formattedCheckin} - Salida: ${formattedCheckout}
+            </p>
+            <p class="font-semibold text-[12px] text-[#151515]">
+                Extras: ${nombresServicios}
+            </p>
             
           </td>
           <td class="p-2 text-end lg:flex lg:flex-row h-24 items-center gap-2">
             <p class="font-semibold text-base text-[#151515] w-max">
-              S/ ${Number(element.costototal) + Number(element.preciolimpieza)}
+              S/ ${Number(element.costototal)}
             </p>
             <button type="button" onClick="(deleteItem(${element.id} , ${element.isCombo}))" class=" w-5 h-5 flex justify-center items-center mx-auto">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#272727" class="w-5 h-5">
@@ -458,24 +482,21 @@ function PintarCarrito() {
   });
 
   mostrarTotalItems()
-  console.log("costototal : ");
   calcularTotal()
-  console.log("costototalfffff : ");
-
+  
 }
+
 
 function calcularTotal() {
   
-  let articulos = Local.get('carrito')
+  let articulos = Local.get('carrito') || [];
+  
   let total = articulos.map(item => {
     let monto
-    
     if (Number(item.costototal) !== 0) {
-      monto =  item.cantidad * (Number(item.costototal) + Number(item.preciolimpieza))
+      monto =  item.cantidad * (Number(item.costototal))
     } 
-
     return monto
-    
   })
   
   const suma = total.reduce((total, elemento) => total + elemento, 0);
@@ -484,5 +505,6 @@ function calcularTotal() {
   console.log("tofixed  ", suma.toFixed(2))
  
 }
+
 
 

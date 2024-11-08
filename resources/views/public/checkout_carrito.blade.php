@@ -157,40 +157,44 @@
 @section('scripts_importados')
   <script>
     $(document).ready(function() {
-      calcularTotal()
+      calcularTotal2()
     });
 
-    // let articulosCarrito = [];
-    let checkedRadio = false
+     // let articulosCarrito = [];
+    //let checkedRadio = false
 
-    function calcularTotal() {
+    function calcularTotal2() {
       console.log('Calculo el total');
       const precioProductos = getTotalPrice()
       $('#itemSubtotal').text(`S/. ${precioProductos.toFixed(2)}`)
-      const precioEnvio = getCostoEnvio()
-      const total = precioProductos + precioEnvio
-
+      // const precioEnvio = getCostoEnvio()
+      // const total = precioProductos + precioEnvio
+      const total = precioProductos
+      console.log(total);
       $('#itemTotal').text(`S/. ${total.toFixed(2)} `)
       $('#itemsTotal').text(`S/. ${total.toFixed(2)} `)
     }
+
     const getTotalPrice = () => {
       const carrito = Local.get('carrito') ?? []
       const productPrice = carrito.reduce((total, x) => {
-        let price = Number(x.precio) * x.cantidad
-        if (Number(x.descuento)) {
-          price = Number(x.descuento) * x.cantidad
-        }
+        let price = Number(x.costototal)
+        //let price = Number(x.precio) * x.cantidad
+        // if (Number(x.descuento)) {
+        //   price = Number(x.descuento) * x.cantidad
+        // }
         total += price
         return total
       }, 0)
       return productPrice
     }
-    const getCostoEnvio = () => {
-      if ($('[name="envio"]:checked').val() == 'recojo') return 0
-      const priceStr = $('#distrito_id option:selected').attr('data-price')
-      const price = Number(priceStr) || 0
-      return price
-    }
+    
+    // const getCostoEnvio = () => {
+    //   if ($('[name="envio"]:checked').val() == 'recojo') return 0
+    //   const priceStr = $('#distrito_id option:selected').attr('data-price')
+    //   const price = Number(priceStr) || 0
+    //   return price
+    // }
 
     /*  function deleteOnCarBtn(id, operacion) {
        console.log('Elimino un elemento del cvarrio');
@@ -321,6 +325,7 @@
 
       })
     })
+
     $('input[type="radio"][name="bordered-radio"]').on('click', function() {
       // Obtener el valor del radio button seleccionado
       const valorSeleccionado = $(this).val();
@@ -348,6 +353,7 @@
       limpiarHTML()
       PintarCarrito()
     });
+
     $("#btnSiguiente").on('click', function(e) {
       const carrito = Local.get('carrito') ?? []
       if (carrito.length == 0) {
@@ -359,6 +365,7 @@
         });
       }
     })
+
   </script>
 @stop
 

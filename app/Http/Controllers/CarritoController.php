@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExtraService;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,8 +66,18 @@ class CarritoController extends Controller
     }
 
     public function buscarProducto(Request $request){
+       $servicios = $servicios ?? [];
+
        $id =  $request->id; 
        $cantidad =  (int)$request->cantidad; 
+       $servicios =  $request->servicios; 
+
+       if (is_array($servicios) && count($servicios) > 0) {
+            $nombresServicios = ExtraService::whereIn('id', $servicios)->pluck('service');
+        } else {
+            // Si $servicios es un arreglo vacío o no válido
+            $nombresServicios = collect(); // Un valor predeterminado como una colección vacía
+        }
 
        $is_reseller = false; 
        if(Auth::check()){
@@ -78,6 +89,6 @@ class CarritoController extends Controller
 
         $producto = Products::find($id);
 
-        return response()->json(['message' => 'Producto encontrado ', 'data' => $producto , 'cantidad'=> $cantidad, 'is_reseller' => $is_reseller] );
+        return response()->json(['message' => 'Producto encontrado ', 'data' => $producto , 'servicios'=> $servicios, 'nombresServicios' => $nombresServicios, 'cantidad'=> $cantidad, 'is_reseller' => $is_reseller] );
     }
 }

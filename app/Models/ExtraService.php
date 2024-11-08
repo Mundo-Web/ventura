@@ -5,19 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SaleDetail extends Model
+class ExtraService extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'sale_id',
-        'product_image',
-        'product_name',
-        'product_color',
-        'checkin',
-        'checkout',
-        'extras',
-        'quantity',
+        'product_id',
+        'service',
         'price',
+        'visible',
+        'status',
     ];
 }

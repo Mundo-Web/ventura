@@ -394,6 +394,43 @@
                   </div>
                 </div>
 
+
+                <div class="md:col-span-5 mt-2">
+                  <div class=" flex items-end justify-between gap-2 ">
+                    <label for="services">Servicios extras (Borre contenido para eliminar)</label>
+                    <button type="button" id="AddService"
+                      class="text-blue-500 hover:underline focus:outline-none font-medium">
+                      <i class="fa fa-plus"></i>
+                      Agregar
+                    </button>
+                  </div>
+                  @foreach ($servicios as $key => $items)
+                    @php
+                      $counters = count($servicios) - $key;
+                    @endphp
+                    <div class="flex gap-2">
+                      <div class="relative mb-2  mt-2">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                          <i class="text-lg text-gray-500 dark:text-gray-400 fas fa-pen"></i>
+                        </div>
+                        <input type="text" id="services" name="service-{{ $counters }}"
+                          value="{{ $items->service }}"
+                          class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Servicio">
+                      </div>
+                      <div class="relative mb-2  mt-2">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                          <i class="text-lg text-gray-500 dark:text-gray-400 fas fa-pen"></i>
+                        </div>
+                        <input type="text" id="services" name="price-{{ $counters }}"
+                          value="{{ $items->price }}"
+                          class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Precio">
+                      </div>
+                    </div>
+                  @endforeach
+                </div>
+
                 <div class="md:col-span-5 flex justify-between gap-4">
                   <div class="w-full">
                     <label for="cuartos">Nro. de cuartos</label>
@@ -848,7 +885,8 @@
 
   </div>
  
-   <script>
+
+  <script>
       console.log(FullCalendar);
       //plugins: ['dayGrid', 'iCalendar'],
       document.addEventListener('DOMContentLoaded', function() {
@@ -865,7 +903,7 @@
         });
         calendar.render();
       });
-    </script>
+  </script>
 
   <script>
     $('#tags_id').select2({
@@ -899,8 +937,6 @@
     });
   </script>
 
-
-
   <script>
     function capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -922,6 +958,8 @@
 
       return elemento
     }
+
+
     $('document').ready(function() {
       let valorInput = $('[id="specifications"]').length / 2
 
@@ -978,23 +1016,83 @@
           .nextSibling); // Insertar el input antes del siguiente elemento después del botón
       })
 
-
-      // Note that the name "myFormDropzone" is the camelized
-      // id of the form.
-      /* Dropzone.options.myFormDropzone = {
-              // Configuration options go here
-            };
-       */
+    })
 
 
-      // Dropzone.options.myFormDropzone = {
-      //   autoProcessQueue: false,
-      //   uploadMultiple: true,
-      //   maxFilezise: 10,
-      //   maxFiles: 4,
-      // }
+    function agregarElementosService(elemento, valorInput, name) {
+      elemento.setAttribute("type", "text");
+      elemento.setAttribute("name", `${name}-${valorInput}`);
+      elemento.setAttribute("placeholder", `${name == 'service'? 'Servicio': 'Precio'}`);
+      elemento.setAttribute("id", `price`);
+
+      elemento.classList.add("mt-1", "bg-gray-50", "border", "border-gray-300", "text-gray-900", "text-sm",
+        "rounded-lg",
+        "focus:ring-blue-500", "focus:border-blue-500", "block", "w-full", "pl-10", "p-2.5",
+        "dark:bg-gray-700",
+        "dark:border-gray-600", "dark:placeholder-gray-400", "dark:text-white",
+        "dark:focus:ring-blue-500",
+        "dark:focus:border-blue-500");
+
+      return elemento
+    }
+
+    $('document').ready(function() {
+      let valorInput = $('[id="services"]').length / 2
+
+
+      $("#AddService").on('click', function(e) {
+        e.preventDefault()
+        valorInput++
+
+        const addButton = document.getElementById("AddService");
+        const divFlex = document.createElement("div");
+        const dRelative = document.createElement("div");
+        const dRelative2 = document.createElement("div");
+
+        divFlex.classList.add('flex', 'gap-2')
+        dRelative.classList.add('relative', 'mb-2', 'mt-2')
+        dRelative2.classList.add('relative', 'mb-2', 'mt-2')
+
+        const iconContainer = document.createElement("div");
+        const icon = `<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <i class="text-lg text-gray-500 dark:text-gray-400 fas fa-pen"></i>
+        </div>`
+        iconContainer.innerHTML = icon;
+
+        // Obtener el nodo del icono
+        const iconNode = iconContainer.firstChild;
+
+
+
+        const inputTittle = document.createElement("input");
+        const inputValue = document.createElement("input");
+
+        let inputT = agregarElementosService(inputTittle, valorInput, 'service')
+        let inputV = agregarElementosService(inputValue, valorInput, 'price')
+
+        dRelative.appendChild(inputT);
+        dRelative2.appendChild(inputV);
+
+        // Agregar el icono como primer hijo de dRelative
+        dRelative.insertBefore(iconNode, inputT);
+
+        // Clonar el nodo del icono para agregarlo como primer hijo de dRelative2
+        const iconNodeCloned = iconNode.cloneNode(true);
+        dRelative2.insertBefore(iconNodeCloned, inputV);
+
+
+        divFlex.appendChild(dRelative);
+        divFlex.appendChild(dRelative2);
+
+        const parentContainer = addButton.parentElement
+          .parentElement; // Obtener el contenedor padre
+        parentContainer.insertBefore(divFlex, addButton.parentElement
+          .nextSibling); // Insertar el input antes del siguiente elemento después del botón
+      })
+
     })
   </script>
+
   <script>
     const pickr = Pickr.create({
       el: '#colorPicker', // Selector CSS del input
@@ -1020,6 +1118,7 @@
 
     })
   </script>
+  
   <script>
     function toggleMenu() {
       console.log('cambiando toggle')
@@ -1120,78 +1219,69 @@
       $(`#subcategory_id option[data-category="${value}"]`).prop('hidden', false)
     })
   </script>
+
   <script>
-                                    $(document).ready(function() {
-                                        $('#departamento_id').change(function() {
-                                            var departamento_id = $(this).val();
-                                            if (departamento_id) {
-                                                $.ajax({
-                                                    url: '/admin/products/provincias/' + departamento_id,
-                                                    type: 'GET',
-                                                    dataType: 'json',
-                                                    success: function(data) {
+          $(document).ready(function() {
+              $('#departamento_id').change(function() {
+                  var departamento_id = $(this).val();
+                  if (departamento_id) {
+                      $.ajax({
+                          url: '/admin/products/provincias/' + departamento_id,
+                          type: 'GET',
+                          dataType: 'json',
+                          success: function(data) {
 
-                                                        // Crear el combo de provincia con la opción inicial y las opciones obtenidas
-                                                        var provinciaSelect =
-                                                            '<select name="provincia_id" id="provincia_id" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">' +
-                                                            '<option value="">Seleccionar una Provincia </option>';
-                                                        $.each(data, function(key, value) {
-                                                            provinciaSelect += '<option value="' + value.id + '">' +
-                                                                value.description + '</option>';
-                                                        });
-
-                                                        provinciaSelect += '</select>';
-
-                                                        // Reemplazar el contenido del contenedor con el nuevo select
-                                                        $('#provincia-container').html(provinciaSelect);
-
+                              // Crear el combo de provincia con la opción inicial y las opciones obtenidas
+                              var provinciaSelect =
+                                  '<select name="provincia_id" id="provincia_id" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">' +
+                                  '<option value="">Seleccionar una Provincia </option>';
+                              $.each(data, function(key, value) {
+                                  provinciaSelect += '<option value="' + value.id + '">' +
+                                      value.description + '</option>';
+            
+                              provinciaSelect += 
+                              // Reemplazar el contenido del contenedor con el nuevo select
+                              $('#provincia-container').html(provi
                                                     },
-                                                    error: function(xhr, status, error) {
-                                                        console.error('Error: ' + status + ' ' + error);
-                                                    }
-                                                })
-                                            } else {
-                                                $('#provincia-container').empty();
-                                                $('#distrito-container').empty();
-                                            }
+                          error: function(xhr, status, error) {
+                              console.error('Error: ' + status + ' ' + error);
+                          }
+                      })
+                  } else {
+                      $('#provincia-container').empty();
+                      $('#distrito-container').empty();
+                      
+      
+      
+          $(document).on('change', '#provincia_id', function() {
+              var provincia_id = $(this).val();
+              if (provincia_id) {
+                  $.ajax({
+                      url: '/admin/products/distritos/' + provincia_id,
+                      type: 'GET',
+                      dataType: 'json',
+                      success: func
+                          // Crear el combo de provincia con la opción inicial y las opciones obtenidas
+                          var distritoSelect =
+                              '<select name="distrito_id" id="distrito_id" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">' +
+                              '<option value="">Seleccionar una Distrito </option>';
+                          $.each(data, function(key, value) {
+                              distritoSelect += '<option value="' + value.id + '">' +
+                                  value.description + '</option>';
+                          });
+                          distritoSelect += '</select>';
 
-                                        })
+                          // Reemplazar el contenido del contenedor con el nuevo select
+                          $('#distrito-container').html(dist
+                      },
+                      error: function(xhr, status, error) {
+                          console.error('Error: ' + status + ' ' + error);
+                      }
+                  })
+              } else {
+                  $('#distrito-container').empty();
+      
+           });
+  </script>
 
-
-
-                                    })
-
-                                    $(document).on('change', '#provincia_id', function() {
-                                        var provincia_id = $(this).val();
-                                        if (provincia_id) {
-                                            $.ajax({
-                                                url: '/admin/products/distritos/' + provincia_id,
-                                                type: 'GET',
-                                                dataType: 'json',
-                                                success: function(data) {
-
-                                                    // Crear el combo de provincia con la opción inicial y las opciones obtenidas
-                                                    var distritoSelect =
-                                                        '<select name="distrito_id" id="distrito_id" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">' +
-                                                        '<option value="">Seleccionar una Distrito </option>';
-                                                    $.each(data, function(key, value) {
-                                                        distritoSelect += '<option value="' + value.id + '">' +
-                                                            value.description + '</option>';
-                                                    });
-                                                    distritoSelect += '</select>';
-
-                                                    // Reemplazar el contenido del contenedor con el nuevo select
-                                                    $('#distrito-container').html(distritoSelect);
-
-                                                },
-                                                error: function(xhr, status, error) {
-                                                    console.error('Error: ' + status + ' ' + error);
-                                                }
-                                            })
-                                        } else {
-                                            $('#distrito-container').empty();
-                                        }
-
-                                    });
-                                </script>
 </x-app-layout>

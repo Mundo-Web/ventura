@@ -16,6 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('sale_id');
             $table->string('product_image')->nullable();
             $table->string('product_name');
+            $table->string('checkin');
+            $table->string('checkout');
+            $table->text('extras')->nullable();
             $table->integer('quantity');
             $table->decimal('price');
             $table->timestamps();

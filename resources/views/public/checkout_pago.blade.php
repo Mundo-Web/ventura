@@ -349,6 +349,7 @@
               checkin: x.checkin,
               checkout: x.checkout,
               quantity: x.cantidad,
+              extras: x.services,
               isCombo: x.isCombo || false
             })),
             contact: {
@@ -720,11 +721,12 @@
       $('#itemTotal').text(`S/. ${total.toFixed(2)} `)
       $('#itemsTotal').text(`S/. ${total.toFixed(2)} `)
     }
+    
     const getTotalPrice = () => {
       const carrito = Local.get('carrito') ?? []
       const productPrice = carrito.reduce((total, x) => {
         //let price = (Number(x.costototal) + Number(x.preciolimpieza)) * x.cantidad
-        let price = Number(x.costototal) + Number(x.preciolimpieza)
+        let price = Number(x.costototal) 
         //if (Number(x.descuento)) {
         //  price = Number(x.descuento) * x.cantidad
         //}

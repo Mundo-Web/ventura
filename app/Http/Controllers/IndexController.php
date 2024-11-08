@@ -24,6 +24,7 @@ use App\Models\Category;
 use App\Models\ClientLogos;
 use App\Models\Department;
 use App\Models\District;
+use App\Models\ExtraService;
 use App\Models\Galerie;
 use App\Models\Offer;
 use App\Models\PolyticsCondition;
@@ -640,8 +641,10 @@ class IndexController extends Controller
   }
 
   public function getPrices(Request $request){
-    
+      
+      $serviciosseleccionados = [];
       $client = new Client();
+      $serviciosseleccionados = $request->servicios;
       
       $listings = [
         [
@@ -692,15 +695,27 @@ class IndexController extends Controller
           }
         }
 
+        $extrasCost = ExtraService::whereIn('id', $serviciosseleccionados)->get()->sum('price');
+        $producto = Products::where('sku','=', $request['id'])->first();
+        if ($producto) {
+          $tasaLimpieza = (float) $producto->preciolimpieza;
+        } else {
+          $tasaLimpieza = 0.00; 
+        }
+        $costoTotalFinal = $extrasCost + $totalCost + $tasaLimpieza;
+
         return response()->json([
           'success' => true,
           'message' => 'Datos recibidos correctamente.',
           'data' => [
-              'productSku' => $request['id'],
-              'checkin' => $checkin,
-              'checkout' => $checkout,
+              // 'productSku' => $request['id'],
+              // 'checkin' => $checkin,
+              // 'checkout' => $checkout,
+              'costoServicios'=>$extrasCost,
+              'tazaLimpieza'=> $tasaLimpieza,
               'totalCost' => $totalCost,
-              'datos' => $data,
+              'costoTotalFinal' => $costoTotalFinal
+              // 'datos' => $data,
               
           ]
         ]);
@@ -788,6 +803,14 @@ class IndexController extends Controller
           ->orWhereNotNull('specifications');
       })
       ->get();
+    
+    $serviciosextras = ExtraService::where('product_id', '=', $id)
+    ->where(function ($query) {
+      $query->whereNotNull('service')
+        ->orWhereNotNull('price');
+    })
+    ->get();
+
     $productosConGalerias = DB::select("
             SELECT products.*, galeries.*
             FROM products
@@ -856,7 +879,7 @@ class IndexController extends Controller
 
     if (!$combo) $combo = new Offer();
 
-    return view('public.product', compact('disabledDates', 'departamento', 'provincia', 'distrito', 'is_reseller', 'atributos', 'isWhishList', 'testimonios', 'general', 'valorAtributo', 'ProdComplementarios', 'productosConGalerias', 'especificaciones', 'url_env', 'product', 'capitalizeFirstLetter', 'categorias', 'destacados', 'otherProducts', 'galery', 'combo', 'valoresdeatributo'));
+    return view('public.product', compact('serviciosextras','disabledDates', 'departamento', 'provincia', 'distrito', 'is_reseller', 'atributos', 'isWhishList', 'testimonios', 'general', 'valorAtributo', 'ProdComplementarios', 'productosConGalerias', 'especificaciones', 'url_env', 'product', 'capitalizeFirstLetter', 'categorias', 'destacados', 'otherProducts', 'galery', 'combo', 'valoresdeatributo'));
   }
 
   public function wishListAdd(Request $request)

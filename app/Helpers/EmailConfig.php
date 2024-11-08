@@ -13,8 +13,8 @@ class EmailConfig
         $mail->isSMTP();
         $mail->Host = 'mail.boostperu.com.pe';
         $mail->SMTPAuth = true;
-        $mail->Username = 'atencionalcliente@boostperu.com.pe';
-        $mail->Password = 'atencionalcliente#2024';
+        $mail->Username = '#';
+        $mail->Password = '#';
         // $mail->Username = 'boostperuatencion@gmail.com';
         // $mail->Password = 'hlabkcttomghufms';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;

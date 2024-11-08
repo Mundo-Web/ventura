@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\ExtraService;
 use App\Models\Offer;
 use App\Models\Price;
 use App\Models\Products;
@@ -59,10 +60,13 @@ class PaymentController extends Controller
 
       $totalXReserva = [];
       $totalCost = 0;
+      $extras = [];
+
       foreach ($productsJpa as $productJpa) {
         $key = array_search($productJpa->id, array_column($body['cart'], 'id'));
         $checkin = $body['cart'][$key]['checkin']; 
         $checkout = $body['cart'][$key]['checkout'];
+        $extras = $body['cart'][$key]['extras'];
         
         if (!$checkin || !$checkout) {
           continue;
@@ -106,9 +110,15 @@ class PaymentController extends Controller
                   }
               }
 
-              
-              $totalCost += ($productCost + $productJpa->preciolimpieza) * $body['cart'][$key]['quantity'];
-              $totalXReserva[$productJpa->id] = $productCost + $productJpa->preciolimpieza;
+              if (is_array($extras) && count($extras) > 0) {
+                  $extrasCost = ExtraService::whereIn('id', $extras)->sum('price');
+              } else {
+                  $extrasCost = 0; // Valor predeterminado si no hay extras
+              }
+
+              //$totalCost += ($productCost + $productJpa->preciolimpieza) * $body['cart'][$key]['quantity'];
+              $totalCost += $productCost + $productJpa->preciolimpieza + $extrasCost;
+              $totalXReserva[$productJpa->id] = $productCost + $productJpa->preciolimpieza + $extrasCost;
 
           } catch (\Exception $e) {
               continue;
@@ -182,6 +192,18 @@ class PaymentController extends Controller
       foreach ($productsJpa as $productJpa) {
         $key = array_search($productJpa->id, array_column($body['cart'], 'id'));
         $quantity = $body['cart'][$key]['quantity'];
+        $checkin = $body['cart'][$key]['checkin'];
+        $checkout = $body['cart'][$key]['checkout'];
+        $extras = $body['cart'][$key]['extras'];
+    
+        if (is_array($extras) && count($extras) > 0) {
+          $nombresServicios = ExtraService::whereIn('id', $extras)->pluck('service');
+        } else {
+          $nombresServicios = collect(); 
+        }
+
+        $extrasStr = $nombresServicios->implode(', ');
+
         //$price = $productJpa->descuento > 0 ? $productJpa->descuento : $productJpa->precio;
         $price = $totalXReserva[$productJpa->id]; 
 
@@ -190,6 +212,9 @@ class PaymentController extends Controller
           'product_image' => $productJpa->imagen,
           'product_name' => $productJpa->producto,
           'product_color' => $productJpa->color,
+          'checkin' => $checkin,
+          'checkout' => $checkout,
+          'extras' => $extrasStr,
           'quantity' => $quantity,
           'price' => $price
         ]);

@@ -548,10 +548,10 @@
                                       <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" />
                                   </div>
                                   
-                                  <span  class="self-stretch my-auto">S/ <b id="costonoches">0.00</b></span>
+                                  <span id="costonoches" class="self-stretch my-auto">Calculando</span>
                               </div>
-                              @if ($product->preciolimpieza)
-                                <div class="flex gap-10 justify-between items-center mt-3 w-full">
+                              @if ($product->preciolimpieza && $product->preciolimpieza > 0)
+                                <div class="flex gap-10 justify-between items-center mt-1 w-full">
                                   <div class="flex gap-1 items-center self-stretch my-auto">
                                       <span>Tasa de limpieza</span>
                                       <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" />
@@ -559,6 +559,38 @@
                                   <span class="self-stretch my-auto">S/ {{$product->preciolimpieza}}</span>
                                 </div>
                               @endif
+
+                              @if (!$serviciosextras->isEmpty())
+                                  <p class="text-[#006258] font-FixelText_Bold text-base mt-3">Extras: </p>
+                                  <div class="flex flex-col gap-1 mt-1">
+                                      @foreach ($serviciosextras as $items)
+                                          <div class="flex gap-10 justify-between items-center w-full">
+                                              <div class="flex gap-1 items-center">
+                                                  <label for="servicio_extra_{{ $items->id }}" class="flex items-center gap-1">
+                                                      <span>{{ $items->service }}</span>
+                                                      <img 
+                                                          loading="lazy" 
+                                                          src="{{ asset('images/svg/alert.svg') }}" 
+                                                          class="object-contain w-4 aspect-square" 
+                                                          alt="" 
+                                                      />
+                                                  </label>
+                                              </div>
+                                              <div class="flex flex-row items-center justify-center gap-1">
+                                                <span class="mt-1">S/ {{ $items->price }}</span>
+                                                <input 
+                                                        type="checkbox" 
+                                                        name="servicios_extras[]" 
+                                                        value="{{ $items->id }}" 
+                                                        id="servicio_extra_{{ $items->id }}" 
+                                                        class="w-4 h-4 focus:ring-0 ring-0 text-[#006258] rounded-sm servicio-extra"
+                                                  >
+                                               </div>
+                                          </div>
+                                      @endforeach
+                                  </div>
+                              @endif
+                              
                               {{-- @if ($product->precioservicio)
                               <div class="flex gap-10 justify-between items-center mt-3 w-full">
                                   <div class="flex gap-1 items-center self-stretch my-auto">
@@ -571,7 +603,7 @@
                           </div>
                           <div class="flex gap-10 justify-between items-center mt-4 w-full text-lg font-FixelText_Bold">
                               <span class="self-stretch my-auto">Total</span>
-                              <span class="self-stretch my-auto">S/ <b id="costototal">0.00</b></span>
+                              <span class="self-stretch my-auto" id="costototal">Selecciona fechas</span>
                           </div>
                       </div>
                       <p class="self-center mt-2 text-xs font-medium text-center text-slate-950 font-FixelText_Medium">
@@ -621,6 +653,8 @@
 @section('scripts_importados')
 
     <script>
+      let serviciosExtras = [];
+      let costoTotalFinal = 0;
       let disabledDates = @json($disabledDates);
       let formattedDisabledDates = disabledDates.map(date => moment(date, 'DD/MM/YYYY'));
       $('#arrival-date').daterangepicker({
@@ -696,6 +730,7 @@
         let productSku = @json($product->sku);
         let checkin = $('#arrival-date').data('checkin');
         let checkout = $('#arrival-date').data('checkout');
+        serviciosExtras = [];
 
         if (!checkin || !checkout) {
             Swal.fire({
@@ -705,6 +740,15 @@
             });
             return;
         }
+
+        $('#costototal').text("Calculando...");
+        $('#btnAgregarCarritoPr').prop('disabled', true);
+
+
+        $('input[name="servicios_extras[]"]:checked').each(function() {
+            serviciosExtras.push($(this).val());
+        });
+
 
         $.ajax({
             url: "{{ route('producto.prices') }}",
@@ -716,17 +760,19 @@
             data: JSON.stringify({
                 id: productSku, // SKU del producto
                 checkin: checkin, // Fecha de llegada
-                checkout: checkout // Fecha de salida
+                checkout: checkout, // Fecha de salida
+                servicios: serviciosExtras // Servicios extras
             }),
             success: function(response) {
                 if(response) {
-                    $('#costonoches').text(response.data.totalCost);
-                    let total = response.data.totalCost + {{ $product->preciolimpieza ?? 0.00 }};
-                    $('#costototal').text(total);
-
+                    $('#costonoches').text("S/ " + response.data.totalCost);
+                    // let total = response.data.totalCost + {{ $product->preciolimpieza ?? 0.00 }};
+                    $('#costototal').text("S/ " + response.data.costoTotalFinal);
+                    costoTotalFinal = response.data.costoTotalFinal;
                 } else {
                     $('#costonoches').text('0.00');
                 }
+                $('#btnAgregarCarritoPr').prop('disabled', false);
             },
             error: function(xhr) {
                 Swal.fire({
@@ -736,7 +782,13 @@
                 });
             }
         });
-    }
+     }
+
+     $(document).ready(function () {
+      $('.servicio-extra').on('change', function () {
+          cotizarPrecios();
+      });
+    });
   </script>
 
   <script>
@@ -830,24 +882,24 @@
 
         } */
 
-    function calcularTotal() {
-      let articulos = Local.get('carrito')
-      let total = articulos.map(item => {
-        let monto
-        if (Number(item.descuento) !== 0) {
-          monto = item.cantidad * Number(item.descuento)
-        } else {
-          monto = item.cantidad * Number(item.precio)
+    // function calcularTotal() {
+    //   let articulos = Local.get('carrito')
+    //   let total = articulos.map(item => {
+    //     let monto
+    //     if (Number(item.descuento) !== 0) {
+    //       monto = item.cantidad * Number(item.descuento)
+    //     } else {
+    //       monto = item.cantidad * Number(item.precio)
 
-        }
-        return monto
+    //     }
+    //     return monto
 
-      })
-      const suma = total.reduce((total, elemento) => total + elemento, 0);
+    //   })
+    //   const suma = total.reduce((total, elemento) => total + elemento, 0);
 
-      $('#itemsTotal').text(`S/. ${suma.toFixed(2)} `)
+    //   $('#itemsTotal').text(`S/. ${suma.toFixed(2)} `)
 
-    }
+    // }
 
     /*  function addOnCarBtn(id, operacion) {
 
