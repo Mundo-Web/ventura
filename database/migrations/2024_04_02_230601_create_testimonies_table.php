@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('ocupation')->nullable();
+            $table->string('url_image')->nullable();
             $table->text('testimonie')->nullable();
             $table->boolean('visible')->default(false);
             $table->boolean('status')->default(false);

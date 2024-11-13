@@ -26,26 +26,25 @@
 
         <div class="flex flex-col text-white text-base justify-start items-start gap-5">
             <img class="h-20 object-contain" src="{{ asset('images/svg/venturalogo2.svg') }}" />
-            <p class="font-FixelText_Light text-sm">Somos una empresa dedicada a la gestión integral de propiedades de
-                lujo en Lima, ofreciendo una experiencia inigualable tanto para huéspedes como para propietarios.</p>
+            <p class="font-FixelText_Light text-sm">{{ $datosgenerales->aboutus }}</p>
             <div class="mt-3">
-                <a class="text-sm font-FixelText_Semibold tracking-wide bg-[#73F7AD] border-2 border-[#73F7AD] text-[#009A84] px-3 md:px-6 py-3.5 rounded-2xl">
+                <a href="{{route('contacto')}}" class="text-sm font-FixelText_Semibold tracking-wide bg-[#73F7AD] border-2 border-[#73F7AD] text-[#009A84] px-3 md:px-6 py-3.5 rounded-2xl">
                     Solicitar una cita</a>
             </div>
         </div>
 
         <div class="flex flex-col text-sm font-FixelText_Light text-white gap-2 pl-0 md:pl-[10%]">
             <h3 class="text-xl text-white font-Homie_Bold pb-3">Enlaces</h3>
-            <a href="/">Inicio</a>
-            <a href="#">Nosotros</a>
-            <a href="#">Propiedades</a>
-            <a href="#">Contacto</a>
+            <a href="{{route('index')}}">Inicio</a>
+            <a href="{{route('nosotros')}}">Nosotros</a>
+            <a href="{{route('Catalogo.jsx')}}">Propiedades</a>
+            <a href="{{route('contacto')}}">Contacto</a>
         </div>
 
         <div class="flex flex-col text-sm font-FixelText_Light text-white gap-2">
             <h3 class="text-xl text-white font-Homie_Bold pb-3">Datos de contacto</h3>
             <p>{{ config('app.name') }}</p>
-            <p>{{ $datosgenerales->address }}</p>
+            <p>{{ $datosgenerales->address }} {{ $datosgenerales->inside }}</p>
             <p> {{ $datosgenerales->city }} - {{ $datosgenerales->country }}</p>
             <p>{{ $datosgenerales->cellphone }}</p>
             <p>{{ $datosgenerales->email }}</p>
@@ -190,6 +189,11 @@
             return true;
         }
 
+        $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
         $("#subsEmail").submit(function(e) {
 
@@ -242,14 +246,14 @@
 
                     if (isDuplicado) {
                         message =
-                            'El correo que ha ingresado ya existe. Utilice otra direccion de correo'
+                            'El correo que ha ingresado ya existe. Utilice otra dirección de correo'
                     } else {
                         message = response.responseJSON.message
                     }
                     Swal.close();
                     Swal.fire({
                         title: message,
-                        icon: "error",
+                        icon: "warning",
                     });
                 }
             });

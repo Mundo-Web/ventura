@@ -10,6 +10,7 @@ use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Spatie\FlareClient\Http\Client;
 
 class LogosClientController extends Controller
 {
@@ -18,7 +19,9 @@ class LogosClientController extends Controller
      */
     public function index()
     {
-        $logos = ClientLogos::where("status", "=", true)->get();
+        $logos = ClientLogos::where("status", "=", true)
+        ->orderBy('order', 'asc')
+        ->get();
         return view('pages.logos.index', compact('logos'));
     }
 
@@ -32,6 +35,19 @@ class LogosClientController extends Controller
         return view('pages.logos.create');
     }
 
+
+    public function saveImg($file, $route, $nombreImagen){
+		$manager = new ImageManager(new Driver());
+		$img =  $manager->read($file);
+
+		if (!file_exists($route)) {
+			mkdir($route, 0777, true); // Se crea la ruta con permisos de lectura, escritura y ejecución
+	}
+
+		$img->save($route . $nombreImagen);
+	}
+
+
     /**
      * Store a newly created resource in storage.
      */
@@ -41,58 +57,32 @@ class LogosClientController extends Controller
             'title'=>'required',
         ]);
 
-        $post = new ClientLogos();
+        $logo = new ClientLogos();
+
 
         if($request->hasFile("imagen")){
-           
-            $manager = new ImageManager(new Driver());
-            
-            $nombreImagen = Str::random(10) . '_' . $request->file('imagen')->getClientOriginalName();
-               
-            $img =  $manager->read($request->file('imagen'));
-
-            //seteamos el tamaño de que deben de tener las imagenes que se suban
-             $qwidth = 808;
-             $qheight = 445;
-
-            // Obtener las dimensiones de la imagen que se esta subiendo
-            $width = $img->width();
-            $height = $img->height();
-
-            if($width > $height){
-                //dd('Horizontal');
-                //si es horizontal igualamos el alto de la imagen a alto que queremos
-                
-                // $img->resize(height: 445)->crop(808, 445);
-
-            }else{
-                //dd('Vertical');
-                //En caso sea vertical la imagen
-                //gualamos el ancho y cropeamos
-                
-                // $img->resize(width: 808)->crop(808, 445);
-           }
-                     
-            $ruta = 'storage/images/logos/';
-            if (!file_exists($ruta)) {
-                mkdir($ruta, 0777, true); // Se crea la ruta con permisos de lectura, escritura y ejecución
-            }
-            
-            $img->save($ruta.$nombreImagen);
-            
-           
-            
-            $post->url_image =  $ruta.$nombreImagen; 
+            $nombreImagen = Str::random(10) . '_' . $request->file('imagen')->getClientOriginalName(); 
+            $file =  $request->file('imagen');
+            $route = 'storage/images/logos/';
+            $this->saveImg($file, $route, $nombreImagen);
+            $logo->url_image =  $route.$nombreImagen; 
         }
 
-        $post->title = $request->title;
-        $post->description = $request->description;
-        
-        $post->status = 1;
 
-       
+        if($request->hasFile("imagen2")){
+           
+            $nombreImagen2 = Str::random(10) . '_' . $request->file('imagen2')->getClientOriginalName();   
+            $file2 =  $request->file('imagen2');
+            $route2 = 'storage/images/logos/';
+            $this->saveImg($file2, $route2, $nombreImagen2);
+            $logo->url_image2 =  $route2.$nombreImagen2; 
+        }
 
-        $post->save();
+        $logo->title = $request->title;
+        $logo->description = $request->description;
+        $logo->order = $request->order;
+        $logo->status = 1;
+        $logo->save();
         return redirect()->route('logos.index')->with('success', 'Publicación creado exitosamente.');
     }
 
@@ -109,7 +99,8 @@ class LogosClientController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $logo = ClientLogos::find($id);
+        return view('pages.logos.edit', compact('logo'));
     }
 
     /**
@@ -117,7 +108,48 @@ class LogosClientController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title'=>'required',
+        ]);
+
+        $logo = ClientLogos::find($id);
+        
+        try {
+			if($request->hasFile("imagen")){
+
+                $nombreImagen = Str::random(10) . '_' . $request->file('imagen')->getClientOriginalName(); 
+                $file =  $request->file('imagen');
+                $route = 'storage/images/logos/';
+               
+                $this->saveImg($file, $route, $nombreImagen);
+    
+                $logo->url_image =  $route.$nombreImagen; 
+            }
+    
+    
+            if($request->hasFile("imagen2")){
+               
+                $nombreImagen2 = Str::random(10) . '_' . $request->file('imagen2')->getClientOriginalName();   
+                $file2 =  $request->file('imagen2');
+                $route2 = 'storage/images/logos/';
+                
+                $this->saveImg($file2, $route2, $nombreImagen2);
+               
+                $logo->url_image2 =  $route2.$nombreImagen2; 
+            }
+	
+			$logo->title = $request->title;
+            $logo->order = $request->order;
+            $logo->description = $request->description;
+			$logo->save();
+
+			return redirect()->route('logos.index')->with('success', 'Publicación creado exitosamente.');
+
+
+		} catch (\Throwable $th) {
+			return response()->json(['messge' => 'Verifique sus datos '], 400); 
+		}
+
     }
 
     /**
@@ -144,5 +176,45 @@ class LogosClientController extends Controller
         // Eliminar el logo de la base de datos
         $logo->delete();
         return response()->json(['message'=>'Logo eliminado']);
+    }
+
+
+
+    public function updateVisible(Request $request)
+    {
+        // Lógica para manejar la solicitud AJAX
+        $cantidad = $this->contarCategoriasDestacadas();
+
+
+        if ($cantidad >= 100000 && $request->status == 1) {
+            return response()->json(['message' => 'Solo puedes destacar 10000 categorias'], 409);
+        }
+
+
+        $id = $request->id;
+
+        $field = $request->field;
+
+        $status = $request->status;
+
+        $category = ClientLogos::findOrFail($id);
+
+        $category->$field = $status;
+
+        $category->save();
+
+        $cantidad = $this->contarCategoriasDestacadas();
+
+
+        return response()->json(['message' => 'Marca modificada',  'cantidad' => $cantidad]);
+    }
+
+
+    public function contarCategoriasDestacadas()
+    {
+
+        $cantidad = ClientLogos::where('destacar', '=', 1)->count();
+
+        return  $cantidad;
     }
 }

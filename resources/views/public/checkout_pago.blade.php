@@ -312,13 +312,13 @@
 
               <div class="text-[#141718] flex justify-between items-center border-b-[1px] border-[#E8ECEF] pb-5">
                 <p class="font-normal text-[16px]">Subtotal</p>
-                <p id="itemSubtotal" class="font-semibold text-[16px]">S/. 0.00 </p>
+                <p id="itemSubtotal" class="font-semibold text-[16px]">$ 0.00 </p>
               </div>
 
               <div
                 class="text-[#141718] text-[20px] flex justify-between font-semibold items-center border-b-[1px] border-[#E8ECEF] pb-5">
                 <p>Total</p>
-                <p id="itemTotal">S/. 0.00 </p>
+                <p id="itemTotal">$ 0.00 </p>
               </div>
 
               <button id="btnPagar"
@@ -558,7 +558,7 @@
 
       Culqi.settings({
         title: 'Ventura',
-        currency: 'PEN',
+        currency: 'USD',
         amount: Math.round((precioProductos + precioEnvio) * 100),
       });
       Culqi.options({
@@ -608,7 +608,7 @@
       let price = 'Gratis'
       let className = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
       if (data.price.price > 0) {
-        price = `S/. ${data.price.price.toFixed(2)}`
+        price = `$ ${data.price.price.toFixed(2)}`
         className = 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
       }
       return $(`<div class="relative">
@@ -702,7 +702,7 @@
       if (price == 0) {
         $('#precioEnvio').text('Gratis')
       } else {
-        $('#precioEnvio').text(`S/. ${price.toFixed(2)}`)
+        $('#precioEnvio').text(`$ ${price.toFixed(2)}`)
       }
       calcularTotal()
     })
@@ -714,12 +714,12 @@
 
     function calcularTotal() {
       const precioProductos = getTotalPrice()
-      $('#itemSubtotal').text(`S/. ${precioProductos.toFixed(2)}`)
+      $('#itemSubtotal').text(`$ ${precioProductos.toFixed(2)}`)
       const precioEnvio = getCostoEnvio()
       const total = precioProductos + precioEnvio
 
-      $('#itemTotal').text(`S/. ${total.toFixed(2)} `)
-      $('#itemsTotal').text(`S/. ${total.toFixed(2)} `)
+      $('#itemTotal').text(`$ ${total.toFixed(2)} `)
+      $('#itemsTotal').text(`$ ${total.toFixed(2)} `)
     }
     
     const getTotalPrice = () => {

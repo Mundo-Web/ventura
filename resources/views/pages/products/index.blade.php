@@ -276,22 +276,22 @@
     columns: [{
         dataField: 'producto',
         caption: 'PRODUCTO',
-        width: '40%'
+        width: '60%'
       },
+      // {
+      //   dataField: 'precio',
+      //   caption: 'PRECIO'
+      // },
+      // {
+      //   dataField: 'descuento',
+      //   caption: 'DESCUENTO'
+      // },
+      // {
+      //   dataField: 'stock',
+      //   caption: 'STOCK'
+      // },
       {
-        dataField: 'precio',
-        caption: 'PRECIO'
-      },
-      {
-        dataField: 'descuento',
-        caption: 'DESCUENTO'
-      },
-      {
-        dataField: 'stock',
-        caption: 'STOCK'
-      },
-      {
-        caption: 'ESTADO',
+        caption: 'IMAGEN',
         cellTemplate: (container, {
           data
         }) => {

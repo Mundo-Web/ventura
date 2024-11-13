@@ -14,7 +14,7 @@ import axios from 'axios'
 
 
 
-const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_cat: selected_category, tag_id, subCatId }) => {
+const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_cat: selected_category, tag_id, subCatId, textoshome }) => {
   const take = 12
   const [items, setItems] = useState([]);
   const [filter, setFilter] = useState({});
@@ -23,6 +23,7 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
   const [showModal, setShowModal] = useState(false);
   const is_proveedor = useRef(false);
   const cancelTokenSource = useRef(null);
+  
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -233,7 +234,7 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
         <div className="w-full lg:w-[55%] text-[#151515] flex flex-col justify-center items-center gap-2 md:gap-10">
             <div className="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 lg:pt-0 xl:max-w-4xl">
               <h1 className="text-[#F8FCFF] font-Homie_Bold text-5xl lg:text-6xl">
-                Propiedades que inspiran, experiencias que  marcan la diferencia.
+                {textoshome?.title1section || 'Propiedades que inspiran, experiencias que marcan la diferencia.'}
               </h1>
 
             </div>
@@ -370,19 +371,20 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
           <div className="flex flex-col max-w-xl">
             
             <div className="flex flex-col w-full text-center gap-5 text-[#006258]">
-              <h2 className="text-4xl font-Homie_Bold">¿Quieres que pongamos tu propiedad en alquiler?</h2>
-              <p className="text-base font-FixelText_Regular text-[#000929]">Comparte aquí tu correo electrónico y te daremos más información.</p>
+              <h2 className="text-4xl font-Homie_Bold">{textoshome?.title5section || 'Ingrese un texto'}</h2>
+              <p className="text-base font-FixelText_Regular text-[#000929]">{textoshome?.description5section || 'Ingrese un texto'}</p>
             </div>
 
             <div className="flex flex-col mt-8 w-full gap-4">
               <div className="flex flex-col w-full rounded-lg">
-                <form className="flex flex-row gap-5 justify-end px-5 py-3.5 w-full bg-white rounded-2xl">
+                <form id="subsEmail" className="flex flex-row gap-5 justify-end px-5 py-3.5 w-full bg-white rounded-2xl">
+                  <input type="hidden" name="tipo" value="Catalogo" />  
                   <input placeholder="Introduce tu correo electrónico" type="email" id="email" name="email" class="w-full px-4 py-2 text-sm font-FixelText_Regular focus:border-0 focus:ring-0 text-[#006258] placeholder:text-[#00625852] border border-transparent rounded-xl" aria-label="Introduce tu correo electrónico" required />
                   <button type="submit" className="self-end px-10 py-3 text-base font-FixelText_Semibold text-center text-[#73F7AD] bg-[#009A84] rounded-lg">Enviar</button>
                 </form>
               </div>
               <p class="text-base text-center font-FixelText_Regular text-[#000929]">
-                Únete a <strong>10,000+</strong> propietarios más en nuestra comunidad inmobiliaria.
+                {textoshome?.footer5section || 'Ingrese un texto'}
               </p>
             </div>
 

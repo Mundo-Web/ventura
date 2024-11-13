@@ -396,7 +396,7 @@
         <div class="flex flex-col gap-2 pt-2">
             <div class="text-[#111111]  text-xl flex justify-between items-center">
                 <p class="font-FixelText_Bold font-semibold">Total</p>
-                <p class="font-FixelText_Bold font-semibold" id="itemsTotal">S/ 0.00</p>
+                <p class="font-FixelText_Bold font-semibold" id="itemsTotal">$ 0.00</p>
             </div>
             <div>
                 <a href="/carrito"

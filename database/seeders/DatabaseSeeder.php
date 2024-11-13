@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\NosotrosView;
 use App\Models\Strength;
 use Attribute;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
             MarketerSeeder::class,
             CampaignMarketerSeeder::class,
             */
+            
             AttributesSeeder::class,
             RoleSeeder::class,
             UsersSeeder::class,
@@ -43,9 +45,14 @@ class DatabaseSeeder extends Seeder
             SliderSeeder::class,
             SubCategorySeeder::class,
             //ProductSeeder::class,
+            EstadiscticsSeeder::class,
             StatusSeeder::class,
             PricesTableSeeder::class,
             PoliticasDatos::class,
+            NosotrosViewSeeder::class,
+            TestimonySeeder::class,
+            StrengthSeeder::class,
+            HomeViewSeeder::class,
             AboutUsSeeder::class
             
             //ServiceSeeder::class,

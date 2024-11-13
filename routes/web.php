@@ -27,11 +27,13 @@ use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\GalerieController;
+use App\Http\Controllers\HomeViewController;
 use App\Http\Controllers\LogosClientController;
 
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LibroReclamacionesController;
 use App\Http\Controllers\NewsletterSubscriberController;
+use App\Http\Controllers\NosotrosViewController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PoliticaDatosController;
 use App\Http\Controllers\PolyticsConditionController;
@@ -50,6 +52,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\TermsAndConditionController;
 use App\Models\AboutUs;
 use App\Models\LibroReclamaciones;
+use App\Models\NosotrosView;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,6 +142,10 @@ Route::middleware(['auth:sanctum', 'verified', 'can:Admin'])->group(function () 
         //Datos Generales
         Route::resource('/datosgenerales', GeneralController::class);
 
+        Route::resource('/nosotrosview', NosotrosViewController::class);
+
+        Route::resource('/homeview', HomeViewController::class);
+
         //Testimonies
         Route::resource('/testimonios', TestimonyController::class);
         Route::post('/testimonios/deleteTestimony', [TestimonyController::class, 'deleteTestimony'])->name('testimonios.deleteTestimony');
@@ -183,6 +190,8 @@ Route::middleware(['auth:sanctum', 'verified', 'can:Admin'])->group(function () 
         //Crud Logos
         Route::resource('/logos', LogosClientController::class);
         Route::post('/logos/deleteLogo', [LogosClientController::class, 'deleteLogo'])->name('logos.deleteLogo');
+        Route::post('/logos/updateVisible', [LogosClientController::class, 'updateVisible'])->name('logos.updateVisible');
+        Route::get('/logos/contarCategorias', [LogosClientController::class, 'contarCategoriasDestacadas'])->name('logos.contarCategoriasDestacadas');
 
         //Equipo
         Route::resource('/staff', StaffController::class);

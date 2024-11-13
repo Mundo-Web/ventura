@@ -337,7 +337,7 @@
                   </label>
                 </div>
                 <div class="md:col-span-5 flex justify-between gap-4">
-                  <div class="w-full">
+                  <div class="w-full hidden">
                     <label for="precio">Precio 
                       {{-- <span class="text-red-500 font-bold">*</span> --}}
                     </label>
@@ -352,7 +352,7 @@
                     </div>
 
                   </div>
-                  <div class="w-full">
+                  <div class="w-full hidden">
                     <label for="descuento">Precio con descuento</label>
                     <div class="relative mb-2  mt-2">
                       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -380,7 +380,7 @@
                     </div>
 
                   </div>
-                  <div class="w-full">
+                  <div class="w-full hidden">
                     <label for="precioservicio">Taza de Servicio</label>
                     <div class="relative mb-2  mt-2">
                       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

@@ -26,8 +26,8 @@
                 {{-- <th>Descripcion</th> --}}
                 {{-- <th>Icono</th>
                 <th>Imagen</th> --}}
-                <th>Visible</th>
-                <th>Acciones</th>
+                <th class="w-32">Visible</th>
+                <th class="w-32">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -35,7 +35,7 @@
               @foreach ($strength as $item)
                 <tr>
                   <td>{{ Str::limit($item->titulo, 150)}}</td>
-                  {{-- <td>{!! Str::limit($item->descripcion, 150) !!}</td> --}}
+                  {{-- <td>{{ Str::limit($item->descripcionshort, 100) }}</td> --}}
                   {{-- <td class="px-3 py-2"><img class="w-20" src="{{ asset($item->icono) }}" alt=""></td>
 
                   <td class="px-3 py-2"><img class="w-20" src="{{ asset($item->imagen) }}" alt=""></td> --}}

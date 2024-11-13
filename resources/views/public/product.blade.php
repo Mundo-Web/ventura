@@ -545,7 +545,7 @@
                               <div class="flex gap-10 justify-between items-center w-full">
                                   <div class="flex gap-1 items-center self-stretch my-auto">
                                       <span id="cantidadnoches">0</span>noches
-                                      <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" />
+                                      {{-- <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" /> --}}
                                   </div>
                                   
                                   <span id="costonoches" class="self-stretch my-auto">Calculando</span>
@@ -554,9 +554,9 @@
                                 <div class="flex gap-10 justify-between items-center mt-1 w-full">
                                   <div class="flex gap-1 items-center self-stretch my-auto">
                                       <span>Tasa de limpieza</span>
-                                      <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" />
+                                      {{-- <img loading="lazy" src="{{asset('images/svg/alert.svg')}}" class="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" alt="" /> --}}
                                   </div>
-                                  <span class="self-stretch my-auto">S/ {{$product->preciolimpieza}}</span>
+                                  <span class="self-stretch my-auto">$ {{$product->preciolimpieza}}</span>
                                 </div>
                               @endif
 
@@ -566,18 +566,18 @@
                                       @foreach ($serviciosextras as $items)
                                           <div class="flex gap-10 justify-between items-center w-full">
                                               <div class="flex gap-1 items-center">
-                                                  <label for="servicio_extra_{{ $items->id }}" class="flex items-center gap-1">
+                                                  <label for="servicio_extra_{{ $items->id }}" class="flex items-center gap-1 line-clamp-1">
                                                       <span>{{ $items->service }}</span>
-                                                      <img 
+                                                      {{-- <img 
                                                           loading="lazy" 
                                                           src="{{ asset('images/svg/alert.svg') }}" 
                                                           class="object-contain w-4 aspect-square" 
                                                           alt="" 
-                                                      />
+                                                      /> --}}
                                                   </label>
                                               </div>
                                               <div class="flex flex-row items-center justify-center gap-1">
-                                                <span class="mt-1">S/ {{ $items->price }}</span>
+                                                <span class="mt-1">$ {{ $items->price }}</span>
                                                 <input 
                                                         type="checkbox" 
                                                         name="servicios_extras[]" 
@@ -765,9 +765,9 @@
             }),
             success: function(response) {
                 if(response) {
-                    $('#costonoches').text("S/ " + response.data.totalCost);
+                    $('#costonoches').text("$ " + response.data.totalCost);
                     // let total = response.data.totalCost + {{ $product->preciolimpieza ?? 0.00 }};
-                    $('#costototal').text("S/ " + response.data.costoTotalFinal);
+                    $('#costototal').text("$ " + response.data.costoTotalFinal);
                     costoTotalFinal = response.data.costoTotalFinal;
                 } else {
                     $('#costonoches').text('0.00');

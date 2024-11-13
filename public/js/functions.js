@@ -458,14 +458,13 @@ function PintarCarrito() {
             <p class="font-semibold text-[12px] text-[#151515]">
                 Ingreso: ${formattedCheckin} - Salida: ${formattedCheckout}
             </p>
-            <p class="font-semibold text-[12px] text-[#151515]">
-                Extras: ${nombresServicios}
-            </p>
+            
+            ${nombresServicios ? `<p class="font-semibold text-[12px] text-[#151515]">Extras: ${nombresServicios}</p>` : ''}
             
           </td>
           <td class="p-2 text-end lg:flex lg:flex-row h-24 items-center gap-2">
             <p class="font-semibold text-base text-[#151515] w-max">
-              S/ ${Number(element.costototal)}
+              $ ${Number(element.costototal)}
             </p>
             <button type="button" onClick="(deleteItem(${element.id} , ${element.isCombo}))" class=" w-5 h-5 flex justify-center items-center mx-auto">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#272727" class="w-5 h-5">
@@ -501,7 +500,7 @@ function calcularTotal() {
   
   const suma = total.reduce((total, elemento) => total + elemento, 0);
   
-  $('#itemsTotal').text(`S/. ${suma.toFixed(2)} `)
+  $('#itemsTotal').text(`$ ${suma.toFixed(2)} `)
   console.log("tofixed  ", suma.toFixed(2))
  
 }

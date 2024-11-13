@@ -63,7 +63,7 @@ const ProductCard = ({ item, width, bgcolor, is_reseller }) => {
               />
             )}
           </div>
-          <div className="addProduct text-center flex justify-center h-0">
+          {/* <div className="addProduct text-center flex justify-center h-0">
             <div className='flex flex-row gap-2 items-center'>
               <a
                 href={`/producto/${item.id}`}
@@ -73,7 +73,7 @@ const ProductCard = ({ item, width, bgcolor, is_reseller }) => {
               </a>
             </div>
 
-          </div>
+          </div> */}
         </div>
       </div>
       <a href={`/producto/${item.id}`} className='px-1 py-2 flex flex-col gap-3'>

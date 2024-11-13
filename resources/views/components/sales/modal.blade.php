@@ -15,8 +15,8 @@
   </div>
   <h4 class="h4 mb-2 mt-2">Orden #<span id="invoice-code"></span></h4>
   <p id="invoice-client" class="font-bold mb-2"></p>
-  <span>Direccion Envio:</span>
-  <p id="invoice-address" class="text-gray-700 mb-2"></p>
+  {{-- <span>Direccion Envio:</span>
+  <p id="invoice-address" class="text-gray-700 mb-2"></p> --}}
 
   <p class="font-bold"> Datos Facturacion: </p>
   <p class=" ">
@@ -122,9 +122,9 @@
       .removeClass('bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300')
     $('#invoice-code').text(data.code)
     $('#invoice-client').text(`${data.name} ${data.lastname}`)
-    $('#invoice-address').text(data.address_description ?
-      `${data.address_department}, ${data.address_province}, ${data.address_district} - ${data.address_street} #${data.address_number}` :
-      'Recojo en tienda')
+    // $('#invoice-address').text(data.address_description ?
+    //   `${data.address_department}, ${data.address_province}, ${data.address_district} - ${data.address_street} #${data.address_number}` :
+    //   'Recojo en tienda')
 
     $('#invoice-status-id').val(data.status?.id ?? null)
     $('#invoice-status').text(data.status?.name ?? 'Sin estado')
@@ -148,6 +148,14 @@
     fetch(`/api/saledetails/${data.id}`)
       .then(res => res.json())
       .then(data => {
+
+        function formatDate(dateString) {
+          const [year, month, day] = dateString.split('-');
+          return `${day}/${month}/${year}`;
+        }
+
+        
+
         $('#invoice-products').empty()
         if (data.length == 0) {
           $('#invoice-products').html(`<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -158,9 +166,15 @@
           return
         }
         data.forEach(item => {
+
+          const formattedCheckin = formatDate(item.checkin);
+          const formattedCheckout = formatDate(item.checkout);
+
           $('#invoice-products').append(`<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              ${item.product_name}
+            <th scope="row" class="flex flex-col px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              <span> ${item.product_name} </span>
+              <span class="font-normal text-sm text-black"> Ingreso: ${formattedCheckin} - Salida: ${formattedCheckout} </span>
+              ${item.extras ? `<span class="font-normal text-sm text-black"> Extras: ${item.extras} </span> ` : ''}
             </th>
             <td class="px-6 py-4">
               S/. ${Number(item.price).toFixed(2)}
@@ -173,20 +187,20 @@
             </td>
           </tr>`)
         })
-        $('#invoice-products').append(`<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              Envio 
-            </th>
-            <td class="px-6 py-4">
-              S/. ${envio}
-            </td>
-            <td class="px-6 py-4">
-              1
-            </td>
-            <td class="px-6 py-4">
-              S/. ${envio}
-            </td>
-          </tr>`)
+        // $('#invoice-products').append(`<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        //     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        //       Envio 
+        //     </th>
+        //     <td class="px-6 py-4">
+        //       S/. ${envio}
+        //     </td>
+        //     <td class="px-6 py-4">
+        //       1
+        //     </td>
+        //     <td class="px-6 py-4">
+        //       S/. ${envio}
+        //     </td>
+        //   </tr>`)
       })
 
     $('#invoice-modal').modal('show')
