@@ -395,7 +395,7 @@
                 </div>
 
 
-                <div class="md:col-span-5 mt-2">
+                <div class="md:col-span-5 mt-1">
                   <div class=" flex items-end justify-between gap-2 ">
                     <label for="services">Servicios extras (Borre contenido para eliminar)</label>
                     <button type="button" id="AddService"
@@ -429,6 +429,21 @@
                       </div>
                     </div>
                   @endforeach
+                </div>
+
+                <div class="md:col-span-5 mt-1">
+                  <div class="w-full">
+                    <label for="precioservicio">Limite de personas</label>
+                    <div class="relative mb-2  mt-2">
+                      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="text-lg text-gray-500 dark:text-gray-400 fa-solid fa-user"></i>
+                      </div>
+                      <input type="number" id="precioservicio" name="precioservicio" value="{{ $product->precioservicio }}"
+                        step="0.1"
+                        class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Taza de servicio">
+                    </div>
+                  </div>
                 </div>
 
                 <div class="md:col-span-5 flex justify-between gap-4">
@@ -886,7 +901,7 @@
   </div>
  
 
-  <script>
+  {{-- <script>
       console.log(FullCalendar);
       //plugins: ['dayGrid', 'iCalendar'],
       document.addEventListener('DOMContentLoaded', function() {
@@ -903,6 +918,26 @@
         });
         calendar.render();
       });
+  </script> --}}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let disabledDates = @json($disabledDates);
+     
+      let disabledEvents = disabledDates.map(date => {
+            return {
+                title: 'Fecha bloqueada',
+                start: date, 
+                allDay: true
+            };
+        });
+      
+      let calendarEl = document.getElementById('calendar');
+      let calendar =  new FullCalendar.Calendar(calendarEl, {
+        events: disabledEvents
+      });
+      calendar.render();
+    });
   </script>
 
   <script>

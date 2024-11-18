@@ -754,7 +754,7 @@ class IndexController extends Controller
          
           $lines = explode("\n", $icalContent);
 
-        // Procesar las líneas del archivo .ics
+          // Procesar las líneas del archivo .ics
           foreach ($lines as $line) {
               $line = trim($line); // Eliminar espacios en blanco
 

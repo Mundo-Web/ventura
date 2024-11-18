@@ -527,7 +527,7 @@
                           <button class="py-2.5 px-5 text-lg font-Helvetica_Bold rounded-full bg-[#009A84] m-1 text-white" id=disminuir
                               type="button">-</button>
                       </div>
-                      <div id=cantidadSpan class="flex-1 shrink gap-2.5 font-FixelText_Semibold self-stretch p-4 h-full rounded-lg border border-teal-600 border-solid bg-slate-50 min-w-[140px]">
+                      <div id="cantidadSpan" data-max-personas="{{ $product->precioservicio > 0 ? $product->precioservicio : 2 }}" class="flex-1 shrink gap-2.5 font-FixelText_Semibold self-stretch p-4 h-full rounded-lg border border-teal-600 border-solid bg-slate-50 min-w-[140px]">
                         <span>1</span> personas
                       </div>
                       <div class="flex justify-center items-center cursor-pointer rounded-full">
@@ -846,7 +846,7 @@
     // })
     $('#disminuir').on('click', function() {
       let cantidad = Number($('#cantidadSpan span').text())
-      if (cantidad > 0) {
+      if (cantidad > 1) {
         cantidad--
         $('#cantidadSpan span').text(cantidad)
       }
@@ -855,10 +855,13 @@
     })
     // cantidadSpan
     $('#aumentar').on('click', function() {
-      let cantidad = Number($('#cantidadSpan span').text())
-      cantidad++
-      $('#cantidadSpan span').text(cantidad)
-
+      let cantidad = Number($('#cantidadSpan span').text());
+      let maxPersonas = Number($('#cantidadSpan').data('max-personas'));
+      
+      if (cantidad < maxPersonas) {
+            cantidad++;
+            $('#cantidadSpan span').text(cantidad);
+      }
     })
   </script>
   <script>

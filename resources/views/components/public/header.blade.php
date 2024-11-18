@@ -29,7 +29,7 @@
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: #FF5E14;
+        background-color: #5BE3A4;
         transform: scaleX(0);
         transition: transform 0.3s ease;
     }
@@ -236,7 +236,7 @@
 
             <div class="w-auto flex flex-col justify-center items-center">
                 <a href="{{route('index')}}">
-                  <img id="logo-boostperu" class="w-[170px] " {{-- public\images\svg\LOGO2.png --}}
+                  <img id="logo-boostperu" class="w-[170px]"
                     src="{{ asset($isIndex ? 'images/svg/venturalogo.svg' : 'images/svg/venturalogo.svg') }}" alt="boostperu" />
                 </a>
             </div>
@@ -244,23 +244,21 @@
             <div class="hidden lg:flex items-center justify-center ">
                 <div>
                   <nav id="menu-items"
-                    class=" text-white text-base font-FixelText_Medium flex gap-5 xl:gap-14 items-center justify-center "
-                    x-data="{ openCatalogo: false, openSubMenu: null }">
-                    <a href="/" class="font-medium hover:opacity-75 ">
+                    class=" text-white text-base font-FixelText_Medium flex gap-5 xl:gap-14 items-center justify-center">
+                    
+                    <a href="/" class="font-medium">
                       <span class="underline-this tracking-wide">Inicio</span>
                     </a>
-                   
         
-                    <a id="productos-link" href="{{ route('Catalogo.jsx') }}" class="font-medium ">
+                    <a id="productos-link" href="{{ route('Catalogo.jsx') }}" class="font-medium">
                       <span class="underline-this tracking-wide">Propiedades</span>
-                      {{-- <div id="productos-link-h" class="w-0"></div> --}}
                     </a>
         
-                    <a href="/nosotros" class="font-medium hover:opacity-75 ">
+                    <a href="/nosotros" class="font-medium">
                       <span class="underline-this tracking-wide">Nosotros</span>
                     </a>
         
-                    <a href="/contacto" class="font-medium hover:opacity-75  ">
+                    <a href="/contacto" class="font-medium">
                       <span class="underline-this tracking-wide">Contacto</span>
                     </a>
         
