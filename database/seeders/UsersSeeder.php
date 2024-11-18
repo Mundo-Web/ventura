@@ -26,11 +26,11 @@ class UsersSeeder extends Seeder
         ])->assignRole('Admin');
 
         User::updateOrCreate([
-            'email' => 'admin@boostperu.com'
+            'email' => 'admin@venturabnb.pe'
         ], [
-            'name' => 'Admin Boost Peru',
-            'email' => 'admin@boostperu.com',
-            'password' => Hash::make('b0057P3ru#2024'),
+            'name' => 'Admin Ventura',
+            'email' => 'admin@venturabnb.pe',
+            'password' => Hash::make('ventura#2024'),
         ])->assignRole('Admin');
 
         User::updateOrCreate([
