@@ -30,7 +30,7 @@ class UsersSeeder extends Seeder
         ], [
             'name' => 'Admin Ventura',
             'email' => 'admin@venturabnb.pe',
-            'password' => Hash::make('ventura#2024'),
+            'password' => Hash::make('Ventur@#2024'),
         ])->assignRole('Admin');
 
         User::updateOrCreate([
