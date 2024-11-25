@@ -75,6 +75,17 @@ class HomeViewController extends Controller
            
         } 
 
+        if ($request->hasFile("imagensecond")) {
+            $file = $request->file('imagensecond');
+            $routeImg = 'storage/images/general/';
+            $nombreImagen = Str::random(10) . '_' . $file->getClientOriginalName();
+      
+            $this->saveImg($file, $routeImg, $nombreImagen);
+      
+            $homeview['url_image2section'] = $routeImg . $nombreImagen;
+           
+        } 
+
         $homeview->update($request->all());
 
         $homeview->save();  

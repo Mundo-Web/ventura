@@ -77,6 +77,7 @@
                                                 aria-describedby="user_avatar_help" id="user_avatar" type="file">
                                         </div>
                                     </div>
+                                    
 
                                     <div class="md:col-span-5">
                                         <label for="title2section">Titulo: Sección estadisticas</label>
@@ -118,6 +119,15 @@
                                             <textarea type="text" id="description2section" name="description2section"
                                                 class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="Ingrese la descripcion">{{ $homeview->description2section }}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="md:col-span-5">
+                                        <label for="imagensecond">Imagen estadisticas</label>
+                                        <div class="relative mb-2  mt-2">
+                                            <input id="imagensecond" name="imagensecond"
+                                                class="p-2.5 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                                aria-describedby="user_avatar_help" id="user_avatar" type="file">
                                         </div>
                                     </div>
 
