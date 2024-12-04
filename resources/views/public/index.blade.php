@@ -78,7 +78,7 @@
                                         class="w-full min-w-36 py-3 text-sm border-0  font-FixelText_Medium self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30">
                                                 <option class="line-clamp-1" value="">Ubicación</option>
                                             @foreach ($distritosfiltro as $ubicaciones)
-                                                @if (!empty($ubicaciones->distrito_id))
+                                                @if (!empty($ubicaciones->distrito_id && !empty($ubicaciones->distrito->description)))
                                                     <option class="line-clamp-1" value="{{$ubicaciones->distrito_id}}">{{$ubicaciones->distrito->description}}</option>
                                                 @endif  
                                             @endforeach
