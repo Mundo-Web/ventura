@@ -71,16 +71,16 @@
                           <div class="relative w-full text-left">
                           <div class="group">
                               <div>
-                                  @if ($limite > 0)
-                                          <select name="cantidad_personas" id="cantidad_personas" class="w-full text-sm font-FixelText_Medium self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30">
+                                  
+                                    <select name="cantidad_personas" id="cantidad_personas" class="w-full text-sm font-FixelText_Medium self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30">
                                               <option value=""># Personas</option>
                                               @for ($i = 1; $i <= $limite; $i++)
                                                   <option value="{{ $i }}"
                                                   @selected($i == $cantidad)
                                                   >{{ $i }}</option>
                                               @endfor
-                                          </select>
-                                  @endif
+                                    </select>
+                                 
                               </div>
                           </div>
                           </div>
