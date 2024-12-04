@@ -108,9 +108,12 @@ class IndexController extends Controller
     $textoshome = HomeView::first();
     $estadisticas = ClientLogos::where('status', '=', 1)->where('visible', '=', 1)->get();
     $categoriasindex = Category::where('status', '=', 1)->where('destacar', '=', 1)->get();
-
-
-    return view('public.index', compact('textoshome','general','url_env', 'popups', 'banners', 'blogs', 'categoriasAll', 'productosPupulares', 'ultimosProductos', 'productos', 'destacados', 'descuentos', 'general', 'benefit', 'faqs', 'testimonie', 'slider', 'categorias', 'categoriasindex','estadisticas'));
+    $distritosfiltro = Products::where('status', '=', 1)->where('visible', '=', 1)->get();
+    $limitepersonas = $distritosfiltro->pluck('precioservicio')->filter(function ($precio) {
+      return $precio > 0; // Excluir valores no válidos
+    });
+    $limite = $limitepersonas->max();
+    return view('public.index', compact('limite','distritosfiltro','textoshome','general','url_env', 'popups', 'banners', 'blogs', 'categoriasAll', 'productosPupulares', 'ultimosProductos', 'productos', 'destacados', 'descuentos', 'general', 'benefit', 'faqs', 'testimonie', 'slider', 'categorias', 'categoriasindex','estadisticas'));
   }
 
   public function catalogo(Request $request, string $id_cat = null)
@@ -122,6 +125,94 @@ class IndexController extends Controller
     $subCatId = $request->input('subcategoria');
     $tag_id = $request->input('tag');
     $id_cat = $id_cat ?? $catId;
+
+    $lugar = $request->input('lugar') ?? '';
+    $cantidad = $request->input('cantidad_personas') ?? '';
+    $llegada = $request->input('fecha_llegada') ?? '';
+    $salida = $request->input('fecha_salida') ?? '';
+    $client = new Client();
+    $consultaapi = Products::where('status', 1)->where('visible', 1)->get();
+
+    $query = Products::where('status', 1)
+    ->where('visible', 1)
+    ->with('distrito');
+
+    // Verifica si se proporcionó el lugar y la cantidad
+    if (!empty($lugar)) {
+        $query->where('distrito_id', $lugar);
+    }
+
+    if (!empty($cantidad)) {
+        $query->where('precioservicio', '>=', $cantidad);
+    }
+
+    if (!empty($llegada) && !empty($salida)) {
+      
+      $checkin = Carbon::createFromFormat('d/m/Y', $request->input('fecha_llegada'))->format('Y-m-d');
+      $checkout = Carbon::createFromFormat('d/m/Y', $request->input('fecha_salida'))->format('Y-m-d');
+      
+       $listings = [];
+
+        foreach ($consultaapi as $department) {
+            $listings[] = [
+                'id' => $department->sku, 
+                'pms' => $department->pms, 
+                'dateFrom' => $checkin,
+                'dateTo' => $checkout,
+                "reason" => false
+            ];
+        }
+
+      try {
+            $response = $client->post('https://api.pricelabs.co/v1/listing_prices', [
+                'headers' => [
+                    'X-API-Key' => env('PRICELABS_API_KEY'),
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => ['listings' => $listings]
+            ]);
+
+            $data = json_decode($response->getBody(), true);
+            
+            $availableDepartments = [];
+
+            foreach ($data as $department) {
+                // Si la respuesta contiene un error, ignorarlo
+                if (isset($department['error'])) {
+                    continue;
+                }
+    
+                $allAvailable = true; // Variable para verificar si todas las fechas están disponibles
+                foreach ($department['data'] as $availability) {
+                    // Verificar si alguna de las fechas tiene el estado "Booked"
+                    if (strpos($availability['booking_status'], 'Booked') !== false) {
+                        $allAvailable = false; // Si alguna fecha está reservada, marcamos como no disponible
+                        break; // Salir del loop si encontramos una fecha "Booked"
+                    }
+                }
+    
+                // Si todas las fechas están disponibles, añadir el departamento a la lista
+                if ($allAvailable) {
+                    $availableDepartments[] = $department['id'];
+                }
+            }
+
+           
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Solicitud fallida',
+                'desc' => $e->getMessage(),
+            ], 400);
+        }
+
+        $query->whereIn('sku', $availableDepartments);
+    }
+
+
+
+    // Ordena por ID descendente y obtén los resultados
+    $products = $query->orderBy('id', 'desc')->get();
+
 
     // $categories = Category::with('subcategories')->where('visible', true)->get();
     $categories = Category::with(['subcategories' => function ($query) {
@@ -146,18 +237,133 @@ class IndexController extends Controller
 
     $textoshome = HomeView::first();
 
-    return Inertia::render('Catalogo', [
-      'component' => 'Catalogo',
-      'minPrice' => $minPrice,
-      'maxPrice' => $maxPrice,
-      'categories' => $categories,
-      'tags' => $tags,
-      'attribute_values' => $attribute_values,
-      'id_cat' => $id_cat,
-      'tag_id' => $tag_id,
-      'textoshome' => $textoshome,
-      'subCatId' => $subCatId
-    ])->rootView('app');
+    $distritosfiltro = Products::where('status', '=', 1)->where('visible', '=', 1)->with('distrito')->get();
+    $limitepersonas = $distritosfiltro->pluck('precioservicio')->filter(function ($precio) {
+      return $precio > 0; // Excluir valores no válidos
+    });
+    $limite = $limitepersonas->max() ?? 1;
+
+
+
+    return view('public.catalogo' , compact('lugar','cantidad','llegada','salida','products','minPrice','maxPrice','categories','tags','attribute_values','id_cat','tag_id','textoshome','distritosfiltro','limite'));
+    // return Inertia::render('Catalogo', [
+    //   'component' => 'Catalogo',
+    //   'minPrice' => $minPrice,
+    //   'maxPrice' => $maxPrice,
+    //   'categories' => $categories,
+    //   'tags' => $tags,
+    //   'attribute_values' => $attribute_values,
+    //   'id_cat' => $id_cat,
+    //   'tag_id' => $tag_id,
+    //   'textoshome' => $textoshome,
+    //   'subCatId' => $subCatId,
+    //   'distritosfiltro' => $distritosfiltro,
+    //   'limite' => $limite
+
+    // ])->rootView('app');
+  }
+
+  public function obtenerDepartamentos(Request $request){
+      
+      $lugar = $request->input('lugar') ?? '';
+      $cantidad = $request->input('cantidad_personas') ?? '';
+      $llegada = $request->input('llegada') ?? '';
+      $salida = $request->input('salida') ?? '';
+      $client = new Client();
+
+      $consultaapi = Products::where('status', 1)->where('visible', 1)->get();
+
+      $query = Products::where('status', 1)
+      ->where('visible', 1)
+      ->with('distrito');
+
+      // Verifica si se proporcionó el lugar y la cantidad
+      if (!empty($lugar)) {
+          $query->where('distrito_id', $lugar);
+      }
+
+      if (!empty($cantidad)) {
+          $query->where('precioservicio', '>=', $cantidad);
+      }
+    
+      if (!empty($llegada) && !empty($salida)) {
+
+        $checkin = Carbon::createFromFormat('d/m/Y', $request->input('llegada'))->format('Y-m-d');
+        $checkout = Carbon::createFromFormat('d/m/Y', $request->input('salida'))->format('Y-m-d');
+       
+        $listings = [];
+
+          foreach ($consultaapi as $department) {
+              $listings[] = [
+                  'id' => $department->sku, 
+                  'pms' => $department->pms, 
+                  'dateFrom' => $checkin,
+                  'dateTo' => $checkout,
+                  "reason" => false
+              ];
+          }
+
+        try {
+              $response = $client->post('https://api.pricelabs.co/v1/listing_prices', [
+                  'headers' => [
+                      'X-API-Key' => env('PRICELABS_API_KEY'),
+                      'Content-Type' => 'application/json',
+                  ],
+                  'json' => ['listings' => $listings]
+              ]);
+
+              $data = json_decode($response->getBody(), true);
+              
+              $availableDepartments = [];
+
+              foreach ($data as $department) {
+                  // Si la respuesta contiene un error, ignorarlo
+                  if (isset($department['error'])) {
+                      continue;
+                  }
+      
+                  $allAvailable = true; // Variable para verificar si todas las fechas están disponibles
+                  foreach ($department['data'] as $availability) {
+                      // Verificar si alguna de las fechas tiene el estado "Booked"
+                      if (strpos($availability['booking_status'], 'Booked') !== false) {
+                          $allAvailable = false; // Si alguna fecha está reservada, marcamos como no disponible
+                          break; // Salir del loop si encontramos una fecha "Booked"
+                      }
+                  }
+      
+                  // Si todas las fechas están disponibles, añadir el departamento a la lista
+                  if ($allAvailable) {
+                      $availableDepartments[] = $department['id'];
+                  }
+              }
+
+            
+          } catch (\Exception $e) {
+              return response()->json([
+                  'error' => 'Solicitud fallida',
+                  'desc' => $e->getMessage(),
+              ], 400);
+          }
+
+        $query->whereIn('sku', $availableDepartments);
+    }
+
+    $products = $query->orderBy('id', 'desc')->get();
+    
+    if ($products->isEmpty()) { 
+       $mensaje = 'No se encontraron departamentos que coincidan con los filtros.'; 
+       $encontrados = false;
+    }else{
+       $mensaje = 'Se encontraron departamentos que coinciden con los filtros.'; 
+       $encontrados = true;
+    }
+
+    
+    return response()->json([
+      'message' => $mensaje,
+      'data' => $products,
+      'encontrados' => $encontrados
+    ]);
   }
 
   public function ofertas(Request $request, string $id_cat = null)
@@ -649,18 +855,12 @@ class IndexController extends Controller
   }
 
   public function getPrices(Request $request){
-      
+    
       $serviciosseleccionados = [];
       $client = new Client();
       $serviciosseleccionados = $request->servicios;
-      
-      $listings = [
-        [
-            'id' => $request['id'],
-            'pms' => 'airbnb'
-        ]
-      ];
-      
+      $department = Products::where('sku', '=', $request['id'])->first();
+
       $checkin = $request->input('checkin');
       $checkout = $request->input('checkout');
       
@@ -669,6 +869,15 @@ class IndexController extends Controller
             'error' => 'Faltan datos importantes.',
         ], 400);
       }
+
+      $listings = [
+        [
+            'id' => $department->sku,
+            'pms' => $department->pms,
+            'dateFrom' => $checkin,
+            'dateTo' => $checkout
+        ]
+      ];
 
       try {
         $response = $client->post('https://api.pricelabs.co/v1/listing_prices', [

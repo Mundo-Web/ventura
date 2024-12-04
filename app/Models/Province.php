@@ -9,6 +9,8 @@ class Province extends Model
 {
     use HasFactory;
     
+    protected $keyType = 'string';
+    
     protected $fillable = [        
         'department_id',
         'description',

@@ -70,6 +70,10 @@
         bottom: 0;
         z-index: 900;
     }
+
+    .prose{
+        max-width: 100%!important;
+    }
 </style>
 
 <div class="navigation shadow-xl px-5 overflow-y-auto" style="z-index: 9999; background-color: #fff !important ">
@@ -79,39 +83,39 @@
         </svg>
     </button>
 
-    <nav class="w-full h-full overflow-y-auto p-8" x-data="{ openCatalogo: true, openSubMenu: null }">
+    <nav class="w-full h-full overflow-y-auto py-8" x-data="{ openCatalogo: true, openSubMenu: null }">
         <ul class="space-y-1">
             <li>
                 <a href="/"
-                    class="text-[#272727] font-medium font-poppins text-sm py-2 px-3 block hover:opacity-75 transition-opacity duration-300 {{ $isIndex ? 'text-[#FF5E14]' : '' }}">
+                    class="text-[#272727] font-medium font-FixelText_Bold text-sm py-2 px-3 block hover:opacity-75 transition-opacity duration-300">
                     <span class="underline-this">
-                        <svg class="inline-block w-3 h-3 mb-0.5 me-2 text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path
-                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
-                        </svg>
-                        INICIO
+                        <i class="fa-solid fa-circle-arrow-right  text-[#006258] inline-block w-3 h-3 mb-0.5 me-2"></i>
+                        Inicio
                     </span>
                 </a>
             </li>
 
             <li>
                 <a href="/nosotros"
-                    class="text-[#272727] font-medium font-poppins text-sm py-2 px-3 block hover:opacity-75 transition-opacity duration-300 {{ $isIndex ? 'text-[#FF5E14]' : '' }}">
+                    class="text-[#272727] font-medium font-FixelText_Bold text-sm py-2 px-3 block hover:opacity-75 transition-opacity duration-300">
                     <span class="underline-this">
-                        <svg class="inline-block w-3 h-3 mb-0.5 me-2 text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path
-                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
-                        </svg>
-                        NOSOTROS
+                        <i class="fa-solid fa-circle-arrow-right  text-[#006258] inline-block w-3 h-3 mb-0.5 me-2"></i>
+                        Nosotros
                     </span>
                 </a>
             </li>
 
             <li>
+                <a href="/catalogo"
+                    class="text-[#272727] font-medium font-FixelText_Bold text-sm py-2 px-3 block hover:opacity-75 transition-opacity duration-300">
+                    <span class="underline-this">
+                        <i class="fa-solid fa-circle-arrow-right  text-[#006258] inline-block w-3 h-3 mb-0.5 me-2"></i>
+                        Departamentos
+                    </span>
+                </a>
+            </li>
+
+            {{-- <li>
                 <a @click="openCatalogo = !openCatalogo" href="javascript:void(0)"
                     class="text-[#272727] flex justify-between items-center font-medium font-poppins text-sm py-2 px-3 hover:opacity-75 transition-opacity duration-300 {{ $pagina == 'catalogo' ? 'text-[#FF5E14]' : '' }}">
                     <span class="underline-this">
@@ -176,36 +180,26 @@
                     </li>
 
                 </ul>
-            </li>
+            </li> --}}
 
             <li>
                 <a href="/blog/0"
-                    class="text-[#272727] font-medium font-poppins text-sm py-2 px-3 block hover:opacity-75 transition-opacity duration-300 {{ $pagina == 'contacto' ? 'text-[#FF5E14]' : '' }}">
+                    class="text-[#272727] font-medium font-FixelText_Bold text-sm py-2 px-3 block hover:opacity-75 transition-opacity duration-300">
                     <span class="underline-this">
-                        <svg class="inline-block w-3 h-3 mb-0.5 me-2 text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                            viewBox="0 0 14 20">
-                            <path
-                                d="M12 0H2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM7.5 17.5h-1a1 1 0 0 1 0-2h1a1 1 0 0 1 0 2ZM12 13H2V4h10v9Z" />
-                        </svg>
-                        BLOG
+                        <i class="fa-solid fa-circle-arrow-right  text-[#006258] inline-block w-3 h-3 mb-0.5 me-2"></i>
+                        Blog
                     </span>
                 </a>
             </li>
 
             <li>
                 <a href="/contacto"
-                    class="text-[#272727] font-medium font-poppins text-sm py-2 px-3 block hover:opacity-75 transition-opacity duration-300 {{ $pagina == 'contacto' ? 'text-[#FF5E14]' : '' }}">
+                    class="text-[#272727] font-medium font-FixelText_Bold text-sm py-2 px-3 block hover:opacity-75 transition-opacity duration-300">
                     <span class="underline-this">
-                        <svg class="inline-block w-3 h-3 mb-0.5 me-2 text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-500"
-                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path
-                                d="M19 4h-1a1 1 0 1 0 0 2v11a1 1 0 0 1-2 0V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V5a1 1 0 0 0-1-1ZM3 4a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4Zm9 13H4a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-3H4a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-3H4a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-3h-2a1 1 0 0 1 0-2h2a1 1 0 1 1 0 2Zm0-3h-2a1 1 0 0 1 0-2h2a1 1 0 1 1 0 2Z" />
-                            <path d="M6 5H5v1h1V5Z" />
-                        </svg>
-                        CONTACTO
-                    </span></a>
+                        <i class="fa-solid fa-circle-arrow-right  text-[#006258] inline-block w-3 h-3 mb-0.5 me-2"></i>
+                        Contacto
+                    </span>
+                </a>
             </li>
 
             {{-- @if ($tags->count() > 0)
@@ -228,7 +222,7 @@
 <header class="bg-[#00897B] py-3.5">
 
     <div>
-        <div id="header-menu" class="flex justify-between gap-5 w-full px-[5%] xl:px-[8%] py-1  text-[17px] relative items-center">
+        <div id="header-menu" class="flex justify-between gap-3 w-full px-[3%] xl:px-[8%] py-1  text-[17px] relative items-center">
             <div id="menu-burguer" class="lg:hidden z-10 w-max">
                 <img class="h-10 w-10 cursor-pointer" src="{{ asset('images/img/menu_hamburguer.png') }}"
                   alt="menu hamburguesa" onclick="show()" />
@@ -244,19 +238,23 @@
             <div class="hidden lg:flex items-center justify-center ">
                 <div>
                   <nav id="menu-items"
-                    class=" text-white text-base font-FixelText_Medium flex gap-5 xl:gap-14 items-center justify-center">
+                    class=" text-white text-base font-FixelText_Medium flex gap-5 xl:gap-10 items-center justify-center">
                     
                     <a href="/" class="font-medium">
                       <span class="underline-this tracking-wide">Inicio</span>
                     </a>
         
-                    <a id="productos-link" href="{{ route('Catalogo.jsx') }}" class="font-medium">
+                    <a id="productos-link" href="{{ route('catalogo.all') }}" class="font-medium">
                       <span class="underline-this tracking-wide">Propiedades</span>
                     </a>
         
                     <a href="/nosotros" class="font-medium">
                       <span class="underline-this tracking-wide">Nosotros</span>
                     </a>
+
+                    <a href="/blog/0" class="font-medium">
+                        <span class="underline-this tracking-wide">Blog</span>
+                      </a>
         
                     <a href="/contacto" class="font-medium">
                       <span class="underline-this tracking-wide">Contacto</span>
@@ -266,7 +264,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-end md:w-auto md:justify-center items-center gap-3">
+            <div class="flex justify-end md:w-auto md:justify-center items-center gap-1 md:gap-4">
 
                     @if (Auth::user() == null)
                       <a class="text-sm font-FixelText_Semibold tracking-wide border-2 text-white px-2.5 md:px-4 py-2 md:py-3.5 leading-none rounded-full md:rounded-2xl" href="{{ route('login') }}">
@@ -274,14 +272,21 @@
                         <div class="md:hidden"><i class="fa-solid fa-user text-xl"></i></div>
                       </a>
                     @else
-                      <div class=" relative md:inline-flex font-FixelText_Semibold" x-data="{ open: false }">
+                      
+                      <div class="relative md:inline-flex font-FixelText_Semibold" x-data="{ open: false }">
                           <button class="inline-flex justify-center items-center group" aria-haspopup="true"
                               @click.prevent="open = !open" :aria-expanded="open">
-                              <div class="flex items-center truncate ">
-                              <span id="usernamelogin" class="text-white  truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:opacity-75 dark:group-hover:text-slate-200">
-      
-                              </span>
-                              <i class="fas fa-angle-down ms-2 text-white"></i>
+                              <div class="flex items-center truncate">
+                                <span id="usernamelogin" class="hidden md:flex text-white  truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:opacity-75 dark:group-hover:text-slate-200">
+        
+                                </span>
+                                
+                                <a class="flex md:hidden text-sm font-FixelText_Semibold tracking-wide border-2 text-white px-2.5 md:px-4 py-2 md:py-3.5 leading-none rounded-full md:rounded-2xl" href="{{ route('login') }}">
+                                    <div><i class="fa-solid fa-user text-xl"></i></div>
+                                </a>
+                                
+                                <i class="hidden md:flex fas fa-angle-down ms-2 text-white before:hidden before:md:flex"></i>
+
                               </div>
                           </button>
                           <div
@@ -306,6 +311,7 @@
                               </ul>
                           </div>
                       </div>
+
                     @endif
 
                     {{-- @else
@@ -431,7 +437,7 @@
     firstLName = firstLName ? firstLName.charAt(0).toUpperCase() + firstLName.slice(1) : ''
     SecondLName = SecondLName ? SecondLName.charAt(0).toUpperCase() + SecondLName.slice(1) : ''
 
-    console.log(firstName, SecondName, firstLName, SecondLName)
+    
 
     $('#usernamelogin').text(
       `${firstName ? firstName : ''} ${SecondName ? SecondName : ''} ${firstLName ? firstLName : ''} ${SecondLName ? SecondLName : ''}`

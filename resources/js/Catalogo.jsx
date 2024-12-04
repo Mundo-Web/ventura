@@ -14,7 +14,8 @@ import axios from 'axios'
 
 
 
-const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_cat: selected_category, tag_id, subCatId, textoshome }) => {
+
+const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_cat: selected_category, tag_id, subCatId, textoshome, distritosfiltro, limite}) => {
   const take = 12
   const [items, setItems] = useState([]);
   const [filter, setFilter] = useState({});
@@ -24,6 +25,12 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
   const is_proveedor = useRef(false);
   const cancelTokenSource = useRef(null);
   
+
+  const params = new URLSearchParams(window.location.search);
+  const llegada = params.get('fecha_llegada');
+  const salida = params.get('fecha_salida');
+  const lugar = params.get('lugar');
+  const cantidad = params.get('cantidad_personas');
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -41,11 +48,26 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
     const params = new URLSearchParams(window.location.search);
     const tag = params.get('tag');
 
+
     // Actualizar el filtro con el 'tag_id' si existe
     if (tag) {
       setFilter(prevFilter => ({
         ...prevFilter,
         'txp.tag_id': [tag]
+      }));
+    }
+
+    if (lugar) {
+      setFilter(prevFilter => ({
+        ...prevFilter,
+        'distrito_id': [lugar]
+      }));
+    }
+
+    if (cantidad) {
+      setFilter(prevFilter => ({
+        ...prevFilter,
+        'precioservicio': [cantidad]
       }));
     }
 
@@ -56,6 +78,7 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
         category_id: [selected_category]
       }));
     }
+
   }, [selected_category]);
 
   useEffect(() => {
@@ -142,6 +165,30 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
       filterBody.push(tagsFilter);
     }
 
+    if (filter['distrito_id'] && filter['distrito_id'].length > 0) {
+      const ubicaciones = [];
+      filter['distrito_id'].forEach((x, i) => {
+        if (i === 0) {
+          ubicaciones.push(['distrito_id', '=', x]);
+        } else {
+          ubicaciones.push('or', ['distrito_id', '=', x]);
+        }
+      });
+      filterBody.push(ubicaciones);
+    }
+
+    if (filter['precioservicio'] && filter['precioservicio'].length > 0) {
+      const cantidadpersonas = [];
+      filter['precioservicio'].forEach((x, i) => {
+        if (i === 0) {
+          cantidadpersonas.push(['precioservicio', '=', x]);
+        } else {
+          cantidadpersonas.push('or', ['precioservicio', '=', x]);
+        }
+      });
+      filterBody.push(cantidadpersonas);
+    }
+
     for (const key in filter) {
       if (!key.startsWith('attribute-')) continue;
       if (filter[key].length === 0) continue;
@@ -224,7 +271,7 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
 
   const categoryDetails = categories.find(category => category.id === Number(selected_category));
   const imgcatalogo = 'images/img/portadacatalogo.png';
-  console.log(categoryDetails);
+
 
   return (<>
    <div>
@@ -232,87 +279,15 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
    <section className="flex flex-col lg:flex-row gap-3 lg:gap-10 justify-center items-center px-[5%] lg:pl-[5%] lg:pr-0 bg-[#5BE3A4]">
       
         <div className="w-full lg:w-[55%] text-[#151515] flex flex-col justify-center items-center gap-2 md:gap-10">
-            <div className="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 lg:pt-0 xl:max-w-4xl">
-              <h1 className="text-[#F8FCFF] font-Homie_Bold text-5xl lg:text-6xl">
+            <div className="w-full flex flex-col gap-5 px-0 lg:pr-[5%] pt-8 lg:pt-0 xl:max-w-4xl">
+              <h1 className="text-[#F8FCFF] font-Homie_Bold text-5xl">
                 {textoshome?.title1section || 'Propiedades que inspiran, experiencias que marcan la diferencia.'}
               </h1>
-
             </div>
-          {/*
-
-            <div className="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 md:pt-0">
-             
-              <div className="px-0 w-full z-10">
-                
-               
-                <div className="bg-white rounded-t-lg inline-block w-auto md:max-w-[388px]">
-                  <div className="flex justify-between items-center">
-                    <button
-                      className="px-10 py-3 text-[#009A84] font-FixelText_Semibold border-b-[2.5px] border-[#009A84] focus:outline-none tab-button flex-1"
-                      onclick="showTab('tab1')">
-                      Elige unas Fechas
-                    </button>
-                  </div>
-                </div>
-                
-              
-                <div id="tab1" className="flex flex-col md:flex-row py-4 px-4 tab-content bg-white justify-between items-center gap-5 rounded-b-lg md:rounded-tr-lg w-full">
-                  
-                  <div className="w-full">
-                    <div className="relative w-full text-left">
-                      <div className="group">
-                        <div>
-                          <select name="departamento_id" id="departamento_id2"
-                            className="w-full py-3 px-5 text-text18 text-[#000929] border-0">
-                            <option value="">Ubicacion</option>
-
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="w-[0.5px] h-[50px] bg-[#E0DEF7] hidden md:block">
-                  </div>
-
-                  <div className="w-full">
-                    <div className="relative w-full text-left">
-                      <div className="group">
-                        <div>
-                          <select name="categoria_id" id="categoria_id2"
-                            className="w-full py-3 px-5 text-text18 text-[#000929] border-0">
-                            <option value="">Categorias</option>
-
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-    
-                  <div className="w-[0.5px] h-[50px] bg-[#E0DEF7] hidden md:block">
-                  </div>
-    
-                  <div className="flex justify-center items-center md:w-full">
-                    <div className="flex flex-row-reverse 2md:flex-row justify-center items-center gap-5">
-                      <div className="flex justify-start items-center w-full">
-                        <button id="linkExplirarAlquileres"
-                          className="bg-[#009A84] rounded-2xl font-FixelText_Semibold text-base text-white px-10 py-3 text-center">
-                          <span className="flex w-full">Buscar</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-                
-              </div>
-              <p className="font-FixelText_Regular underline text-sm text-white ">
-                Propietario, anuncia tu propiedad gratis
-              </p>
-
-            </div>
-
-          */}
+            
+            <div class="w-full flex flex-col gap-5 px-0 lg:pr-[5%] pt-8 md:pt-0 relative">
+            <FilterContainer setFilter={setFilter} filter={filter} minPrice={minPrice ?? 0} maxPrice={maxPrice ?? 0} categories={categories} tags={tags} attribute_values={Object.values(attributes)} selected_category={selected_category} tag_id={tag_id} distritosfiltro={distritosfiltro} limite={limite} lugar={lugar} cantidad={cantidad} llegada={llegada} salida={salida}/>
+            </div>   
         </div>
 
        
@@ -325,10 +300,12 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
     </section>  
       
     <form className="flex flex-col lg:flex-row gap-6 w-full px-[5%] lg:px-[8%]">
+      
       {/* sticky */}
       {/* <section className="hidden lg:flex md:flex-col gap-4 md:basis-3/12 bg-white p-6 rounded-lg h-max top-2">
         <FilterContainer setFilter={setFilter} filter={filter} minPrice={minPrice ?? 0} maxPrice={maxPrice ?? 0} categories={categories} tags={tags} attribute_values={Object.values(attributes)} selected_category={selected_category} tag_id={tag_id} />
       </section> */}
+
       <section className="flex flex-col gap-6 md:basis-full py-6">
         
         <div className="w-full bg-white rounded-lg font-medium flex flex-row justify-between items-center px-2 py-3">
@@ -349,10 +326,11 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
         </div>
 
       </section>
+
       {/* modal */}
 
-      {showModal && (<div className="fixed z-40 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center max-h-[80vh] p-5" id="modal">
-        {/* btn para cerrar modal */}
+      {/* {showModal && (<div className="fixed z-40 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center max-h-[80vh] p-5" id="modal">
+       
         <div className="z-50 flex items-center content-center justify-center absolute  p-4 bg-black rounded-full h-6 w-6" style={{ top: '20px', right: '20px' }}>
           <button type='button' onClick={() => setShowModal(false)} className="text-white text-md ">X</button>
 
@@ -362,7 +340,7 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
           <FilterContainer setFilter={setFilter} filter={filter} minPrice={minPrice ?? 0} maxPrice={maxPrice ?? 0} categories={categories} tags={tags} attribute_values={Object.values(attributes)} selected_category={selected_category} tag_id={tag_id} />
         </div>
 
-      </div>)}
+      </div>)} */}
 
 
     </form>

@@ -121,9 +121,10 @@
                     <label for=""
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Previsualizacion del
                       producto</label>
-                    <div class="flex flex-wrap items-center gap-4">
-                      <div for="imagen_ambiente" x-data="{ showAmbiente: false }" @mouseenter="showAmbiente = true"
-                        @mouseleave="showAmbiente = false"
+                    <div class="flex flex-wrap items-end gap-4">
+                      <div for="imagen_ambiente" x-data="{ showAmbiente: false }" 
+                        {{-- @mouseenter="showAmbiente = true"
+                        @mouseleave="showAmbiente = false" --}}
                         class="relative flex justify-center items-center h-[256px] w-[256px] border rounded-lg">
                         @if ($product->imagen)
                           <img id="imagen_previewer" x-show="!showAmbiente"
@@ -142,7 +143,7 @@
                             src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
                             class="bg-[#f2f2f2] w-full h-full object-cover absolute inset-0 rounded-lg" />
                         @endif
-                        @if ($product->imagen_ambiente)
+                        {{-- @if ($product->imagen_ambiente)
                           <img id="imagen_ambiente_previewer" x-show="showAmbiente"
                             x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
@@ -159,7 +160,7 @@
                             x-transition:leave-start="opacity-100 scale-100"
                             x-transition:leave-end="opacity-0 scale-95" src="{{ asset('images/img/noimagen.jpg') }}"
                             alt="imagen_alternativa" class="w-full h-full object-cover absolute inset-0 rounded-lg" />
-                        @endif
+                        @endif --}}
                       </div>
                       <div>
                         {{-- <div class="mb-4">
@@ -184,14 +185,14 @@
                             id="imagen" name="imagen" type="file" accept="image/*"
                             title="Cargar imagen de producto" tippy>
                         </div>
-                        <div>
+                        {{-- <div>
                           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             for="imagen_ambiente">Imagen Secundaria</label>
                           <input data-id="input_img"
                             class="py-1 px-2 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             id="imagen_ambiente" name="imagen_ambiente" type="file" accept="image/*"
                             title="Cargar imagen de ambiente" tippy>
-                        </div>
+                        </div> --}}
                       </div>
                     </div>
                   </div>
@@ -615,7 +616,7 @@
                   <select name="distrito_id" id="distrito_id" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                       <option value="">Seleccionar un Distrito </option>
                       @foreach ($distritos as $dist)
-                          <option value="{{ $prov->id }}"
+                          <option value="{{ $dist->id }}"
                               {{ $dist->id == $product->distrito_id ? 'selected' : '' }}>
                               {{ $dist->description }}
                           </option>
@@ -890,14 +891,8 @@
           </div>  
 
         </div>
-
-
-
       </div>
-
     </form>
-
-
   </div>
  
 
@@ -1257,66 +1252,68 @@
 
   <script>
           $(document).ready(function() {
-              $('#departamento_id').change(function() {
+              
+            $('#departamento_id').change(function() {
                   var departamento_id = $(this).val();
+                 
                   if (departamento_id) {
                       $.ajax({
                           url: '/admin/products/provincias/' + departamento_id,
                           type: 'GET',
                           dataType: 'json',
                           success: function(data) {
-
-                              // Crear el combo de provincia con la opción inicial y las opciones obtenidas
-                              var provinciaSelect =
-                                  '<select name="provincia_id" id="provincia_id" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">' +
-                                  '<option value="">Seleccionar una Provincia </option>';
-                              $.each(data, function(key, value) {
-                                  provinciaSelect += '<option value="' + value.id + '">' +
-                                      value.description + '</option>';
-            
-                              provinciaSelect += 
-                              // Reemplazar el contenido del contenedor con el nuevo select
-                              $('#provincia-container').html(provi
-                                                    },
+                            $('#provincia_id').empty();
+                            $('#provincia_id').append('<option value="">Seleccionar una Provincia</option>');
+                            // Rellenar el select con las nuevas opciones
+                            $.each(data, function(key, value) {
+                                $('#provincia_id').append('<option value="' + value.id + '">' + value.description + '</option>');
+                            });
+                            // Opcional: Limpiar selects dependientes
+                            $('#distrito-container').html('<select id="distrito_id" name="distrito_id" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">' +
+                            '<option value="">Seleccionar un Distrito</option>' +
+                            '</select>');
+                          },
                           error: function(xhr, status, error) {
-                              console.error('Error: ' + status + ' ' + error);
+                                console.error('Error: ' + status + ' ' + error);
                           }
                       })
                   } else {
                       $('#provincia-container').empty();
                       $('#distrito-container').empty();
-                      
-      
-      
-          $(document).on('change', '#provincia_id', function() {
-              var provincia_id = $(this).val();
-              if (provincia_id) {
-                  $.ajax({
-                      url: '/admin/products/distritos/' + provincia_id,
-                      type: 'GET',
-                      dataType: 'json',
-                      success: func
-                          // Crear el combo de provincia con la opción inicial y las opciones obtenidas
-                          var distritoSelect =
-                              '<select name="distrito_id" id="distrito_id" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">' +
-                              '<option value="">Seleccionar una Distrito </option>';
-                          $.each(data, function(key, value) {
-                              distritoSelect += '<option value="' + value.id + '">' +
-                                  value.description + '</option>';
-                          });
-                          distritoSelect += '</select>';
+                  }    
+            })
 
-                          // Reemplazar el contenido del contenedor con el nuevo select
-                          $('#distrito-container').html(dist
-                      },
-                      error: function(xhr, status, error) {
-                          console.error('Error: ' + status + ' ' + error);
-                      }
-                  })
-              } else {
-                  $('#distrito-container').empty();
-      
-           });
+
+
+            $('#provincia_id').change(function() {
+                  var provincia_id = $(this).val();
+                 
+                  if (provincia_id) {
+                      $.ajax({
+                          url: '/admin/products/distritos/' + provincia_id,
+                          type: 'GET',
+                          dataType: 'json',
+                          success: function(data) {
+                            $('#distrito_id').empty();
+                            $('#distrito_id').append('<option value="">Seleccionar un Distrito</option>');
+
+                            // Rellenar el select con los datos recibidos
+                            $.each(data, function(key, value) {
+                                $('#distrito_id').append('<option value="' + value.id + '">' + value.description + '</option>');
+                            });
+                          },
+                          error: function(xhr, status, error) {
+                                console.error('Error: ' + status + ' ' + error);
+                          }
+                      })
+                  } else {
+                    $('#distrito_id').empty();
+                    $('#distrito_id').append('<option value="">Seleccionar un Distrito</option>');
+                  }    
+            })
+
+          });         
+           
   </script>
 
 </x-app-layout>

@@ -19,6 +19,17 @@
             right: 13px !important;
         }
     }
+    .swiper-pagination-carruseltop .swiper-pagination-bullet {
+        width: 14px;
+        height: 8px;
+        border-radius: 6px;
+        background-color: #73F7AD !important;     
+    }
+
+    .swiper-pagination-carruseltop .swiper-pagination-bullet:not(.swiper-pagination-bullet-active) {
+        background-color: #05304e56!important;
+        opacity: 1;
+    }
 </style>
 
 
@@ -31,9 +42,9 @@
             class="flex flex-col lg:flex-row gap-3 lg:gap-10 justify-center items-center px-[5%] lg:pl-[5%] lg:pr-0 bg-[#5BE3A4]">
 
             <!-- Primer div -->
-            <div class="w-full lg:w-[55%] text-[#151515] flex flex-col justify-center items-center gap-2 md:gap-10">
-                <div class="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 lg:pt-0 xl:max-w-3xl">
-                    <h1 class="text-[#F8FCFF] font-Homie_Bold text-5xl xl:text-6xl">
+            <div class="w-full lg:w-[55%] text-[#151515] flex flex-col justify-center items-center gap-2 md:gap-5">
+                <div class="w-full flex flex-col gap-5 px-0 lg:pr-[5%] pt-8 lg:pt-0 xl:max-w-3xl">
+                    <h1 class="text-[#F8FCFF] font-Homie_Bold text-4xl lg:text-5xl">
                         {{$textoshome->title1section ?? 'Ingrese un texto'}}
                     </h1>
                     <p class="text-[#F8FCFF] text-lg font-FixelText_Regular">
@@ -41,79 +52,89 @@
                     </p>
                 </div>
 
-                {{-- <div class="w-full flex flex-col gap-5 px-0 lg:px-[5%] pt-8 md:pt-0">
-              <!--  -->
-              <div class="px-0 w-full z-10">
-                
-                <!-- Tab Buttons -->
-                <div class="bg-white rounded-t-lg inline-block w-auto md:max-w-[388px]">
-                  <div class="flex justify-between items-center">
-                    <button
-                      class="px-10 py-3 text-[#009A84] font-FixelText_Semibold border-b-[2.5px] border-[#009A84] focus:outline-none tab-button flex-1"
-                      onclick="showTab('tab1')">
-                      Elige unas Fechas
-                    </button>
-                  </div>
-                </div>
-                
-                <!-- Tab Content -->
-                <div id="tab1" class="flex flex-col md:flex-row py-4 px-4 tab-content bg-white justify-between items-center gap-5 rounded-b-lg md:rounded-tr-lg w-full">
-                  
-                  <div class="w-full">
-                    <div class="relative w-full text-left">
-                      <div class="group">
-                        <div>
-                          <select name="departamento_id" id="departamento_id2"
-                            class="w-full py-3 px-5 text-text18 text-[#000929] border-0">
-                            <option value="">Ubicacion</option>
-
-                          </select>
+                <div class="w-full flex flex-col gap-5 px-0 lg:pr-[5%] pt-8 md:pt-0 relative">
+                    <!--  -->
+                    <div class="px-0 w-full z-10">
+                        
+                        <!-- Tab Buttons -->
+                        <div class="bg-white rounded-t-lg inline-block w-auto md:max-w-[400px]">
+                            <div class="flex justify-between items-center">
+                                <button
+                                    class="px-10 py-3 text-[#009A84] font-FixelText_Semibold border-b-[2.5px] border-[#009A84] focus:outline-none tab-button flex-1"
+                                    >
+                                    Elige unas Fechas 
+                                </button>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
+                        
+                        <!-- Tab Content -->
+                        <div id="tab1" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-8 py-4 px-4 tab-content bg-white justify-between items-center gap-3 rounded-b-lg md:rounded-tr-lg w-full">
+                        
+                            <div class="w-full md:col-span-2">
+                                <div class="relative w-full text-left">
+                                <div class="group">
+                                    <div>
+                                    <select name="departamento_id" id="lugar"
+                                        class="w-full min-w-36 py-3 text-sm border-0  font-FixelText_Medium self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30">
+                                                <option class="line-clamp-1" value="">Ubicación</option>
+                                            @foreach ($distritosfiltro as $ubicaciones)
+                                                @if (!empty($ubicaciones->distrito_id))
+                                                    <option class="line-clamp-1" value="{{$ubicaciones->distrito_id}}">{{$ubicaciones->distrito->description}}</option>
+                                                @endif  
+                                            @endforeach
+                                    </select>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
 
-                  <div class="w-[0.5px] h-[50px] bg-[#E0DEF7] hidden md:block">
-                  </div>
+                            <div class="w-full md:col-span-3">
+                                <div class="relative w-full text-left md:text-center">
+                                <div class="group">
+                                    <div>
+                                        <input type="text" id="arrival-date" class="text-left md:text-center w-full py-3 text-sm flex-1 shrink font-FixelText_Medium self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30" value="2024-07-13" aria-label="Fecha de llegada" />
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
 
-                  <div class="w-full">
-                    <div class="relative w-full text-left">
-                      <div class="group">
-                        <div>
-                          <select name="categoria_id" id="categoria_id2"
-                            class="w-full py-3 px-5 text-text18 text-[#000929] border-0">
-                            <option value="">Categorias</option>
 
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-    
-                  <div class="w-[0.5px] h-[50px] bg-[#E0DEF7] hidden md:block">
-                  </div>
-    
-                  <div class="flex justify-center items-center md:w-full">
-                    <div class="flex flex-row-reverse 2md:flex-row justify-center items-center gap-5">
-                      <div class="flex justify-start items-center w-full">
-                        <button id="linkExplirarAlquileres"
-                          class="bg-[#009A84] rounded-2xl font-FixelText_Semibold text-base text-white px-10 py-3 text-center">
-                          <span class="flex w-full">Buscar</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
+                            <div class="w-full md:col-span-2">
+                                <div class="relative w-full text-left">
+                                <div class="group">
+                                    <div>
+                                        @if ($limite > 0)
+                                                <select name="cantidad_personas" id="cantidad_personas" class="w-full text-sm font-FixelText_Medium self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30">
+                                                    <option value=""># Personas</option>
+                                                    @for ($i = 1; $i <= $limite; $i++)
+                                                        <option value="{{ $i }}">{{ $i }}</option>
+                                                    @endfor
+                                                </select>
+                                        @endif
+                                    </div>
+                                </div>
+                                </div>
+                            </div>    
                 
-              </div>
 
-              <!-- Pequeño slogan  -->
-              <p class="font-FixelText_Regular underline text-sm text-white ">
-                Propietario, anuncia tu propiedad gratis
-              </p>
+                            <div class="flex justify-center items-center w-full md:col-span-1">
+                                    <div class="flex justify-start items-center">
+                                        <button id="linkExplirarAlquileres"
+                                            class="bg-[#009A84] rounded-xl font-FixelText_Semibold text-base text-white px-3 py-3 text-center">
+                                            <span class="hidden md:flex"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                            <span class="flex md:hidden px-7">Buscar</span>
+                                        </button>
+                                    </div>
+                            </div>
 
-            </div> --}}
+                        </div>
+                        
+                         <!-- Pequeño slogan  -->
+                        <p class="font-FixelText_Regular underline text-sm text-white mt-2">
+                            Propietario, anuncia tu propiedad gratis
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <!-- Segundo div -->
@@ -225,6 +246,7 @@
                                   </div>
                               @endforeach
                           </div>
+                          <div class="swiper-pagination-carruseltop !flex justify-center py-3 mt-3"></div>
                       </div>
                   </div>
 
@@ -556,12 +578,16 @@
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
             },
+            pagination: {
+                el: ".swiper-pagination-carruseltop",
+                clickable: true,
+            },
             breakpoints: {
                 0: {
                     slidesPerView: 1,
                 }
             },
-
+            
         });
     </script>
     <script>
@@ -699,7 +725,62 @@
 
         })
     </script>
+    <script>
+         $(document).ready(function () {
+            
+            $('#arrival-date').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY',
+                    cancelLabel: 'Cancelar',
+                    applyLabel: 'Aplicar' 
+                },
+                startDate: moment(), 
+                endDate: moment(), 
+                minDate: moment(),
+                maxDate: moment().add(9, 'months'),
+               
+            });
 
+       
+            $('#linkExplirarAlquileres').click(function (e) {
+                e.preventDefault();
+
+                // Capturar valores de los filtros
+                const lugar = $('#lugar').val();
+                const rangoFechas = $('#arrival-date').val();
+                const cantidadPersonas = $('#cantidad_personas').val();
+
+                let fechaLlegada = '';
+                let fechaSalida = '';
+                if (rangoFechas.includes(" - ")) {
+                    [fechaLlegada, fechaSalida] = rangoFechas.split(" - ");
+                }
+                
+                // Validación (opcional)
+                if (!lugar && !rangoFechas && !cantidadPersonas) {
+                    alert("Por favor, selecciona al menos un filtro para realizar la búsqueda.");
+                    return;
+                }
+
+                const params = new URLSearchParams();
+                // Redirigir a Catalogo.jsx con parámetros
+                if (lugar) {
+                    params.append('lugar', lugar);
+                }
+                if (fechaLlegada) {
+                    params.append('fecha_llegada', fechaLlegada);
+                }
+                if (fechaSalida) {
+                    params.append('fecha_salida', fechaSalida);
+                }
+                if (cantidadPersonas) {
+                    params.append('cantidad_personas', cantidadPersonas);
+                }
+
+                 window.location.href = `/catalogo?${params.toString()}`;
+            });
+        });
+    </script>
 
 @stop
 

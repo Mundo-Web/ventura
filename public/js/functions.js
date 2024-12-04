@@ -505,5 +505,3 @@ function calcularTotal() {
  
 }
 
-
-

@@ -41,7 +41,7 @@
     <p class="mb-2">Estado: <span id="invoice-status" class="font-bold"></span></p>
   @endif
 
-  <div class="flex gap-4">
+  {{-- <div class="flex gap-4">
     <label class="inline-flex items-center cursor-pointer"
       @if (!$isAdmin) title="Marca si recibiste los productos correctamente" tippy @endif>
       <input id="confirmation_client" name="invoice-confirmation" type="checkbox" value="client" class="sr-only peer"
@@ -72,7 +72,7 @@
         @endif
       </span>
     </label>
-  </div>
+  </div> --}}
   <hr class="my-4">
 
   <div class="relative overflow-x-auto mb-4">

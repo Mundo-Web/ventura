@@ -10,8 +10,8 @@ use Inertia\Inertia;
 
 // require __DIR__ . '/router.php';
 
-Route::get('/catalogo/{id?}', [IndexController::class, 'catalogo'])->name('Catalogo.jsx');
-Route::get('/ofertas/{id?}', [IndexController::class, 'ofertas'])->name('Ofertas.jsx');
+// Route::get('/catalogo/{id?}', [IndexController::class, 'catalogo'])->name('Catalogo.jsx');
+// Route::get('/ofertas/{id?}', [IndexController::class, 'ofertas'])->name('Ofertas.jsx');
 
 Route::middleware(['auth:sanctum', 'verified', 'can:Admin'])->group(function () {
   Route::prefix('admin')->group(function () {

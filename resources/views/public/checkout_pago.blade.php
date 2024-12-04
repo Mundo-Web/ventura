@@ -321,6 +321,10 @@
                 <p id="itemTotal">$ 0.00 </p>
               </div>
 
+              <div class="text-[#151515] flex justify-center items-center -mt-3">
+                <p class="font-FixelText_Semibold text-sm">Moneda de pago: $ Dólares</p>
+              </div>
+
               <button id="btnPagar"
                 class="text-white bg-[#00897b] tracking-wider w-full py-3 rounded-2xl cursor-pointer font-semibold text-lg inline-block text-center">Pagar reservación</button>
             </div>

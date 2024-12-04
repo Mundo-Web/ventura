@@ -7,10 +7,13 @@ use App\Models\AttributeProductValues;
 use App\Models\Attributes;
 use App\Models\AttributesValues;
 use App\Models\Category;
+use App\Models\Department;
+use App\Models\District;
 use App\Models\dxDataGrid;
 use App\Models\ExtraService;
 use App\Models\Galerie;
 use App\Models\Products;
+use App\Models\Province;
 use App\Models\Specifications;
 use App\Models\SubCategory;
 use App\Models\Tag;
@@ -377,9 +380,9 @@ class ProductsController extends Controller
     }
 
     
-    $departamentos = DB::select('select * from departments where active = ? order by 2', [1]);
-    $provincias = DB::select('select * from provinces where active = ? order by 3', [1]);
-    $distritos  = DB::select('select * from districts where active = ? order by 3', [1]);
+    $departamentos = Department::where('active', '=', 1)->get();
+    $provincias = Province::where('active', '=', 1)->where('department_id', $product->departamento_id)->get();
+    $distritos  = District::where('active', '=', 1)->where('province_id', $product->provincia_id)->get();
 
     return view('pages.products.save', compact('disabledDates','servicios','product', 'atributos', 'valorAtributo', 'tags', 'categoria', 'especificacion', 'subcategories', 'galery', 'valoresdeatributo', 'departamentos', 'provincias', 'distritos'));
   }

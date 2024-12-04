@@ -59,6 +59,9 @@
                 <p class="font-semibold text-[20px]">Total</p>
                 <span id="itemTotal" class="font-semibold text-[20px]">$ 0.00</span>
               </div>
+              <div class="text-[#151515] flex justify-center items-center -mt-5">
+                <p class="font-FixelText_Semibold text-sm">Moneda de pago: $ Dólares</p>
+              </div>
               <a id="btnSiguiente" href="/pago"
                 class="text-white bg-[#00897b] w-full py-3 rounded-2xl cursor-pointer font-FixelText_Semibold tracking-wider font-semibold text-lg inline-block text-center">Siguiente</a>
             </div>

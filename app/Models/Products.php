@@ -119,5 +119,10 @@ class Products extends Model
     return $this->hasMany(Wishlist::class, 'product_id');
   }
 
+  public function distrito()
+  {
+    return $this->belongsTo(District::class, 'distrito_id');
+  }
+
  
 }

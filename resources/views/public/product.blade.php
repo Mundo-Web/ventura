@@ -676,17 +676,15 @@
         }
       }, function(start, end) {
           let nights = end.diff(start, 'days');
+          // Verificar si el rango de fechas seleccionado incluye fechas reservadas
+          let rangeBlocked = false;
 
-        // Verificar si el rango de fechas seleccionado incluye fechas reservadas
-        let rangeBlocked = false;
-
-        for (let m = start.clone(); m.isBefore(end); m.add(1, 'days')) {
-            if (formattedDisabledDates.some(blockedDate => m.isSame(blockedDate, 'day'))) {
-                rangeBlocked = true;
-                break;
-            }
-        }
-
+          for (let m = start.clone(); m.isBefore(end); m.add(1, 'days')) {
+              if (formattedDisabledDates.some(blockedDate => m.isSame(blockedDate, 'day'))) {
+                  rangeBlocked = true;
+                  break;
+              }
+          }
 
         if (rangeBlocked) {
             Swal.fire({

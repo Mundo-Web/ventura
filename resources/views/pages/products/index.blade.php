@@ -199,7 +199,9 @@
 
 
 </x-app-layout>
-
+<script>
+  const APP_URL = "{{ config('app.url') }}";
+</script>
 <script>
   const salesDataGrid = $('#gridContainer').dxDataGrid({
     language: "es",
@@ -372,8 +374,13 @@
         }) => {
           container.addClass('!px-3 !py-2 !text-center')
           container.css('vertical-align', 'middle')
-          container.html(`<a href="/admin/products/${data.id}/edit"
-            class="inline-block bg-yellow-400 px-3 py-2 rounded text-white  ">
+          container.html(`
+          <a href="#" data-link="${APP_URL}/storage/calendars/${data.sku}.ics"
+            class="inline-block bg-green-400 px-3 py-2 rounded text-white btn-copy-link">
+            <i class="fa-solid fa-link"></i>
+          </a>
+          <a href="/admin/products/${data.id}/edit"
+            class="inline-block bg-yellow-400 px-3 py-2 rounded text-white">
             <i class="fa-regular fa-pen-to-square"></i>
           </a>
           <form action="" method="POST" class="inline-block">
@@ -534,3 +541,22 @@
 
   })
 </script>
+<script>
+  document.addEventListener('click', function (e) {
+      if (e.target.closest('.btn-copy-link')) {
+        e.preventDefault(); // Prevenir la acción por defecto del enlace.
+        const link = e.target.closest('.btn-copy-link').getAttribute('data-link');
+
+        navigator.clipboard.writeText(link).then(() => {
+          Swal.fire({
+            title: "Enlace copiado",
+            text: "Enlace copiado satifactoriamente",
+            icon: "success"
+          });
+        }).catch(err => {
+          console.error('Error al copiar el enlace: ', err);
+        });
+      }
+  });
+</script>
+

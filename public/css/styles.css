@@ -1235,3 +1235,48 @@ src: url("/fonts/FixelText-Medium.woff2") format("woff2");
 font-family: "FixelText-Light";
 src: url("/fonts/FixelText-Light.woff2") format("woff2");
 }
+
+.react-daterange-picker__calendar{
+    background-color: white;
+    padding: 5px;
+    color: #2d694b;
+    font-family: "FixelText-Regular";
+    text-transform: capitalize;
+}
+
+.react-calendar__tile--active{
+    background-color: #2d694b;
+    color: white;
+    font-family: "FixelText-Regular";
+}
+
+.react-calendar__navigation{
+    font-family: "Homie_Bold";
+    text-transform: capitalize;
+}
+
+.react-calendar__navigation__label__labelText{
+    font-family: "Homie_Bold";
+    text-transform: capitalize;
+}
+
+.react-daterange-picker{
+    padding: 0px 3%;
+    font-family: "FixelText-Medium";
+    color: #2d694b;
+    font-size: 14px;
+}
+
+.react-daterange-picker__wrapper{
+    border: none!important;
+}
+
+.react-daterange-picker__button{
+    display: none;
+}
+
+.react-calendar__tile--hasActive{
+    background-color: #2d694b;
+    color: white;
+    font-family: "FixelText-Regular";
+}

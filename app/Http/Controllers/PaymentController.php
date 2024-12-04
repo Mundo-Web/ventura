@@ -38,13 +38,13 @@ class PaymentController extends Controller
 
       if (Auth::check() && Auth::user()->hasRole('Reseller')) {
          
-          $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'precio_reseller as descuento'])
+          $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'sku', 'pms', 'precio_reseller as descuento'])
             ->whereIn('id', array_map(fn($x) => $x['id'], $products))
             ->get();
         
         
       }else{
-        $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'descuento', 'preciolimpieza', 'sku'])
+        $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'descuento', 'preciolimpieza', 'sku', 'pms'])
         ->whereIn('id', array_map(fn($x) => $x['id'], $products))
         ->get();
       }
@@ -77,7 +77,9 @@ class PaymentController extends Controller
         $listings = [
           [
               'id' => $productJpa->sku, 
-              'pms' => 'airbnb', 
+              'pms' => $productJpa->pms,
+              'dateFrom' => $checkin,
+              'dateTo' => $checkout 
           ]
         ];
 

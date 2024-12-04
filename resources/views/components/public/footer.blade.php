@@ -37,7 +37,7 @@
             <h3 class="text-xl text-white font-Homie_Bold pb-3">Enlaces</h3>
             <a href="{{route('index')}}">Inicio</a>
             <a href="{{route('nosotros')}}">Nosotros</a>
-            <a href="{{route('Catalogo.jsx')}}">Propiedades</a>
+            <a href="{{route('catalogo.all')}}">Propiedades</a>
             <a href="{{route('contacto')}}">Contacto</a>
         </div>
 

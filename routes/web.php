@@ -85,8 +85,10 @@ Route::get('/agradecimiento', [IndexController::class, 'agradecimiento'])->name(
 /* Catálogo y producto */
 Route::get('/producto/{id}', [IndexController::class, 'producto'])->name('producto');
 Route::post('/producto/prices', [IndexController::class, 'getPrices'])->name('producto.prices');
-// Route::get('/catalogo', [IndexController::class, 'catalogo'])->name('catalogo.all');
-// Route::get('/catalogo/{category}', [IndexController::class, 'catalogo'])->name('catalogo');
+Route::get('/catalogo', [IndexController::class, 'catalogo'])->name('catalogo.all');
+Route::get('/catalogo/filtrar', [IndexController::class, 'obtenerDepartamentos'])->name('filtrardepartamentos');
+Route::get('/catalogo/{category}', [IndexController::class, 'catalogo'])->name('catalogo');
+
 // Route::get('/catalogo/{category}/{subcategory}', [IndexController::class, 'catalogo'])->name('catalogo.sub');
 Route::post('carrito/buscarProducto', [CarritoController::class, 'buscarProducto'])->name('carrito.buscarProducto');
 Route::get('/buscar', [IndexController::class, 'searchProduct'])->name('buscar');

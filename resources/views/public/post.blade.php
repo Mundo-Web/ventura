@@ -20,10 +20,10 @@
         <section class="w-full px-[5%] lg:px-[10%] flex flex-col gap-10 py-12 lg:py-16" data-aos="fade-up" data-aos-offset="150">
             <div class="flex flex-col gap-3">
                
-                <h3 class="font-semibold font-Inter_Bold text-base text-[#E52E06]">{{$post->categories->name}}</h3>
+                <h3 class="font-semibold font-FixelText_Bold text-base text-[#006258]">{{$post->categories->name}}</h3>
                   
                
-                <h2 class="font-Inter_Bold font-bold text-3xl  text-[#333] leading-tight tracking-tight">
+                <h2 class="font-Homie_Bold font-bold text-3xl  text-[#333] leading-tight tracking-tight">
                     {{ $post->title }}
                 </h2>
                 <div class="flex justify-start items-center gap-2">
@@ -40,7 +40,7 @@
                             </clipPath>
                         </defs>
                     </svg>
-                    <p class="text-[#444444] font-Inter_Regular font-normal text-sm">Publicado
+                    <p class="text-[#444444] font-FixelText_Regular font-normal text-sm mt-1">Publicado
                         {{ \Carbon\Carbon::parse($post->created_at)->diffForHumans() }}</p>
                 </div>
 
@@ -56,7 +56,7 @@
 
 
 
-                <div class="flex flex-col gap-2 text-[#333] font-Inter_Regular font-normal text-base py-4">
+                <div class="flex flex-col gap-2 text-[#333] font-FixelText_Regular font-normal text-base py-4">
                     {!! $post->description !!}
                 </div>
 
