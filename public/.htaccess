@@ -3,7 +3,7 @@
         Options -MultiViews -Indexes
     </IfModule>
     <IfModule mod_headers.c>
-        Header set Access-Control-Allow-Origin "https://www.boostperu.mundoweb.pe"
+        Header set Access-Control-Allow-Origin "https://www.venturabnb.pe/"
     </IfModule>
 
     RewriteEngine On
