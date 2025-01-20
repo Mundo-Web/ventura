@@ -176,7 +176,6 @@
           <label for="termsandconditions" class="font-medium text-sm text-[#6C7275]">Estoy de acuerdo con los
             <a target="_blank" class="font-bold" href="{{ route('terms_condition') }} ">terminos y
               condiciones</a></label>
-
         </div>
         {{-- <div class="flex flex-col col-span-4 gap-2">
                     <label for="archivo" class="font-medium text-[12px] text-[#6C7275]">Adjuntar archivos
@@ -184,7 +183,6 @@
                     <input id="archivo" type="file"  name="archivo"
                         class="w-full py-3 px-4 focus:outline-none placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]" />
                 </div> --}}
-
 
         <div class="flex flex-row col-span-4 gap-2 ">
           {!! NoCaptcha::renderJs() !!}
