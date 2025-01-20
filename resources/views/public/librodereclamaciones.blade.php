@@ -12,18 +12,18 @@
 </style>
 
 @section('content')
-  <section class="w-11/12 mx-auto font-poppins">
+  <section class="w-11/12 mx-auto font-FixelText_Regular mt-10 lg:mt-12">
     @if ($errors->has('g-recaptcha-response'))
       <span class="help-block">
         <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
       </span>
     @endif
-    <h2 class="col-span-4 font-bold text-4xl leading-none md:leading-tight text-center pt-3">Libro de Reclamaciones</h2>
+    <h2 class="col-span-4 font-Homie_Bold font-bold text-4xl leading-none md:leading-tight text-center pt-3">Libro de Reclamaciones</h2>
     <form class="flex flex-col gap-5" id="formLibroReclamo" action="" method="POST" enctype='multipart/form-data'>
       <div class=" my-16 grid grid-cols-1  lg:grid-cols-4 gap-5 justify-center items-center">
         @csrf
 
-        <h2 class="col-span-4 font-semibold text-[24px] leading-none md:leading-tight">Identificación del Consumidor
+        <h2 class="col-span-4 font-semibold font-Homie_Bold text-[24px] leading-none md:leading-tight">Identificación del Consumidor
         </h2>
 
         <div class="flex flex-col col-span-4 lg:col-span-2 gap-2">
@@ -99,7 +99,7 @@
 
 
 
-        <h2 class="col-span-4 font-semibold text-[24px] leading-none md:leading-tight">Identificación del bien
+        <h2 class="col-span-4 font-semibold font-Homie_Bold text-[24px] leading-none md:leading-tight">Identificación del bien
           contratado</h2>
 
         <div class="flex flex-col col-span-4 gap-2">
@@ -136,7 +136,7 @@
             class="w-full py-3 px-4 focus:outline-none placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]" />
         </div>
 
-        <h2 class="col-span-4 font-semibold text-[24px] leading-none md:leading-tight">Detalle del reclamo del
+        <h2 class="col-span-4 font-Homie_Bold font-semibold text-[24px] leading-none md:leading-tight">Detalle del reclamo del
           pedido del consumidor</h2>
 
 
@@ -193,7 +193,7 @@
 
         <div class="flex flex-row col-span-2 gap-2 ">
           <input type="submit" value="Enviar a libro de reclamaciones" id="btnAjax"
-            class="col-span-4 text-white bg-[#006BF6] py-3 rounded-2xl cursor-pointer border-2 font-semibold text-[16px] text-center border-none w-full md:w-auto px-10 inline-block" />
+            class="col-span-4 text-white bg-[#006258] py-3 rounded-2xl cursor-pointer border-2 font-semibold text-[16px] text-center border-none w-full md:w-auto px-10 inline-block" />
         </div>
 
       </div>

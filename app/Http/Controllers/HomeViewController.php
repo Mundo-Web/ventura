@@ -86,6 +86,28 @@ class HomeViewController extends Controller
            
         } 
 
+        if ($request->hasFile("imagenthird")) {
+            $file = $request->file('imagenthird');
+            $routeImg = 'storage/images/general/';
+            $nombreImagen = Str::random(10) . '_' . $file->getClientOriginalName();
+      
+            $this->saveImg($file, $routeImg, $nombreImagen);
+      
+            $homeview['url_image3section'] = $routeImg . $nombreImagen;
+           
+        } 
+
+        if ($request->hasFile("imagenfour")) {
+            $file = $request->file('imagenfour');
+            $routeImg = 'storage/images/general/';
+            $nombreImagen = Str::random(10) . '_' . $file->getClientOriginalName();
+      
+            $this->saveImg($file, $routeImg, $nombreImagen);
+      
+            $homeview['url_image4section'] = $routeImg . $nombreImagen;
+           
+        } 
+
         $homeview->update($request->all());
 
         $homeview->save();  

@@ -254,7 +254,7 @@
 
               <div class="flex flex-col w-full md:w-1/2 justify-end items-end">
                   <img loading="lazy" class="object-cover lg:object-contain w-full md:h-[550px]"
-                      src="{{ asset('images/img/imagenchica.png') }}" />
+                     src="{{asset($textoshome->url_image3section)}}" onerror="this.src='{{ asset('images/img/imagenchica.png') }}';" />
               </div>
 
           </section>
@@ -275,7 +275,7 @@
 
                             <img loading="lazy"
                                 class="object-cover sm:object-contain object-bottom absolute inset-0 size-full"
-                                src="{{ asset('images/img/chicos_vt.png') }}" alt="" />
+                                src="{{asset($textoshome->url_image4section)}}" onerror="this.src='{{ asset('images/img/chicos_vt.png') }}';" alt="" />
 
                             <div class="flex relative flex-col justify-center mb-0 w-full max-md:mb-2.5">
                                 <div class="flex flex-col w-full gap-3">

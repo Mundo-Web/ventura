@@ -7,6 +7,9 @@ use App\Http\Requests\StoreNosotrosViewRequest;
 use App\Http\Requests\UpdateNosotrosViewRequest;
 use App\Models\General;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class NosotrosViewController extends Controller
 {
@@ -60,6 +63,28 @@ class NosotrosViewController extends Controller
     public function update(Request $request, $id)
     {
         $nosotros = NosotrosView::findOrfail($id); 
+
+        if ($request->hasFile("imagen")) {
+            $file = $request->file('imagen');
+            $routeImg = 'storage/images/general/';
+            $nombreImagen = Str::random(10) . '_' . $file->getClientOriginalName();
+      
+            $this->saveImg($file, $routeImg, $nombreImagen);
+      
+            $nosotros['url_image2section'] = $routeImg . $nombreImagen;
+           
+        } 
+
+        if ($request->hasFile("imagensecond")) {
+            $file = $request->file('imagensecond');
+            $routeImg = 'storage/images/general/';
+            $nombreImagen = Str::random(10) . '_' . $file->getClientOriginalName();
+      
+            $this->saveImg($file, $routeImg, $nombreImagen);
+      
+            $nosotros['url_image4section'] = $routeImg . $nombreImagen;
+           
+        } 
 
         $nosotros->update($request->all());
 

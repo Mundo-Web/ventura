@@ -70,6 +70,17 @@
                                         </div>
                                     </div>
 
+
+                                    <div class="md:col-span-5">
+                                        <label for="imagen">Nueva imagen principal (1120x570 px)</label>
+                                        <div class="relative mb-2  mt-2">
+                                            <input id="imagen" name="imagen"
+                                                class="p-2.5 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                                aria-describedby="user_avatar_help" id="user_avatar" type="file">
+                                        </div>
+                                    </div>
+
+
                                     <div class="md:col-span-5">
                                         <label for="subtitle3section">Subtitulo - Misión</label>
                                         <div class="relative mb-2">
@@ -160,7 +171,7 @@
                                     </div>
 
                                     <div class="md:col-span-5">
-                                        <label for="title3secondsection">Titulo - Misión</label>
+                                        <label for="title3secondsection">Titulo - Visión</label>
                                         <div class="relative mb-2">
                                             <div
                                                 class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -248,6 +259,14 @@
                                         </div>
                                     </div>
 
+                                    <div class="md:col-span-5">
+                                        <label for="imagensecond">Imagen Estadisticas (442x638 px)</label>
+                                        <div class="relative mb-2  mt-2">
+                                            <input id="imagensecond" name="imagensecond"
+                                                class="p-2.5 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                                aria-describedby="user_avatar_help" id="user_avatar" type="file">
+                                        </div>
+                                    </div>
 
 
                                     <div class="md:col-span-5 text-right mt-6">

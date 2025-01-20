@@ -12,13 +12,17 @@ class NosotrosView extends Model
         
         'title1section', 
         'description1section', 
+        
         'url_image2section',
+
         'title3section',
         'subtitle3section',
         'description3section',
+
         'title3secondsection',
         'subtitle3secondsection',
         'description3secondsection',
+
         'title4section',
         'description4section',
         'url_image4section'

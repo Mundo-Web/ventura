@@ -40,7 +40,7 @@
       </section>
 
       <section class="flex flex-row justify-center items-center px-[5%] lg:px-[8%]">
-        <img src="{{asset('images/img/vt_nosotros3.png')}}" class="rounded-xl lg:rounded-3xl h-full lg:h-[550px] w-full object-contain" />
+        <img src="{{asset($nosotrostextos->url_image2section)}}" onerror="this.src='{{ asset('images/img/vt_nosotros3.png') }}';" class="rounded-xl lg:rounded-3xl h-full lg:h-[550px] w-full object-contain" />
       </section>
 
       <section class="flex flex-col md:flex-row gap-8 md:gap-16 px-[5%] xl:px-[8%] py-14 lg:py-20 text-center items-start" data-aos="fade-up" data-aos-offset="150">
@@ -93,7 +93,7 @@
 
           <div class="bg-[#5BE3A4] w-[80%] sm:w-1/2 ml-auto lg:w-2/5 h-[480px] lg:min-h-svh relative order-1 md:order-2">
             <div class="absolute inset-0 flex justify-center items-center -translate-x-10 lg:-translate-x-1/4">
-              <img class="h-[500px] lg:h-full py-[5%] lg:py-[10%] object-contain" src="{{asset('images/img/vt_nosotros2.png')}}" />  
+              <img class="h-[500px] lg:h-full py-[5%] lg:py-[10%] object-contain" src="{{asset($nosotrostextos->url_image4section)}}" onerror="this.src='{{ asset('images/img/vt_nosotros2.png') }}';" />  
             </div>
           </div>
 
