@@ -8,6 +8,7 @@ use App\Http\Requests\StoreLibroReclamacionesRequest;
 use App\Http\Requests\UpdateLibroReclamacionesRequest;
 use App\Models\Department;
 use App\Models\District;
+use App\Models\General;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -145,7 +146,7 @@ class LibroReclamacionesController extends Controller
         $detail_incident = $data['detail_incident'];
         $mensaje = "Tu reclamo ha sido recepcionado";
         $mail = EmailConfig::config($name, $mensaje);
-
+        $emailadmin = General::first();
         
         
         
@@ -213,6 +214,7 @@ class LibroReclamacionesController extends Controller
             </body>
           </html>
           ';
+            $mail->addBCC($emailadmin->email, 'Administrador');
             $mail->isHTML(true);
             $mail->send();
             
