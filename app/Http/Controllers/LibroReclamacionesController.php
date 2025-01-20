@@ -213,9 +213,6 @@ class LibroReclamacionesController extends Controller
             </body>
           </html>
           ';
-          $mail->addBCC('atencionalcliente@boostperu.com.pe', 'Atencion al cliente', );
-          $mail->addBCC('jefecomercial@boostperu.com.pe', 'Jefe Comercial', );
-          $mail->addBCC('luislopez@boostperu.com.pe', 'Luis Lopez',  );
             $mail->isHTML(true);
             $mail->send();
             
