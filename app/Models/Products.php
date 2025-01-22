@@ -64,8 +64,9 @@ class Products extends Model
     'distrito_id',
     'calendar_url',
     'airbnb_url',
-
-
+    'meta_title', 
+    'meta_description', 
+    'meta_keywords',
 
   ];
   

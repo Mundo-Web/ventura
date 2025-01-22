@@ -545,6 +545,9 @@ class ProductsController extends Controller
        $cleanedData['no_incluye'] = $data['no_incluye'];
        $cleanedData['disponible'] = $data['disponible'];
        $cleanedData['no_disponible'] = $data['no_disponible'];
+       $cleanedData['meta_title'] = $data['meta_title'];
+       $cleanedData['meta_description'] = $data['meta_description'];
+       $cleanedData['meta_keywords'] = $data['meta_keywords'];
 
       $slug = strtolower(str_replace(' ', '-', $request->producto . '-' . $request->color));
 

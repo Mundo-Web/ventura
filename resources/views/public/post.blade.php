@@ -1,4 +1,4 @@
-@extends('components.public.matrix', ['pagina' => 'blog'])
+@extends('components.public.matrix', ['pagina' => $post->title])
 @section('titulo', 'Post')
 @section('meta_title', $meta_title)
 @section('meta_description', $meta_description)

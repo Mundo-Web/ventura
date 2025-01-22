@@ -1,6 +1,9 @@
 @extends('components.public.matrix', ['pagina' => 'catalogo'])
 
 @section('title', 'Producto Detalle | ' . config('app.name', 'Laravel'))
+@section('meta_title', $meta_title)
+@section('meta_description', $meta_description)
+@section('meta_keywords', $meta_keywords)
 
 @section('css_importados')
 

@@ -951,6 +951,10 @@ class IndexController extends Controller
   {     
         $product = Products::findOrFail($id);
 
+        $meta_title = $producto->meta_title ?? $product->producto;
+        $meta_description = $producto->meta_description  ?? Str::limit(strip_tags($product->description), 160);
+        $meta_keywords = $producto->meta_keywords ?? '';
+
         $disabledDates = [];
         $startDate = null;
         $endDate = null;
@@ -1098,7 +1102,7 @@ class IndexController extends Controller
 
     if (!$combo) $combo = new Offer();
 
-    return view('public.product', compact('serviciosextras','disabledDates', 'departamento', 'provincia', 'distrito', 'is_reseller', 'atributos', 'isWhishList', 'testimonios', 'general', 'valorAtributo', 'ProdComplementarios', 'productosConGalerias', 'especificaciones', 'url_env', 'product', 'capitalizeFirstLetter', 'categorias', 'destacados', 'otherProducts', 'galery', 'combo', 'valoresdeatributo'));
+    return view('public.product', compact('meta_title','meta_description','meta_keywords', 'serviciosextras','disabledDates', 'departamento', 'provincia', 'distrito', 'is_reseller', 'atributos', 'isWhishList', 'testimonios', 'general', 'valorAtributo', 'ProdComplementarios', 'productosConGalerias', 'especificaciones', 'url_env', 'product', 'capitalizeFirstLetter', 'categorias', 'destacados', 'otherProducts', 'galery', 'combo', 'valoresdeatributo'));
   }
 
   public function wishListAdd(Request $request)
@@ -1221,7 +1225,7 @@ class IndexController extends Controller
   {
     $appUrl = env('APP_URL');
     $name = $data['full_name'];
-    $mensaje = "Gracias por comunicarte con BoostPeru";
+    $mensaje = "Gracias por comunicarte con Ventura";
     $mail = EmailConfig::config($name, $mensaje);
     // dd($mail);
     try {
