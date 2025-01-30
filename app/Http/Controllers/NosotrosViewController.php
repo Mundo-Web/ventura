@@ -100,4 +100,17 @@ class NosotrosViewController extends Controller
     {
         //
     }
+
+    public function saveImg($file, $route, $nombreImagen)
+    {
+      $manager = new ImageManager(new Driver());
+      $img =  $manager->read($file);
+      // $img->coverDown(1000, 1500, 'center');
+  
+      if (!file_exists($route)) {
+        mkdir($route, 0777, true);
+      }
+  
+      $img->save($route . $nombreImagen);
+    }
 }

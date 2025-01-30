@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-        <form action="{{ route('nosotrosview.update', $nosotros->id) }}" method="POST">
+        <form action="{{ route('nosotrosview.update', $nosotros->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div
