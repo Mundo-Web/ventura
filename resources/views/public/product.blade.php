@@ -304,7 +304,7 @@
 
         <section class="flex flex-col lg:flex-row gap-10 justify-between items-start px-[5%] mt-8 lg:mt-16">
           
-          <div class="flex flex-col min-w-[240px] w-full max-w-4xl">
+          <div class="flex flex-col min-w-[240px] w-full max-w-4xl order-2 lg:order-1">
 
             <div class="flex flex-col justify-center bg-white rounded-2xl">
               <div class="flex flex-col w-full">
@@ -511,8 +511,7 @@
           </div>
 
           
-
-          <div class="flex flex-col sticky top-0 justify-center rounded-2xl w-full lg:w-[400px] ">
+          <div class="flex flex-col lg:sticky lg:top-0 justify-center rounded-2xl w-full lg:w-[400px] order-1 lg:order-2">
                 <section class="flex flex-col p-0 lg:p-6 bg-white rounded-2xl">
                   {{-- <h2 class="gap-10 self-stretch w-full text-lg font-FixelText_Bold text-[#006258]">S/ 333,00 / noche</h2> --}}
                   <div class="flex flex-row gap-4 items-start mt-4 w-full font-medium px-4 justify-center">
