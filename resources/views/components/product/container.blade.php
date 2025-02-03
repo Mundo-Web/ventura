@@ -98,9 +98,9 @@
       {{$item->producto}}
     </h2>
 
-    <p className="text-[13px] lg:text-base text-left overflow-hidden font-FixelText_Light text-[#000929] cortartexto max-h-12 md:min-h-12 mt-3 md:mt-0">
+    {{-- <p className="text-[13px] lg:text-base text-left overflow-hidden font-FixelText_Light text-[#000929] cortartexto max-h-12 md:min-h-12 mt-3 md:mt-0">
       {{ mb_strimwidth($item->extract, 0, 95, '...') }}
-    </p> 
+    </p>  --}}
     {{-- <div class="flex content-between flex-row gap-4 items-center justify-start !font-Helvetica_Medium pb-4">
       @if ($item->descuento == 0)
         <span class="text-[#FD1F4A] text-lg font-bold"> S/. {{ $item->precio }}</span>
