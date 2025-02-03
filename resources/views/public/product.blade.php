@@ -6,7 +6,11 @@
 @section('meta_keywords', $meta_keywords)
 
 @section('css_importados')
-
+<style>
+  .close-modal{
+    z-index: 9999;
+  }
+</style>
 @stop
 
 @section('content')
@@ -259,9 +263,9 @@
         </section> --}}
 
         <section class="flex flex-row gap-1 lg:gap-3 w-full px-[5%] mt-8 lg:mt-14" aria-label="Image Gallery">
-          <div class="w-1/3">
+          <div class="w-1/3 galeriatotal ">
             @if ($product->imagen_2)
-              <img id="collage1_previewer" loading="lazy" src="{{ asset($product->imagen_2) }}" class="object-cover w-full rounded-xl aspect-[0.7]" alt="Gallery image 1" />
+              <img id="collage1_previewer" loading="lazy" src="{{ asset($product->imagen_2) }}" class="cursor-pointer object-cover w-full rounded-xl aspect-[0.7]" alt="Gallery image 1" />
             @else
               <img id="collage1_previewer"
                     src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
@@ -269,9 +273,9 @@
             @endif
           </div>
           
-          <div class="flex flex-col  w-1/3 gap-1 lg:gap-3">
+          <div class="flex flex-col  w-1/3 gap-1 lg:gap-3 galeriatotal ">
             @if ($product->imagen_3)
-              <img id="collage2_previewer" loading="lazy" src="{{ asset($product->imagen_3) }}" class="object-cover flex-1 w-full rounded-xl aspect-[1.45]" alt="Gallery image 2" />
+              <img id="collage2_previewer" loading="lazy" src="{{ asset($product->imagen_3) }}" class="cursor-pointer object-cover flex-1 w-full rounded-xl aspect-[1.45]" alt="Gallery image 2" />
             @else
               <img id="collage2_previewer"
                 src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
@@ -279,7 +283,7 @@
             @endif
 
             @if($product->imagen_4)
-              <img id="collage3_previewer" loading="lazy" src="{{ asset($product->imagen_4) }}" class="object-cover flex-1 w-full rounded-xl aspect-[1.45]" alt="Gallery image 3" />
+              <img id="collage3_previewer" loading="lazy" src="{{ asset($product->imagen_4) }}" class="cursor-pointer object-cover flex-1 w-full rounded-xl aspect-[1.45]" alt="Gallery image 3" />
             @else
                 <img id="collage3_previewer"
                     src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
@@ -287,9 +291,9 @@
             @endif
           </div>
 
-          <div class="w-1/3">
+          <div class="w-1/3 galeriatotal">
             @if($product->image_texture)
-              <img id="collage4_previewer" loading="lazy" src="{{ asset($product->image_texture) }}" class="object-cover w-full rounded-xl aspect-[0.7]" alt="Gallery image 4" />
+              <img id="collage4_previewer" loading="lazy" src="{{ asset($product->image_texture) }}" class="cursor-pointer object-cover w-full rounded-xl aspect-[0.7]" alt="Gallery image 4" />
             @else
                 <img id="collage4_previewer"
                 src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
@@ -651,10 +655,55 @@
 
   </main>
 
+  <div id="modalgaleriatotal" class="modal !bg-white !px-[0px] !py-[0px] !z-50" style="display: none; max-width: 650px !important; width: 100% !important;">
+      <div class=" !bg-white flex flex-col gap-3">
+          <div class="">
+            <div class="swiper galeriadeimagenes">
+              <div class="swiper-wrapper">
+                
+                @foreach ($product->galeria as $index => $image)
+                  <div class="swiper-slide">
+                    <img loading="lazy" src="{{ asset($image->imagen) }}" class="object-contain w-full max-h-[450px] rounded-xl overflow-hidden"/>
+                  </div>
+                @endforeach
 
+                @if ($product->imagen_2)
+                  <div class="swiper-slide">
+                    <img loading="lazy" src="{{ asset($product->imagen_2) }}" class="object-contain w-full max-h-[450px] rounded-xl overflow-hidden"/>
+                  </div>
+                @endif
+                @if ($product->imagen_2)
+                  <div class="swiper-slide">
+                    <img loading="lazy" src="{{ asset($product->imagen_3) }}" class="object-contain w-full max-h-[450px] rounded-xl overflow-hidden"/>
+                  </div>
+                @endif
+                @if ($product->imagen_2)
+                  <div class="swiper-slide">
+                    <img loading="lazy" src="{{ asset($product->imagen_4) }}" class="object-contain w-full max-h-[450px] rounded-xl overflow-hidden"/>
+                  </div>
+                @endif
+                @if ($product->image_texture)
+                  <div class="swiper-slide">
+                    <img loading="lazy" src="{{ asset($product->image_texture) }}" class="object-contain w-full max-h-[450px] rounded-xl overflow-hidden"/>
+                  </div>
+                @endif  
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
 
 @section('scripts_importados')
-
+<script>
+  $(document).ready(function () {
+      $(document).on('click', '.galeriatotal', function () {
+          $(`#modalgaleriatotal`).modal({
+              show: true,
+              fadeDuration: 400,
+          });
+      });
+  });
+</script>
     <script>
       let serviciosExtras = [];
       let costoTotalFinal = 0;
@@ -793,46 +842,18 @@
   </script>
 
   <script>
-    var headerServices = new Swiper(".productos-relacionados", {
-      slidesPerView: 4,
-      spaceBetween: 10,
-      loop: false,
+    var galeria = new Swiper(".galeriadeimagenes", {
+      slidesPerView: 1,
+      autoHeight: true,
+      spaceBetween:20,
+      loop: true,
       centeredSlides: false,
-      initialSlide: 0, // Empieza en el cuarto slide (índice 3) */
-      /* pagination: {
-        el: ".swiper-pagination-estadisticas",
-        clickable: true,
-      }, */
-      //allowSlideNext: false,  //Bloquea el deslizamiento hacia el siguiente slide
-      //allowSlidePrev: false,  //Bloquea el deslizamiento hacia el slide anterior
-      allowTouchMove: true, // Bloquea el movimiento táctil
+      initialSlide: 0, 
+      allowTouchMove: true,
       autoplay: {
         delay: 5500,
         disableOnInteraction: true,
         pauseOnMouseEnter: true
-      },
-
-      breakpoints: {
-        0: {
-          slidesPerView: 1,
-          centeredSlides: true,
-          loop: false,
-        },
-        420: {
-          slidesPerView: 2,
-          centeredSlides: false,
-
-        },
-        700: {
-          slidesPerView: 3,
-          centeredSlides: false,
-
-        },
-        850: {
-          slidesPerView: 4,
-          centeredSlides: false,
-
-        },
       },
     });
   </script>

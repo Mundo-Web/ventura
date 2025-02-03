@@ -269,7 +269,7 @@
 
                   {{-- <hr class="col-span-5"> --}}
 
-                  {{-- <div class="col-span-5">
+                  <div class="col-span-5">
                     <label for="imagenes mb-2">Otras imagenes del producto</label>
                     <div id="imagenes" class="w-full flex flex-wrap gap-1">
 
@@ -304,7 +304,7 @@
                           src="{{ asset('images/img/image-plus.jpg') }}" alt="">
                       </label>
                     </div>
-                  </div> --}}
+                  </div>
 
                   {{-- <div class="md:col-span-5">
                     <label class="block mb-1" for="imagen">Imagen del producto</label>
