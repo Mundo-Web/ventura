@@ -503,9 +503,9 @@
                   </div>
                 </section>
               @endif
-              <button class="gap-2.5 self-stretch font-FixelText_Semibold tracking-wide px-6 py-3 mt-10 w-full text-base font-bold text-[#73F7AD] bg-[#009A84] rounded-xl min-h-[40px] max-md:px-5 max-md:max-w-full">
+              {{-- <button class="gap-2.5 self-stretch font-FixelText_Semibold tracking-wide px-6 py-3 mt-10 w-full text-base font-bold text-[#73F7AD] bg-[#009A84] rounded-xl min-h-[40px] max-md:px-5 max-md:max-w-full">
                 Conocer Departamento
-              </button>
+              </button> --}}
             </section>
           
           </div>
