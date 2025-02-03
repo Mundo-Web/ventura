@@ -125,26 +125,28 @@
         
                 <!-- Imagen del Producto -->
                 <div>
-                    <div class="relative flex justify-center items-center h-max">
-                        <img 
-                            style="opacity: {{ (!$item['imagen_ambiente'] || !$showAmbiente) ? '1' : '0' }};
-                                  scale: {{ (!$item['imagen_ambiente'] || !$showAmbiente) ? '1.05' : '1' }};
-                                  background-color: #eeeeee;"
-                            src="{{ $item['imagen'] ? asset($item['imagen']) : asset('images/img/noimagen.jpg') }}"
-                            alt="{{ $item['name'] }}"
-                            onerror="this.src='{{ asset('images/img/noimagen.jpg') }}';"
-                            class="transition ease-out duration-300 transform w-full aspect-square object-cover inset-0" />
-        
-                        @if (!empty($item['imagen_ambiente']))
+                    <a href="{{ url('/producto/' . $item['id']) }}">
+                        <div class="relative flex justify-center items-center h-max">
                             <img 
-                                style="opacity: {{ $showAmbiente ? '1' : '0' }};
-                                      scale: {{ $showAmbiente ? '1.05' : '1' }};"
-                                src="{{ asset($item['imagen_ambiente']) }}"
+                                style="opacity: {{ (!$item['imagen_ambiente'] || !$showAmbiente) ? '1' : '0' }};
+                                    scale: {{ (!$item['imagen_ambiente'] || !$showAmbiente) ? '1.05' : '1' }};
+                                    background-color: #eeeeee;"
+                                src="{{ $item['imagen'] ? asset($item['imagen']) : asset('images/img/noimagen.jpg') }}"
                                 alt="{{ $item['name'] }}"
                                 onerror="this.src='{{ asset('images/img/noimagen.jpg') }}';"
-                                class="transition ease-out duration-300 transform w-full h-full aspect-square object-cover absolute inset-0" />
-                        @endif
-                    </div>
+                                class="transition ease-out duration-300 transform w-full aspect-square object-cover inset-0" />
+            
+                            @if (!empty($item['imagen_ambiente']))
+                                <img 
+                                    style="opacity: {{ $showAmbiente ? '1' : '0' }};
+                                        scale: {{ $showAmbiente ? '1.05' : '1' }};"
+                                    src="{{ asset($item['imagen_ambiente']) }}"
+                                    alt="{{ $item['name'] }}"
+                                    onerror="this.src='{{ asset('images/img/noimagen.jpg') }}';"
+                                    class="transition ease-out duration-300 transform w-full h-full aspect-square object-cover absolute inset-0" />
+                            @endif
+                        </div>
+                    </a>
                 </div>
             </div>
         

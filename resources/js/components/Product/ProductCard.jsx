@@ -8,6 +8,7 @@ const ProductCard = ({ item, width, bgcolor, is_reseller }) => {
 
 
   return (
+    
     <div className={`flex flex-col relative w-full  bg-white`} data-aos="zoom-in-left">
       <div className={`bg-white product_container basis-4/5 flex flex-col justify-center relative border`}>
         <div className="absolute top-2 left-2 w-max">
@@ -33,32 +34,35 @@ const ProductCard = ({ item, width, bgcolor, is_reseller }) => {
           }
         </div>
         <div>
-          <div className="relative flex justify-center items-center h-max">
-            <img
-              style={{
-                opacity: !item.imagen_ambiente || !showAmbiente ? '1' : '0',
-                scale: !item.imagen_ambiente || !showAmbiente ? '1.05' : '1',
-                backgroundColor: '#eeeeee'
-              }}
-              src={item.imagen ? `/${item.imagen}` : '/images/img/noimagen.jpg'}
-              alt={item.name}
-              onError={(e) => e.target.src = '/images/img/noimagen.jpg'}
-              className={`transition ease-out duration-300 transform w-full aspect-square object-cover inset-0`}
-            />
-
-            {item.imagen_ambiente && (
+          
+            <div className="relative flex justify-center items-center h-max">
+            
               <img
                 style={{
-                  opacity: showAmbiente ? '1' : '0',
-                  scale: showAmbiente ? '1.05' : '1'
+                  opacity: !item.imagen_ambiente || !showAmbiente ? '1' : '0',
+                  scale: !item.imagen_ambiente || !showAmbiente ? '1.05' : '1',
+                  backgroundColor: '#eeeeee'
                 }}
-                src={`/${item.imagen_ambiente}`}
+                src={item.imagen ? `/${item.imagen}` : '/images/img/noimagen.jpg'}
                 alt={item.name}
                 onError={(e) => e.target.src = '/images/img/noimagen.jpg'}
-                className="transition ease-out duration-300 transform w-full h-full aspect-square object-cover absolute inset-0"
+                className={`transition ease-out duration-300 transform w-full aspect-square object-cover inset-0`}
               />
-            )}
-          </div>
+            
+              {item.imagen_ambiente && (
+                <img
+                  style={{
+                    opacity: showAmbiente ? '1' : '0',
+                    scale: showAmbiente ? '1.05' : '1'
+                  }}
+                  src={`/${item.imagen_ambiente}`}
+                  alt={item.name}
+                  onError={(e) => e.target.src = '/images/img/noimagen.jpg'}
+                  className="transition ease-out duration-300 transform w-full h-full aspect-square object-cover absolute inset-0"
+                />
+              )}
+            </div>
+          
         </div>
       </div>
       <a href={`/producto/${item.id}`} className='px-1 py-2 flex flex-col gap-3'>
@@ -72,6 +76,7 @@ const ProductCard = ({ item, width, bgcolor, is_reseller }) => {
           </p> 
       </a>
     </div>
+    
   );
 };
 
