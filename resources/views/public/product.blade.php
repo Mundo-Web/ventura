@@ -262,7 +262,8 @@
             </div>
         </section> --}}
 
-        <section class="flex flex-row gap-1 lg:gap-3 w-full px-[5%] mt-8 lg:mt-14" aria-label="Image Gallery">
+        <section class="flex flex-row gap-1 lg:gap-3 w-full px-[5%] mt-8 lg:mt-14 relative" aria-label="Image Gallery">
+          
           <div class="w-1/3 galeriatotal ">
             @if ($product->imagen_2)
               <img id="collage1_previewer" loading="lazy" src="{{ asset($product->imagen_2) }}" class="cursor-pointer object-cover w-full rounded-xl aspect-[0.7]" alt="Gallery image 1" />
@@ -301,6 +302,7 @@
             @endif
           </div>
         </section>
+        <section class="galeriatotal flex flex-row justify-start w-full px-[5%] mt-5 relative"><div><a class="bg-[#006258] text-white px-6 py-3 md:py-4 rounded-3xl text-sm font-FixelText_Semibold">Ver todas las imágenes</a></div></section>
 
         <section class="flex flex-col lg:flex-row gap-10 justify-between items-start px-[5%] mt-8 lg:mt-16">
           
