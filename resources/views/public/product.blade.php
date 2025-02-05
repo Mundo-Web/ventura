@@ -656,8 +656,8 @@
 
   </main>
 
-  <div id="modalgaleriatotal" class="modal !bg-white !px-[0px] !py-[0px] !z-50" style="display: none; max-width: 650px !important; width: 100% !important;">
-      <div class=" !bg-white flex flex-col gap-3">
+  <div id="modalgaleriatotal" class="modal !bg-transparent !px-[0px] !py-[0px] !z-50" style="display: none; max-width: 650px !important; width: 100% !important;">
+      <div class=" !bg-transparent flex flex-col gap-3">
           <div class="">
             <div class="swiper galeriadeimagenes">
               <div class="swiper-wrapper">
