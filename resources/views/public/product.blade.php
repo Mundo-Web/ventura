@@ -690,6 +690,8 @@
                 @endif  
               </div>
             </div>
+            <div class="swiper-galeria-prev absolute top-1/2 -translate-y-1/2 -left-2 lg:-left-5 z-50 bg-white rounded-full"><i class="fa-solid fa-circle-chevron-left text-5xl text-[#006258]"></i></div>
+            <div class="swiper-galeria-next absolute top-1/2 -translate-y-1/2 -right-2 lg:-right-5 z-50 bg-white rounded-full"><i class="fa-solid fa-circle-chevron-right text-5xl text-[#006258]"></i></div>
           </div>
       </div>
   </div>
@@ -856,7 +858,11 @@
         disableOnInteraction: true,
         pauseOnMouseEnter: true
       },
-    });
+      navigation: {
+                nextEl: ".swiper-galeria-next",
+                prevEl: ".swiper-galeria-prev",
+            },
+      });
   </script>
   <script>
     // $(document).ready(function() {
