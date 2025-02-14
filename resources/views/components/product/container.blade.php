@@ -28,7 +28,8 @@
             $category = $item->categoria();
           @endphp
           @if ($item->imagen)
-            <img x-show="{{ isset($item->imagen_ambiente) }} || !showAmbiente"
+            <img 
+              {{-- x-show="{{ isset($item->imagen_ambiente) }} || !showAmbiente" --}}
               x-transition:enter="transition ease-out duration-300 transform"
               x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
               x-transition:leave="transition ease-in duration-300 transform"
