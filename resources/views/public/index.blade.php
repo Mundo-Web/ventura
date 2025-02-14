@@ -239,7 +239,7 @@
                                           <div class="flex items-center">
                                               <img loading="lazy" src="{{ asset($testimonios->url_image) }}"
                                                   onerror="this.onerror=null;this.src='/images/img/noimagen.jpg';"
-                                                  class="object-contain shrink-0 self-stretch my-auto rounded-full aspect-square w-[72px]"
+                                                  class="object-cover shrink-0 self-stretch my-auto rounded-full aspect-square w-20 h-20"
                                                   alt="{{ $testimonios->name }}" />
                                           </div>
                                       </div>
