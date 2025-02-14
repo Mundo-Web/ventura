@@ -17,9 +17,11 @@
 
   <section class="flex flex-col md:flex-row md:gap-10 w-full px-[5%] font-FixelText_Regular py-16">
 
-    <div class="w-full md:w-3/12 gap-5  grid grid-cols-1">
-      <h3 class="font-Homie_Bold text-base text-[#333]">Buscar post</h3>
-      <div class="relative w-full lg:w-[100%] pb-8 lg:py-0 border-b lg:border-0">
+    <div class="w-full md:w-3/12 gap-5">
+      
+      <h3 class="font-Homie_Bold text-base text-[#333] ">Buscar post</h3>
+      
+      <div class="relative w-full lg:w-[100%] my-5">
         <input id="buscarblog" type="text" placeholder="Buscar..."
           class="w-full pl-8 pr-10 py-2 bg-[#F1F1F1] border border-[#F1F1F1] lg:border-[#F1F1F1] rounded-lg focus:border-[#F1F1F1] focus:ring-0 text-[#666666] placeholder:text-[#666666]">
 
@@ -35,7 +37,7 @@
         </div>
       </div>
 
-      <div class="md:basis-1/6 flex flex-col gap-5">
+      <div class="flex flex-col gap-5">
         <h3 class="font-Homie_Bold text-base text-[#333]">Blog categorias</h3>
         <div class="flex flex-col gap-3">
           <a href="{{ route('blog', 0) }}"
@@ -49,6 +51,7 @@
           @endforeach
         </div>
       </div>
+
     </div>
 
     <div class="w-full md:basis-9/12">

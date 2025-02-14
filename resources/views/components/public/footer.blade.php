@@ -108,7 +108,7 @@
           </div>
           
         </div>
-      </div>
+    </div>
 
     <div id="modalTerminosCondiciones" class="modal" style="max-width: 900px !important;width: 100% !important;  ">
         <!-- Modal body -->
