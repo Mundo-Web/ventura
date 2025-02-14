@@ -47,7 +47,7 @@
               class="w-full h-full object-cover md:object-cover absolute inset-0" />
           @endif
           
-          @isset($item->imagen_ambiente)
+          {{-- @isset($item->imagen_ambiente)
             @if ($item->imagen_ambiente)
               <img x-show="showAmbiente" x-transition:enter="transition ease-out duration-300 transform"
                 x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
@@ -64,7 +64,7 @@
                 src="{{ asset('images/img/noimagen.jpg') }}" alt="imagen_alternativa"
                 class="w-full h-full object-contain object-center md:object-cover absolute inset-0" />
             @endif
-          @endisset
+          @endisset --}}
 
         </div>
       </a>
