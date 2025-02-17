@@ -1,4 +1,4 @@
-@extends('components.public.matrix', ['pagina' => ''])
+@extends('components.public.matrix', ['pagina' => 'Pago'])
 
 @section('css_importados')
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -283,7 +283,7 @@
           <h2 class="font-semibold font-Homie_Bold text-[20px] text-[#151515] px-4">
             Resumen del pedido
           </h2>
-          <div class="p-4 pb-0">
+          {{-- <div class="p-4 pb-0">
             <hr>
           </div>
           <div class="p-4">
@@ -297,9 +297,7 @@
             </select>
           </div>
           <div class="p-4 grid grid-cols-4" id="ElementosFacturacion">
-
-
-          </div>
+          </div> --}}
           <div class="p-4 py-0">
             <hr>
           </div>

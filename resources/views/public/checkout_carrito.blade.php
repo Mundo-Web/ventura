@@ -1,4 +1,4 @@
-@extends('components.public.matrix', ['pagina' => ''])
+@extends('components.public.matrix', ['pagina' => 'Carrito'])
 
 @section('css_importados')
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -113,7 +113,7 @@
     <div id="modalTerminosCondiciones" class="modal" style="max-width: 900px !important;width: 100% !important;  ">
         <!-- Modal body -->
         <div class="p-4 ">
-            <h1 class="font-Inter_SemiBold">Terminos y condiciones</h1>
+            <h1 class="font-FixelText_Bold text-center text-2xl">Terminos y condiciones</h1>
             <p class="font-Inter_Regular  prose grid grid-cols-1">{!! $terminos->content ?? '' !!}</p>
         </div>
     </div>
@@ -121,7 +121,7 @@
     <div id="modalPoliticasDev" class="modal" style="max-width: 900px !important; width: 100% !important;  ">
         <!-- Modal body -->
         <div class="p-4 ">
-            <h1 class="font-Inter_SemiBold">Politicas de devolucion</h1>
+            <h1 class="font-FixelText_Bold text-center text-2xl">Politicas de devolucion</h1>
 
             <p class="font-Inter_Regular  prose grid grid-cols-1 ">{!! $politicas->content ?? '' !!}</p>
 
@@ -132,7 +132,7 @@
     <div id="modallinkPoliticasDatos" class="modal" style="max-width: 900px !important; width: 100% !important;  ">
         <!-- Modal body -->
         <div class="p-4 ">
-            <h1 class="font-Inter_SemiBold">Politicas de Datos</h1>
+            <h1 class="font-FixelText_Bold text-center text-2xl">Politicas de Datos</h1>
 
             <p class="font-Inter_Regular  prose grid grid-cols-1">{!! $politicaDatos->content ?? '' !!}</p>
 
