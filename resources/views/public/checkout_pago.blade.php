@@ -283,10 +283,10 @@
           <h2 class="font-semibold font-Homie_Bold text-[20px] text-[#151515] px-4">
             Resumen del pedido
           </h2>
-          {{-- <div class="p-4 pb-0">
+          <div class="p-4 pb-0 hidden">
             <hr>
           </div>
-          <div class="p-4">
+          <div class="p-4 hidden">
             <label for="tipo-comprobante" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo de
               comprobante</label>
             <select id="tipo-comprobante" name="comprobante"
@@ -296,8 +296,8 @@
               <option value="factura">Factura</option>
             </select>
           </div>
-          <div class="p-4 grid grid-cols-4" id="ElementosFacturacion">
-          </div> --}}
+          <div class="p-4 grid grid-cols-4 hidden" id="ElementosFacturacion">
+          </div>
           <div class="p-4 py-0">
             <hr>
           </div>
