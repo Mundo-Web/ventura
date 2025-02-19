@@ -286,8 +286,8 @@ class ProductsController extends Controller
                     // Verificar si el archivo ya existe en la nueva ubicación
                     if (!File::exists($calendarPath)) {
                         // Crear la carpeta si no existe
-                        if (!File::exists(public_path('calendars'))) {
-                            File::makeDirectory(public_path('calendars'), 0755, true, true);
+                        if (!File::exists(public_path('storage/calendars'))) {
+                            File::makeDirectory(public_path('storage/calendars'), 0755, true, true);
                         }
 
                         // Leer el calendario desde storage y guardarlo en public/calendars/
