@@ -277,36 +277,36 @@ class ProductsController extends Controller
           foreach ($data['listings'] as $departamento) {
 
                   // Buscar el departamento en la base de datos
-                    $existingDept = Products::where('sku', $departamento['id'])->first();
+                     $existingDept = Products::where('sku', $departamento['id'])->first();
                     
-                    // Nueva ruta donde debería estar el archivo .ics
-                    $calendarPath = public_path('storage/calendars/' . $departamento['id'] . '.ics');
-                   
+                    // // Nueva ruta donde debería estar el archivo .ics
+                    // $calendarPath = public_path('storage/calendars/' . $departamento['id'] . '.ics');
+                    $calendarUrl  = 'storage/calendars/'. $departamento['id'] . '.ics';
 
                     // Verificar si el archivo ya existe en la nueva ubicación
-                    if (!File::exists($calendarPath)) {
-                        // Crear la carpeta si no existe
-                        if (!File::exists(public_path('storage/calendars'))) {
-                            File::makeDirectory(public_path('storage/calendars'), 0755, true, true);
-                        }
+                    // if (!File::exists($calendarPath)) {
+                    //     // Crear la carpeta si no existe
+                    //     if (!File::exists(public_path('storage/calendars'))) {
+                    //         File::makeDirectory(public_path('storage/calendars'), 0755, true, true);
+                    //     }
 
-                        // Leer el calendario desde storage y guardarlo en public/calendars/
-                        $oldCalendarPath = 'calendars/' . $departamento['id'] . '.ics'; // Asumiendo que están en storage/app/public/calendars/
+                    //     // Leer el calendario desde storage y guardarlo en public/calendars/
+                    //     $oldCalendarPath = 'calendars/' . $departamento['id'] . '.ics'; // Asumiendo que están en storage/app/public/calendars/
                         
-                        // if (Storage::exists($oldCalendarPath)) {
-                        //     $calendarContent = Storage::get($oldCalendarPath);
-                        //     file_put_contents($calendarPath, $calendarContent);
-                        // } else {
-                            // Si no existe en storage, generar un nuevo calendario
-                            $calendar = Calendar::create($departamento['name'] . ' Calendar');
-                            file_put_contents($calendarPath, $calendar->get());
-                        // }
-                    }
+                    //     // if (Storage::exists($oldCalendarPath)) {
+                    //     //     $calendarContent = Storage::get($oldCalendarPath);
+                    //     //     file_put_contents($calendarPath, $calendarContent);
+                    //     // } else {
+                    //         // Si no existe en storage, generar un nuevo calendario
+                    //         $calendar = Calendar::create($departamento['name'] . ' Calendar');
+                    //         file_put_contents($calendarPath, $calendar->get());
+                    //     // }
+                    // }
 
                     // Si el departamento existe, actualizar solo el campo calendar_url
                     if ($existingDept) {
                         $existingDept->update([
-                            'calendar_url' => $calendarPath
+                            'calendar_url' => $calendarUrl
                         ]);
                     }
                   // Verificar si el departamento ya existe en la base de datos
