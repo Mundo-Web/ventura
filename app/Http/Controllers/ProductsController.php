@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 use function PHPUnit\Framework\isNull;
 
@@ -274,39 +275,85 @@ class ProductsController extends Controller
 
           // Recorrer los departamentos y sincronizar con la base de datos
           foreach ($data['listings'] as $departamento) {
-             
-                  // Verificar si el departamento ya existe en la base de datos
-                  $existingDept = Products::where('sku', $departamento['id'])->first();
-                  
-                  if ($existingDept) {
-                      // Actualizar el departamento existente
-                      $existingDept->update([
-                          'producto' => $departamento['name'],
-                          'cuartos' => $departamento['no_of_bedrooms'],
-                          'pms' => $departamento['pms'],
-                          'preciobase' => $departamento['base'] ?? 0,
-                          'preciomin' => $departamento['min']?? 0,
-                      ]);
-                  } else {
 
-                      $calendar = Calendar::create($departamento['name'] . ' Calendar');
-                      $calendarPath = 'public/calendars/' . $departamento['id'] . '.ics';
-                      Storage::put($calendarPath, $calendar->get());
-                      
-                      // Crear un nuevo departamento
-                      Products::create([
-                            'sku' => $departamento['id'],
-                            'producto' => $departamento['name'],
-                            'cuartos' => $departamento['no_of_bedrooms'],
-                            'pms' => $departamento['pms'],
-                            'preciobase' => $departamento['base'] ?? 0,
-                            'preciomin' => $departamento['min'] ?? 0,
-                            'categoria_id' => 1,
-                            'calendar_url' => Storage::url($calendarPath)
+                  // Buscar el departamento en la base de datos
+                    $existingDept = Products::where('sku', $departamento['id'])->first();
+                    
+                    // Nueva ruta donde debería estar el archivo .ics
+                    $calendarPath = public_path('storage/calendars/' . $departamento['id'] . '.ics');
+                   
+
+                    // Verificar si el archivo ya existe en la nueva ubicación
+                    if (!File::exists($calendarPath)) {
+                        // Crear la carpeta si no existe
+                        if (!File::exists(public_path('calendars'))) {
+                            File::makeDirectory(public_path('calendars'), 0755, true, true);
+                        }
+
+                        // Leer el calendario desde storage y guardarlo en public/calendars/
+                        $oldCalendarPath = 'calendars/' . $departamento['id'] . '.ics'; // Asumiendo que están en storage/app/public/calendars/
+                        
+                        // if (Storage::exists($oldCalendarPath)) {
+                        //     $calendarContent = Storage::get($oldCalendarPath);
+                        //     file_put_contents($calendarPath, $calendarContent);
+                        // } else {
+                            // Si no existe en storage, generar un nuevo calendario
+                            $calendar = Calendar::create($departamento['name'] . ' Calendar');
+                            file_put_contents($calendarPath, $calendar->get());
+                        // }
+                    }
+
+                    // Si el departamento existe, actualizar solo el campo calendar_url
+                    if ($existingDept) {
+                        $existingDept->update([
+                            'calendar_url' => $calendarPath
                         ]);
+                    }
+                  // Verificar si el departamento ya existe en la base de datos
+                  // $existingDept = Products::where('sku', $departamento['id'])->first();
+                  
+                  // if ($existingDept) {
+                  //     // Actualizar el departamento existente
+                  //     $existingDept->update([
+                  //         'producto' => $departamento['name'],
+                  //         'cuartos' => $departamento['no_of_bedrooms'],
+                  //         'pms' => $departamento['pms'],
+                  //         'preciobase' => $departamento['base'] ?? 0,
+                  //         'preciomin' => $departamento['min']?? 0,
+                  //     ]);
+                  // } else {
+
+                  //     $calendar = Calendar::create($departamento['name'] . ' Calendar');
+                  //     $calendarPath = 'public/calendars/' . $departamento['id'] . '.ics';
+                      
+                  //     // Verificar y crear la carpeta si no existe
+                  //     if (!File::exists(public_path('calendars'))) {
+                  //       File::makeDirectory(public_path('calendars'), 0755, true, true);
+                  //     }
+
+                  //     // Crear el calendario
+                  //     $calendar = Calendar::create($departamento['name'] . ' Calendar');
+                  //     $calendarPath = public_path('calendars/' . $departamento['id'] . '.ics');
+
+                  //     // Guardar el archivo en la carpeta public/calendars/
+                  //     file_put_contents($calendarPath, $calendar->get());
+                      
+                  //     // Storage::put($calendarPath, $calendar->get());
+                      
+                  //     // Crear un nuevo departamento
+                  //     Products::create([
+                  //           'sku' => $departamento['id'],
+                  //           'producto' => $departamento['name'],
+                  //           'cuartos' => $departamento['no_of_bedrooms'],
+                  //           'pms' => $departamento['pms'],
+                  //           'preciobase' => $departamento['base'] ?? 0,
+                  //           'preciomin' => $departamento['min'] ?? 0,
+                  //           'categoria_id' => 1,
+                  //           'calendar_url' => Storage::url($calendarPath)
+                  //       ]);
 
                     
-                  } 
+                  // } 
           }
           
           //return redirect()->route('products.index');

@@ -567,7 +567,7 @@
         paymentMethods: paymentMethods,
         paymentMethodsSort: Object.keys(paymentMethods),
         style: {
-          logo: `${location.origin}/images/svg/logo_boost_header.svg`,
+          logo: `${location.origin}/favicon.ico`,
           bannerColor: '#272727'
 
         }
