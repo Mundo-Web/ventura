@@ -956,16 +956,34 @@ class IndexController extends Controller
         $meta_keywords = $producto->meta_keywords ?? '';
 
         $disabledDates = [];
-        $startDate = null;
-        $endDate = null;
+        
 
+        
+        // 1. Obtener fechas bloqueadas desde la base de datos
+        $fechasDB = DB::table('events')
+        ->where('product_id', $product->id)
+        ->pluck('checkin', 'checkout');
+
+        foreach ($fechasDB as $checkout => $checkin) {
+            $startDate = Carbon::parse($checkin)->startOfDay();
+            $endDate = Carbon::parse($checkout)->subDay()->startOfDay(); // Restar un día al checkout
+
+            while ($startDate->lte($endDate)) {
+                $disabledDates[] = $startDate->format('d/m/Y');
+                $startDate->addDay();
+            }
+        }
+
+        // 2. Obtener fechas bloqueadas desde el archivo .ics
         $icalUrl =  $product->airbnb_url;
-          
+
         if ($icalUrl) {
           // Si hay un URL válido, obtenemos el contenido del archivo .ics
           $icalContent = file_get_contents($icalUrl);
-         
           $lines = explode("\n", $icalContent);
+          $startDate = null;
+          $endDate = null;
+          
 
           // Procesar las líneas del archivo .ics
           foreach ($lines as $line) {
@@ -1005,15 +1023,14 @@ class IndexController extends Controller
         }
         
         
-
-
+        $disabledDates = array_unique($disabledDates);
     
-    $is_reseller = false; 
-    if(Auth::check()){
-     $user = Auth::user();
-     $is_reseller = $user->hasRole('Reseller');
+        $is_reseller = false; 
+        if(Auth::check()){
+        $user = Auth::user();
+        $is_reseller = $user->hasRole('Reseller');
      
-   }
+    }
 
     // $productos = Products::where('id', '=', $id)->first();
     // $especificaciones = Specifications::where('product_id', '=', $id)->get();

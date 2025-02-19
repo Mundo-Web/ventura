@@ -286,15 +286,15 @@ class PaymentController extends Controller
         $checkin = $body['cart'][$key]['checkin'];
         $checkout = $body['cart'][$key]['checkout'];
 
+        if (!$checkin || !$checkout) {
+          continue;
+        }
+
         $checkinDate = new \DateTime($checkin);
         $checkoutDate = new \DateTime($checkout);
         $checkoutDate->modify('-1 day');
         
-        if (!$checkin || !$checkout) {
-            continue;
-        }
-
-        $calendarPath = 'public/calendars/' . $productJpa->sku . '.ics';
+        $calendarPath = public_path('storage/calendars/' . $productJpa->sku . '.ics');
 
         DB::table('events')->insert([
           'product_id' => $productJpa->id,
@@ -325,7 +325,7 @@ class PaymentController extends Controller
         }
 
         // Guardar el calendario actualizado
-        Storage::put($calendarPath, $calendar->get());
+        file_put_contents($calendarPath, $calendar->get());
  
       }
 
