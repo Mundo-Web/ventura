@@ -711,7 +711,10 @@
       let serviciosExtras = [];
       let costoTotalFinal = 0;
       let disabledDates = @json($disabledDates);
-      let formattedDisabledDates = disabledDates.map(date => moment(date, 'DD/MM/YYYY'));
+      let formattedDisabledDates = (Array.isArray(disabledDates) ? disabledDates : []).map(date =>
+          moment(date, 'DD/MM/YYYY')
+      );
+      
       $('#arrival-date').daterangepicker({
           locale: {
               format: 'DD/MM/YYYY' 
