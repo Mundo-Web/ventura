@@ -45,11 +45,19 @@
                               <select name="lugar" id="lugar"
                                   class="w-full min-w-36 py-3 text-sm border-0  font-FixelText_Medium self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30">
                                           <option class="line-clamp-1" value="">Ubicación</option>
-                                        @foreach ($distritosfiltro as $ubicaciones)
+                                        {{-- @foreach ($distritosfiltro as $ubicaciones)
                                             @if (!empty($ubicaciones->distrito_id && !empty($ubicaciones->distrito->description)))
                                               <option class="line-clamp-1" value="{{$ubicaciones->distrito_id}}" @selected($ubicaciones->distrito_id == $lugar)>{{$ubicaciones->distrito->description}}</option>
                                             @endif  
-                                      @endforeach
+                                        @endforeach --}}
+                                        @foreach ($distritosParaFiltro as $distrito_id => $productos)
+                                            @php
+                                                $distrito = $productos->first()->distrito; // Obtén el distrito del primer producto del grupo
+                                            @endphp
+                                            @if (!empty($distrito->description))
+                                                <option class="line-clamp-1" value="{{$distrito_id}}">{{$distrito->description}}</option>
+                                            @endif  
+                                        @endforeach
                               </select>
                               </div>
                           </div>

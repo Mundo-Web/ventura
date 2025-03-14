@@ -108,12 +108,17 @@ class IndexController extends Controller
     $textoshome = HomeView::first();
     $estadisticas = ClientLogos::where('status', '=', 1)->where('visible', '=', 1)->get();
     $categoriasindex = Category::where('status', '=', 1)->where('destacar', '=', 1)->get();
+    $distritosParaFiltro = Products::where('status', 1)
+    ->where('visible', 1)
+    ->with('distrito')
+    ->get()
+    ->groupBy('distrito_id');
     $distritosfiltro = Products::where('status', '=', 1)->where('visible', '=', 1)->get();
     $limitepersonas = $distritosfiltro->pluck('precioservicio')->filter(function ($precio) {
       return $precio > 0; // Excluir valores no válidos
     });
     $limite = $limitepersonas->max();
-    return view('public.index', compact('limite','distritosfiltro','textoshome','general','url_env', 'popups', 'banners', 'blogs', 'categoriasAll', 'productosPupulares', 'ultimosProductos', 'productos', 'destacados', 'descuentos', 'general', 'benefit', 'faqs', 'testimonie', 'slider', 'categorias', 'categoriasindex','estadisticas'));
+  return view('public.index', compact('distritosParaFiltro','limite','distritosfiltro','textoshome','general','url_env', 'popups', 'banners', 'blogs', 'categoriasAll', 'productosPupulares', 'ultimosProductos', 'productos', 'destacados', 'descuentos', 'general', 'benefit', 'faqs', 'testimonie', 'slider', 'categorias', 'categoriasindex','estadisticas'));
   }
 
   public function catalogo(Request $request, string $id_cat = null)
@@ -236,7 +241,11 @@ class IndexController extends Controller
       ->get();
 
     $textoshome = HomeView::first();
-
+    $distritosParaFiltro = Products::where('status', 1)
+    ->where('visible', 1)
+    ->with('distrito')
+    ->get()
+    ->groupBy('distrito_id');
     $distritosfiltro = Products::where('status', '=', 1)->where('visible', '=', 1)->with('distrito')->get();
     $limitepersonas = $distritosfiltro->pluck('precioservicio')->filter(function ($precio) {
       return $precio > 0; // Excluir valores no válidos
@@ -245,7 +254,7 @@ class IndexController extends Controller
 
 
 
-    return view('public.catalogo' , compact('lugar','cantidad','llegada','salida','products','minPrice','maxPrice','categories','tags','attribute_values','id_cat','tag_id','textoshome','distritosfiltro','limite'));
+    return view('public.catalogo' , compact('distritosParaFiltro', 'lugar','cantidad','llegada','salida','products','minPrice','maxPrice','categories','tags','attribute_values','id_cat','tag_id','textoshome','distritosfiltro','limite'));
     // return Inertia::render('Catalogo', [
     //   'component' => 'Catalogo',
     //   'minPrice' => $minPrice,
