@@ -869,7 +869,7 @@ class IndexController extends Controller
       $client = new Client();
       $serviciosseleccionados = $request->servicios;
       $department = Products::where('sku', '=', $request['id'])->first();
-
+      
       $checkin = $request->input('checkin');
       $checkout = $request->input('checkout');
       
@@ -887,7 +887,7 @@ class IndexController extends Controller
             'dateTo' => $checkout
         ]
       ];
-
+      
       try {
         $response = $client->post('https://api.pricelabs.co/v1/listing_prices', [
             'headers' => [

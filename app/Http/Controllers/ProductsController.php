@@ -17,6 +17,7 @@ use App\Models\Province;
 use App\Models\Specifications;
 use App\Models\SubCategory;
 use App\Models\Tag;
+use App\Models\Events;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -304,9 +305,7 @@ class ProductsController extends Controller
 
                       // Guardar el archivo en la carpeta public/calendars/
                       file_put_contents($calendarPath, $calendar->get());
-                      
-                      // Storage::put($calendarPath, $calendar->get());
-                      
+                                         
                       // Crear un nuevo departamento
                       Products::create([
                             'sku' => $departamento['id'],
@@ -562,6 +561,7 @@ class ProductsController extends Controller
        $cleanedData['meta_title'] = $data['meta_title'];
        $cleanedData['meta_description'] = $data['meta_description'];
        $cleanedData['meta_keywords'] = $data['meta_keywords'];
+       $cleanedData['sku'] = $data['sku'];
 
       $slug = strtolower(str_replace(' ', '-', $request->producto . '-' . $request->color));
 
@@ -572,8 +572,30 @@ class ProductsController extends Controller
       // Busca el producto, si existe lo actualiza, si no lo crea
       $producto = Products::find($request->id);
       if ($producto) {
-        $cleanedData['max_stock'] = $this->gestionarMaxStock($producto->max_stock, $cleanedData['stock']);
-        $producto->update($cleanedData);
+        
+          
+          if ($producto->sku !== $cleanedData['sku']) {
+            // Obtener la ruta actual del archivo iCal
+            $oldCalendarPath = public_path('storage/calendars/' . $producto->sku . '.ics');
+            $newCalendarPath = public_path('storage/calendars/' . $cleanedData['sku'] . '.ics');
+            // Renombrar el archivo iCal si existe
+            if (File::exists($oldCalendarPath)) {
+                File::move($oldCalendarPath, $newCalendarPath);
+            }
+            // Actualizar la URL del calendario en los datos limpios
+            $cleanedData['calendar_url'] = 'storage/calendars/' . $cleanedData['sku'] . '.ics';
+            
+            $tieneReservas = DB::table('events')->where('product_id', $producto->id)->exists();
+           
+            if ($tieneReservas) {
+              DB::table('events')
+                ->where('product_id', $producto->id)
+                ->update(['sku' => $cleanedData['sku']]);
+            }
+          }
+
+          $cleanedData['max_stock'] = $this->gestionarMaxStock($producto->max_stock, $cleanedData['stock']);
+          $producto->update($cleanedData);
       } else {
         $cleanedData['max_stock'] = $cleanedData['stock'];
         $producto = Products::create($cleanedData);
