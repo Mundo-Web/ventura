@@ -652,6 +652,7 @@
                   </div>
                 </div>
 
+                
 
                 <div class="md:col-span-5 mt-2">
                   <label for="address">Dirección de la propiedad</label>
@@ -716,6 +717,34 @@
                           </option>
                       @endforeach
                   </select>
+              </div>
+
+              <div class="md:col-span-5 flex justify-between gap-4">
+                <div class="w-full">
+                  <label for="latitud">Latitud</label>
+                  <div class="relative mb-2  mt-2">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <i class="text-lg text-gray-500 dark:text-gray-400 fa-solid fa-location-dot"></i>
+                    </div>
+                    <input type="text" id="latitud" name="latitud" value="{{ $product->latitud }}"
+                      step="0.1"
+                      class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Latitud">
+                  </div>
+
+                </div>
+                <div class="w-full">
+                  <label for="longitud">Longitud</label>
+                  <div class="relative mb-2  mt-2">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <i class="text-lg text-gray-500 dark:text-gray-400 fa-solid fa-location-dot"></i>
+                    </div>
+                    <input type="text" id="longitud" name="longitud" value="{{ $product->longitud }}"
+                      step="0.1"
+                      class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Longitud">
+                  </div>
+                </div>
               </div>
                 {{-- <div class="md:col-span-3">
                   <label for="precio_reseller">Precio para revendedor</label>

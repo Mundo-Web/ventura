@@ -562,6 +562,8 @@ class ProductsController extends Controller
        $cleanedData['meta_description'] = $data['meta_description'];
        $cleanedData['meta_keywords'] = $data['meta_keywords'];
        $cleanedData['sku'] = $data['sku'];
+       $cleanedData['latitud'] = $data['latitud'];
+       $cleanedData['longitud'] = $data['longitud'];
 
       $slug = strtolower(str_replace(' ', '-', $request->producto . '-' . $request->color));
 

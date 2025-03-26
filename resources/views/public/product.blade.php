@@ -323,6 +323,7 @@
                 <article class="flex flex-col items-start mt-5 w-full">
                   <header class="flex flex-col">
                     <h1 class="text-3xl font-Homie_Bold text-[#006258]">{{ $product->producto }}</h1>
+                    
                     <p class="mt-2.5 text-base font-FixelText_Regular text-slate-950 text-opacity-50">{{$product->address}}, {{$product->inside}}</p>
                     <p class="mt-2.5 text-base font-FixelText_Regular text-slate-950 text-opacity-50">
                       @php
@@ -345,6 +346,9 @@
                         {{ $locationsString }}
                       </p>
                   </header>
+                  @if ($product->latitud && $product->longitud)
+                        <div class="h-[350px] w-full" id="map"></div>
+                  @endif
                   @if ($product->sku)
                   <div class="flex items-center px-3 py-1.5 mt-5 text-sm text-[#002677] border border-[#002677] border-solid bg-[#002677] bg-opacity-10 rounded-[43px]">
                     <span class="font-FixelText_Regular"># Cod. inmueble  {{ $product->sku }}</span>
@@ -697,6 +701,42 @@
   </div>
 
 @section('scripts_importados')
+  <script type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&libraries" ></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+      $(document).ready(function(){
+          var latitude = {{ $product->latitud }};
+          var longitude = {{ $product->longitud }};
+
+          var location = [
+              ['center', latitude, longitude],
+          ];
+
+          var mylatlng= {
+              lat:location[0][1],
+              lng: location[0][2]
+          };
+
+          var map= new google.maps.Map(document.getElementById("map"),{
+              zoom:15,
+              center: mylatlng,
+              // styles: darkModeStyle
+          });
+          for(var i=0; i< location.length; i++){
+              new google.maps.Marker({
+                  position: new google.maps.LatLng(location[i][1],location[i][2]),
+                  map: map
+                  // icon: {
+                  //     url: "images/img/marcador.png", 
+                  //     scaledSize: new google.maps.Size(60, 60), 
+                  //     anchor: new google.maps.Point(20, 40) 
+                  // }
+  
+              });
+          }
+      });   
+  </script>
 <script>
   $(document).ready(function () {
       $(document).on('click', '.galeriatotal', function () {
