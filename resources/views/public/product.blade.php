@@ -703,7 +703,18 @@
 @section('scripts_importados')
   <script type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&libraries" ></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const latitude = parseFloat("{{ $product->latitud }}");
+        const longitude = parseFloat("{{ $product->longitud }}");
+        const mapElement = document.getElementById("map");
+
+        // Si no hay coordenadas válidas, oculta el contenedor del mapa
+        if (isNaN(latitude) || isNaN(longitude) || latitude === 0 || longitude === 0) {
+            mapElement.style.display = "none"; // Oculta el div#map
+        }
+   });
+  </script>
   <script type="text/javascript">
       $(document).ready(function(){
           var latitude = {{ $product->latitud }};
@@ -727,12 +738,6 @@
               new google.maps.Marker({
                   position: new google.maps.LatLng(location[i][1],location[i][2]),
                   map: map
-                  // icon: {
-                  //     url: "images/img/marcador.png", 
-                  //     scaledSize: new google.maps.Size(60, 60), 
-                  //     anchor: new google.maps.Point(20, 40) 
-                  // }
-  
               });
           }
       });   
