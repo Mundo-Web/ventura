@@ -317,9 +317,9 @@
                     <li class="overflow-hidden self-stretch px-2 my-auto text-slate-950 text-opacity-20">/</li>
                     <li class="self-stretch my-auto text-[#002677]">Departamento</li>
                   </ul>
-                  <button onclick="shareLink()" class="flex items-center justify-center">
+                  <button onclick="copiarEnlace()" class="flex items-center justify-center">
                     <img loading="lazy" src="{{ asset('images/svg/compartir.svg') }}" 
-                         class="object-contain shrink-0 w-6 aspect-square" alt="Compartir enlace" />
+                         class="object-contain shrink-0 w-6 aspect-square" alt="Copiar enlace" />
                   </button>
                 </nav>
 
@@ -719,40 +719,27 @@
    });
   </script>
   <script>
-    function shareLink() {
-        // Primero intentamos usar la Web Share API (dispositivos móviles)
-        if (navigator.share) {
-            navigator.share({
-                title: document.title,
-                text: 'Mira esta página',
-                url: window.location.href
-            }).catch(err => {
-                console.log('Error al compartir:', err);
-                copyToClipboard();
-            });
-        } else {
-            // Fallback para navegadores que no soportan Web Share API
-            copyToClipboard();
-        }
+    
+    function copiarEnlace() {
+        // Obtener la URL actual
+        const url = window.location.href;
+        
+        // Crear un elemento temporal para copiar
+        const inputTemp = document.createElement('input');
+        inputTemp.value = url;
+        document.body.appendChild(inputTemp);
+        inputTemp.select();
+        
+        // Copiar al portapapeles
+        document.execCommand('copy');
+        
+        // Eliminar el elemento temporal
+        document.body.removeChild(inputTemp);
+        
+        // Mostrar notificación (opcional)
+        alert('Enlace copiado: ' + url);
     }
 
-    function copyToClipboard() {
-        const url = window.location.href;
-        navigator.clipboard.writeText(url).then(() => {
-            // Mostrar notificación o alerta
-            alert('Enlace copiado al portapapeles: ' + url);
-        }).catch(err => {
-            console.error('Error al copiar: ', err);
-            // Fallback para navegadores antiguos
-            const textArea = document.createElement('textarea');
-            textArea.value = url;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('Enlace copiado: ' + url);
-        });
-    }
   </script>
   <script type="text/javascript">
       $(document).ready(function(){
