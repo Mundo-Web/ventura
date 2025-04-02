@@ -704,8 +704,6 @@
   </div>
 
 @section('scripts_importados')
-  <script type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&libraries" ></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
         const latitude = parseFloat("{{ $product->latitud }}");
@@ -786,12 +784,63 @@
           moment(date, 'DD/MM/YYYY')
       );
       
-      $('#arrival-date').daterangepicker({
+      const fechasGuardadas = localStorage.getItem('fechasBusqueda');
+      let fechaInicio = moment();
+      let fechaFin = moment().add(1, 'days');
+      let fechasValidas = false;
+
+      if (fechasGuardadas) {
+          const fechas = JSON.parse(fechasGuardadas);
+          fechaInicio = moment(fechas.llegada, 'DD/MM/YYYY');
+          fechaFin = moment(fechas.salida, 'DD/MM/YYYY');
+      }
+
+      if (fechasGuardadas) {
+          try {
+              const fechas = JSON.parse(fechasGuardadas);
+              
+              // Verificar si las fechas están bloqueadas
+              const llegada = moment(fechas.llegada, 'DD/MM/YYYY');
+              const salida = moment(fechas.salida, 'DD/MM/YYYY');
+              
+              let fechaBloqueadaEncontrada = false;
+              
+              // Verificar cada día en el rango guardado
+              for (let m = llegada.clone(); m.isBefore(salida); m.add(1, 'days')) {
+                  if (formattedDisabledDates.some(blockedDate => m.isSame(blockedDate, 'day'))) {
+                      fechaBloqueadaEncontrada = true;
+                      break;
+                  }
+              }
+              
+              if (!fechaBloqueadaEncontrada) {
+                  fechaInicio = llegada;
+                  fechaFin = salida;
+                  fechasValidas = true;
+              } else {
+                  // Si hay fechas bloqueadas, limpiar localStorage
+                  localStorage.removeItem('fechasBusqueda');
+                  Swal.fire({
+                      title: 'Fechas no disponibles',
+                      text: 'Algunas fechas previamente seleccionadas ya no están disponibles. Por favor, selecciona un nuevo rango.',
+                      icon: 'warning'
+                  });
+              }
+          } catch (e) {
+              console.error('Error al parsear fechas:', e);
+              localStorage.removeItem('fechasBusqueda');
+          }
+      }
+
+      $('#arrival-date').daterangepicker(
+          {
           locale: {
-              format: 'DD/MM/YYYY' 
+            format: 'DD/MM/YYYY',
+            cancelLabel: 'Cancelar',
+            applyLabel: 'Aplicar'
           },
-          startDate: moment(), 
-          endDate: moment(), 
+          startDate: fechaInicio,
+          endDate: fechaFin,
           minDate: moment(),
           maxDate: moment().add(9, 'months'),
           minSpan: {
@@ -850,7 +899,19 @@
         
       });
       
-      $('#arrival-date').val('Fecha Inicio - Fecha Fin');
+      if (fechasValidas) {
+          const fechas = JSON.parse(fechasGuardadas);
+          $('#arrival-date').val(fechas.llegada + ' - ' + fechas.salida);
+          $('#arrival-date').data('checkin', moment(fechas.llegada, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+          $('#arrival-date').data('checkout', moment(fechas.salida, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+          
+          // Calcular noches y mostrar precio inicial
+          let nights = moment(fechas.salida, 'DD/MM/YYYY').diff(moment(fechas.llegada, 'DD/MM/YYYY'), 'days');
+          $('#cantidadnoches').text(nights);
+          cotizarPrecios(); // Llamar a la función para calcular precios con las fechas cargadas
+      } else {
+          $('#arrival-date').val('Fecha Inicio - Fecha Fin');
+      }
 
 
       function cotizarPrecios() {

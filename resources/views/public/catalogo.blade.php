@@ -244,99 +244,153 @@
                     cancelLabel: 'Cancelar',
                     applyLabel: 'Aplicar'
                 },
-                startDate: moment(),
-                endDate: moment(),
-                minDate: moment(),
+                startDate: false, // No establecer fecha inicial
+                endDate: false,  // No establecer fecha final
+                minDate: moment(), // Bloquear fechas anteriores
                 maxDate: moment().add(9, 'months'),
+                autoUpdateInput: false, // Evita que se autocomplete
+                opens: 'right',
+                drops: 'down',
+                autoApply: true, // Cierra el calendario y aplica automáticamente al seleccionar
+            });
+
+            // Establecer placeholder inicial
+            $('#arrival-date').val('Seleccione fechas');
+
+            // Actualizar el campo cuando se selecciona un rango
+            $('#arrival-date').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(
+                    picker.startDate.format('DD/MM/YYYY') + 
+                    ' - ' + 
+                    picker.endDate.format('DD/MM/YYYY')
+                );
+            });
+
+            // Restablecer placeholder si se cancela
+            $('#arrival-date').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('Seleccione fecha');
             });
         }
     });
 </script>
 
 <script>
-  $(document).ready(function () {
-      // Cuando el usuario hace clic en el botón de búsqueda
-      $('#linkExplirarAlquileres').on('click', function (e) {
-            e.preventDefault();  // Prevenir el comportamiento por defecto del botón
-
-            const lugar = $('#lugar').val();
-            const rangoFechas = $('#arrival-date').val();
-            const cantidadPersonas = $('#cantidad_personas').val();
-
-            let fechaLlegada = '';
-            let fechaSalida = '';
-
-            if (rangoFechas.includes(" - ")) {
-                [fechaLlegada, fechaSalida] = rangoFechas.split(" - ");
-            }
-                
-            // Validación (opcional)
-            if (!lugar && !rangoFechas && !cantidadPersonas) {
-                alert("Por favor, selecciona al menos un filtro para realizar la búsqueda.");
-                 return;
-            }     
-
-            // Realizar la solicitud AJAX
-            $.ajax({
-                url: "{{ route('filtrardepartamentos') }}",  
-                dataType: "json",
-                method:'GET',
-                data: {
-                    _token: $('input[name="_token"]').val(),
-                    lugar: lugar,  // Enviar el valor de lugar
-                    cantidad_personas: cantidadPersonas,  // Enviar el valor de cantidad_personas
-                    llegada: fechaLlegada,
-                    salida: fechaSalida
-                },
-                success: function (response) {
+    $(document).ready(function () {
+        // Cuando el usuario hace clic en el botón de búsqueda
+        $('#linkExplirarAlquileres').on('click', function (e) {
+              e.preventDefault();  // Prevenir el comportamiento por defecto del botón
+  
+              const lugar = $('#lugar').val();
+              const rangoFechas = $('#arrival-date').val();
+              const cantidadPersonas = $('#cantidad_personas').val();
+  
+              let fechaLlegada = '';
+              let fechaSalida = '';
+  
+              if (rangoFechas.includes(" - ")) {
+                  [fechaLlegada, fechaSalida] = rangoFechas.split(" - ");
+              }
                   
-                  if (response.length === 0) {
-                    $('#productosf').html('<p>No se encontraron departamentos que coincidan con los filtros.</p>');
-                    return;
-                  }
-
-                  let htmlContent = '';
-                  const noImageUrl = '/images/img/noimagen.jpg';
-                    // Iteramos sobre los departamentos recibidos
-                    response.data.forEach(function(item) {
-                        htmlContent += `
-                        <div class="flex flex-col relative w-full bg-white" data-aos="zoom-in-left">
-                            <div class="bg-white product_container basis-4/5 flex flex-col justify-center relative border">
-                                <div>
-                                    <div class="relative flex justify-center items-center h-max">
-                                        <img 
-                                            src="${item.imagen ? item.imagen : 'images/img/noimagen.jpg'}"
-                                            alt="${item.producto}"
-                                            onerror="this.src='${noImageUrl}';"
-                                            class="transition ease-out duration-300 transform w-full aspect-square object-cover inset-0"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <a href="/producto/${item.id}" class="px-1 py-2 flex flex-col gap-3">
-                                <h2 class="block text-lg text-left overflow-hidden font-Homie_Bold text-[#002677]" 
-                                    style="display: -webkit-box; -webkit-line-clamp: 2; text-overflow: ellipsis; -webkit-box-orient: vertical; height: 51px;">
-                                    ${item.producto}
-                                </h2>
-                            </a>
-                        </div>`;
-                    });
-
-                    // Agregamos el contenido generado al contenedor
-                    $('#productosf').html(htmlContent);
-                },
-                error: function (xhr, status, error) {
-                  Swal.fire({
-                      title: 'Hubo un error al realizar la búsqueda',
-                      text: error,
-                      icon: 'warning',
-                  }); 
+              // Validación (opcional)
+              if (!lugar && !rangoFechas && !cantidadPersonas) {
+                  alert("Por favor, selecciona al menos un filtro para realizar la búsqueda.");
+                   return;
+              }    
+              
+              // ACTUALIZACIÓN: Guardar las nuevas fechas en localStorage (incluso si son vacías)
+                if (fechaLlegada && fechaSalida) {
+                    localStorage.setItem('fechasBusqueda', JSON.stringify({
+                        llegada: fechaLlegada,
+                        salida: fechaSalida
+                    }));
+                } else {
+                    // Si no hay fechas válidas, limpiar el localStorage
+                    localStorage.removeItem('fechasBusqueda');
                 }
-            });
-      });
-  });
-</script>
+  
+              // Mostrar SweetAlert de carga
+              Swal.fire({
+                  title: 'Buscando departamentos',
+                  html: 'Por favor espera...',
+                  allowOutsideClick: false,
+                  didOpen: () => {
+                      Swal.showLoading();
+                  }
+              });
+  
+              // Realizar la solicitud AJAX
+              $.ajax({
+                  url: "{{ route('filtrardepartamentos') }}",  
+                  dataType: "json",
+                  method:'GET',
+                  data: {
+                      _token: $('input[name="_token"]').val(),
+                      lugar: lugar,  // Enviar el valor de lugar
+                      cantidad_personas: cantidadPersonas,  // Enviar el valor de cantidad_personas
+                      llegada: fechaLlegada,
+                      salida: fechaSalida
+                  },
+                  success: function (response) {
+                      // Cerrar el SweetAlert de carga
+                      Swal.close();
+                      
+                      // Mostrar SweetAlert de búsqueda realizada
+                      Swal.fire({
+                          title: 'Búsqueda realizada',
+                          text: 'Se han encontrado ' + response.data.length + ' departamentos',
+                          icon: 'success',
+                          timer: 2000,
+                          showConfirmButton: false
+                      });
+                    
+                      if (response.length === 0) {
+                          $('#productosf').html('<p>No se encontraron departamentos que coincidan con los filtros.</p>');
+                          return;
+                      }
+  
+                      let htmlContent = '';
+                      const noImageUrl = '/images/img/noimagen.jpg';
+                      // Iteramos sobre los departamentos recibidos
+                      response.data.forEach(function(item) {
+                          htmlContent += `
+                          <div class="flex flex-col relative w-full bg-white" data-aos="zoom-in-left">
+                              <div class="bg-white product_container basis-4/5 flex flex-col justify-center relative border">
+                                  <div>
+                                      <div class="relative flex justify-center items-center h-max">
+                                          <img 
+                                              src="${item.imagen ? item.imagen : 'images/img/noimagen.jpg'}"
+                                              alt="${item.producto}"
+                                              onerror="this.src='${noImageUrl}';"
+                                              class="transition ease-out duration-300 transform w-full aspect-square object-cover inset-0"
+                                          />
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              <a href="/producto/${item.id}" class="px-1 py-2 flex flex-col gap-3">
+                                  <h2 class="block text-lg text-left overflow-hidden font-Homie_Bold text-[#002677]" 
+                                      style="display: -webkit-box; -webkit-line-clamp: 2; text-overflow: ellipsis; -webkit-box-orient: vertical; height: 51px;">
+                                      ${item.producto}
+                                  </h2>
+                              </a>
+                          </div>`;
+                      });
+  
+                      // Agregamos el contenido generado al contenedor
+                      $('#productosf').html(htmlContent);
+                  },
+                  error: function (xhr, status, error) {
+                      Swal.close();
+                      Swal.fire({
+                          title: 'Hubo un error al realizar la búsqueda',
+                          text: error,
+                          icon: 'error',
+                      }); 
+                  }
+              });
+        });
+    });
+  </script>
 @stop
 
 @stop

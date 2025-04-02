@@ -189,8 +189,8 @@ class IndexController extends Controller
     
                 $allAvailable = true; // Variable para verificar si todas las fechas están disponibles
                 foreach ($department['data'] as $availability) {
-                    // Verificar si alguna de las fechas tiene el estado "Booked"
-                    if (strpos($availability['booking_status'], 'Booked') !== false) {
+                    // Verificar si alguna de las fechas tiene el estado "-1"
+                    if (strpos($availability['user_price'], '-1') !== false) {
                         $allAvailable = false; // Si alguna fecha está reservada, marcamos como no disponible
                         break; // Salir del loop si encontramos una fecha "Booked"
                     }
@@ -334,9 +334,19 @@ class IndexController extends Controller
                   $allAvailable = true; // Variable para verificar si todas las fechas están disponibles
                   foreach ($department['data'] as $availability) {
                       // Verificar si alguna de las fechas tiene el estado "Booked"
-                      if (strpos($availability['booking_status'], 'Booked') !== false) {
-                          $allAvailable = false; // Si alguna fecha está reservada, marcamos como no disponible
-                          break; // Salir del loop si encontramos una fecha "Booked"
+                     
+                      // if (strpos($availability['user_price'], '-1') !== false) {
+                      //     $allAvailable = false; // Si alguna fecha está reservada, marcamos como no disponible
+                      //     break; // Salir del loop si encontramos una fecha "Booked"
+                      // }
+
+                      if (strpos($availability['user_price'], '-1') !== false) {
+                          // Si es "Booked (Check-In)", lo consideramos como fecha de salida (disponible)
+                          if (!isset($availability['booking_status_STLY']) || 
+                              $availability['booking_status_STLY'] !== "Booked (Check-In)") {
+                              $allAvailable = false;
+                              break;
+                          }
                       }
                   }
       

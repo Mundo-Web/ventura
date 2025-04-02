@@ -740,13 +740,33 @@
                 locale: {
                     format: 'DD/MM/YYYY',
                     cancelLabel: 'Cancelar',
-                    applyLabel: 'Aplicar' 
+                    applyLabel: 'Aplicar'
                 },
-                startDate: moment(), 
-                endDate: moment(), 
-                minDate: moment(),
+                startDate: false, // No establecer fecha inicial
+                endDate: false,  // No establecer fecha final
+                minDate: moment(), // Bloquear fechas anteriores
                 maxDate: moment().add(9, 'months'),
-               
+                autoUpdateInput: false, // Evita que se autocomplete
+                opens: 'right',
+                drops: 'down',
+                autoApply: true, // Cierra el calendario y aplica automáticamente al seleccionar
+            });
+
+            // Establecer placeholder inicial
+            $('#arrival-date').val('Seleccione fecha');
+
+            // Actualizar el campo cuando se selecciona un rango
+            $('#arrival-date').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(
+                    picker.startDate.format('DD/MM/YYYY') + 
+                    ' - ' + 
+                    picker.endDate.format('DD/MM/YYYY')
+                );
+            });
+
+            // Restablecer placeholder si se cancela
+            $('#arrival-date').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('Seleccione fechas');
             });
 
        
@@ -768,6 +788,16 @@
                 if (!lugar && !rangoFechas && !cantidadPersonas) {
                     alert("Por favor, selecciona al menos un filtro para realizar la búsqueda.");
                     return;
+                }
+
+                // Guardar fechas en localStorage
+                if (fechaLlegada && fechaSalida) {
+                    localStorage.setItem('fechasBusqueda', JSON.stringify({
+                        llegada: fechaLlegada,
+                        salida: fechaSalida
+                    }));
+                } else {
+                    localStorage.removeItem('fechasBusqueda');
                 }
 
                 const params = new URLSearchParams();
