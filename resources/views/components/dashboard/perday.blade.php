@@ -38,7 +38,7 @@
     maximumFractionDigits: 2,
     minimumFractionDigits: 2
   })
-  $('#total-sales').text(`S/. ${salesPerDayTotal}`)
+  $('#total-sales').text(`$ ${salesPerDayTotal}`)
 
   const skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
   const down = (ctx, value) => ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;

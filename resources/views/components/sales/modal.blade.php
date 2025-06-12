@@ -9,7 +9,7 @@
   <div class="relative md:absolute border rounded-lg right-8 top-6 py-2 px-3 mb-2 text-center">
     <b class="block" id="address-tipo-comprobante"></b>
     <b class="block" id="n_document"></b>
-    <h4 class="h4 mb-1">S/. <span id="invoice-price"></span></h4>
+    <h4 class="h4 mb-1">$ <span id="invoice-price"></span></h4>
     {{--  <span id="invoice-address-price"
       class="w-max block mx-auto text-xs font-medium px-2.5 py-0.5 mb-1 rounded-full"></span> --}}
   </div>
@@ -113,7 +113,7 @@
     let totalInvoice = Number(data.total) + Number(envio)
     $('#invoice-price').text(totalInvoice)
     /* $('#invoice-address-price').text(isFree ? 'Envio gratis' :
-      `S/. ${Number(data.address_price).toFixed(2)}`) */
+      `$ ${Number(data.address_price).toFixed(2)}`) */
     if (isFree) $('#invoice-address-price')
       .addClass('bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300')
       .removeClass('bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300')
@@ -177,13 +177,13 @@
               ${item.extras ? `<span class="font-normal text-sm text-black"> Extras: ${item.extras} </span> ` : ''}
             </th>
             <td class="px-6 py-4">
-              S/. ${Number(item.price).toFixed(2)}
+              $ ${Number(item.price).toFixed(2)}
             </td>
             <td class="px-6 py-4">
               ${item.quantity}
             </td>
             <td class="px-6 py-4">
-              S/. ${(item.price * item.quantity).toFixed(2)}
+              $ ${(item.price * item.quantity).toFixed(2)}
             </td>
           </tr>`)
         })
@@ -192,13 +192,13 @@
         //       Envio 
         //     </th>
         //     <td class="px-6 py-4">
-        //       S/. ${envio}
+        //       $ ${envio}
         //     </td>
         //     <td class="px-6 py-4">
         //       1
         //     </td>
         //     <td class="px-6 py-4">
-        //       S/. ${envio}
+        //       $ ${envio}
         //     </td>
         //   </tr>`)
       })

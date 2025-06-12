@@ -7,8 +7,6 @@
 <script src="/js/dxdatagrid/js/dx.all.js"></script>
 <script src="/js/dxdatagrid/js/localization/dx.messages.es.js"></script>
 <script src="/js/moment/min/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
 <div id="gridContainer"></div>
 
@@ -117,7 +115,7 @@
           container.addClass('!px-3 !py-2')
           const div = $('<div>')
           const orderContainer = $('<a>', {
-            class: 'block text-sm font-medium truncate dark:text-white text-blue-500 cursor-pointer max-w-max',
+            class: 'block text-sm font-medium truncate dark:text-black text-blue-500 cursor-pointer max-w-max',
             text: `#${data.code}`
           })
           if (data.confirmation_client) {
@@ -179,14 +177,14 @@
           })
           const priceContainer = $('<span>', {
             class: 'block w-max mx-auto',
-            text: `S/. ${data.total}`
+            text: `$ ${data.total}`
           })
           const envioContainer = $('<span>', {
               class: `inline-flex items-center ${ isFree ? 'bg-green-100' : 'bg-blue-100'} ${ isFree ? 'text-green-800' : 'text-blue-800'} text-xs font-medium px-2.5 py-0.5 rounded-full dark:${ isFree ? 'bg-green-900' : 'bg-blue-900'} dark:${ isFree ? 'text-green-300' : 'text-blue-300'} w-max`
             })
             .append(
               `<span class="/w-2 h-2 me-1 ${isFree ? 'bg-green-500' : 'bg-blue-500' } rounded-full"></span>`)
-            .append(isFree ? 'Envio gratis' : `S/. ${Number(data.address_price).toFixed(2)}`)
+            .append(isFree ? 'Envio gratis' : `$ ${Number(data.address_price).toFixed(2)}`)
 
           div.append(priceContainer)
           div.append(envioContainer)

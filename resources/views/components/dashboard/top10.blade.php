@@ -49,7 +49,7 @@
                 <div class="text-center">{{ $item->total_customers }}</div>
               </td>
               <td class="p-2">
-                <div class="text-center text-emerald-500">S/. {{ number_format($item->total_price, 2, '.', ',') }}</div>
+                <div class="text-center text-emerald-500">$ {{ number_format($item->total_price, 2, '.', ',') }}</div>
               </td>
               <td class="p-2">
                 <div class="text-center">{{ $item->total_quantity }}</div>
@@ -86,7 +86,7 @@
               <div class="text-center">${row.total_customers}</div>
             </td>
             <td class="p-2">
-              <div class="text-center text-emerald-500">S/. ${row.total_price}</div>
+              <div class="text-center text-emerald-500">$ ${row.total_price}</div>
             </td>
             <td class="p-2">
               <div class="text-center">${row.total_quantity}</div>

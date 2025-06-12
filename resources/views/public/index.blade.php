@@ -304,7 +304,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col min-w-[240px] w-full lg:w-3/5  ">
+                <div class="flex flex-col min-w-[240px] w-full lg:w-3/5">
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-10 items-start w-full max-md:mt-10">
                         @foreach ($benefit as $beneficios)

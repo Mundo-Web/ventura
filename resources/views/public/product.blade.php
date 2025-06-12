@@ -6,11 +6,6 @@
 @section('meta_keywords', $meta_keywords)
 
 @section('css_importados')
-<style>
-  .close-modal{
-    z-index: 9999;
-  }
-</style>
 @stop
 
 @section('content')
@@ -51,6 +46,33 @@
       z-index: 20;
     }
 
+    .close-modal{
+      z-index: 9999;
+    }
+    
+    /* Flatpickr custom styles */
+    .check-in-date:not(.check-in-out-date) {
+        background: linear-gradient(to right, white 50%, #e2e8f0 50%) !important;
+        border-radius: 0 !important;
+    }
+    
+    .check-out-date:not(.check-in-out-date) {
+        background: linear-gradient(to right, #e2e8f0 50%, white 50%) !important;
+        border-radius: 0 !important;
+    }
+    
+    .check-in-out-date {
+        background: #e2e8f0 !important;
+        border-radius: 0 !important;
+    }
+    
+    .flatpickr-day.selected.startRange {
+        border-radius: 50% 0 0 50% !important;
+    }
+    
+    .flatpickr-day.selected.endRange {
+        border-radius: 0 50% 50% 0 !important;
+    }
 
     @media (min-width: 600px) {
       #offers .swiper-slide {
@@ -704,10 +726,11 @@
   </div>
 
 @section('scripts_importados')
+ 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const latitude = parseFloat("{{ $product->latitud }}");
-        const longitude = parseFloat("{{ $product->longitud }}");
+        const latitude = parseFloat("{{ $product->latitud }}") ?? 0;
+        const longitude = parseFloat("{{ $product->longitud }}") ?? 0;
         const mapElement = document.getElementById("map");
 
         // Si no hay coordenadas válidas, oculta el contenedor del mapa
@@ -716,33 +739,29 @@
         }
    });
   </script>
+
   <script>
-    
     function copiarEnlace() {
         // Obtener la URL actual
         const url = window.location.href;
-        
         // Crear un elemento temporal para copiar
         const inputTemp = document.createElement('input');
         inputTemp.value = url;
         document.body.appendChild(inputTemp);
         inputTemp.select();
-        
         // Copiar al portapapeles
         document.execCommand('copy');
-        
         // Eliminar el elemento temporal
         document.body.removeChild(inputTemp);
-        
         // Mostrar notificación (opcional)
         alert('Enlace copiado: ' + url);
     }
-
   </script>
+
   <script type="text/javascript">
       $(document).ready(function(){
-          var latitude = {{ $product->latitud }};
-          var longitude = {{ $product->longitud }};
+          var latitude = {{ $product->latitud ?? 0}};
+          var longitude = {{ $product->longitud ?? 0}};
 
           var location = [
               ['center', latitude, longitude],
@@ -766,24 +785,26 @@
           }
       });   
   </script>
-<script>
-  $(document).ready(function () {
-      $(document).on('click', '.galeriatotal', function () {
-          $(`#modalgaleriatotal`).modal({
-              show: true,
-              fadeDuration: 400,
-          });
-      });
-  });
-</script>
-    <script>
+
+  <script>
+    $(document).ready(function () {
+        $(document).on('click', '.galeriatotal', function () {
+            $(`#modalgaleriatotal`).modal({
+                show: true,
+                fadeDuration: 400,
+            });
+        });
+    });
+  </script>
+
+  <script>
       let serviciosExtras = [];
       let costoTotalFinal = 0;
       let disabledDates = @json($disabledDates);
       let formattedDisabledDates = (Array.isArray(disabledDates) ? disabledDates : []).map(date =>
           moment(date, 'DD/MM/YYYY')
       );
-      
+
       const fechasGuardadas = localStorage.getItem('fechasBusqueda');
       let fechaInicio = moment();
       let fechaFin = moment().add(1, 'days');
@@ -831,7 +852,8 @@
               localStorage.removeItem('fechasBusqueda');
           }
       }
-
+      
+      // Configuración de Flatpickr
       $('#arrival-date').daterangepicker(
           {
           locale: {
@@ -856,9 +878,11 @@
           let nights = end.diff(start, 'days');
           // Verificar si el rango de fechas seleccionado incluye fechas reservadas
           let rangeBlocked = false;
-
-          for (let m = start.clone(); m.isBefore(end); m.add(1, 'days')) {
+          
+           for (let m = start.clone(); m.isBefore(end); m.add(1, 'days')) {
+          //  for (let m = start.clone(); m.isBefore(end.clone().subtract(1, 'days')); m.add(1, 'days')) {
               if (formattedDisabledDates.some(blockedDate => m.isSame(blockedDate, 'day'))) {
+              // if (!m.isSame(end, 'day') && formattedDisabledDates.some(blockedDate => m.isSame(blockedDate, 'day'))) {
                   rangeBlocked = true;
                   break;
               }
@@ -894,11 +918,10 @@
             $('#cantidadnoches').text(1);  
         }
 
-         
         cotizarPrecios();
         
       });
-      
+
       if (fechasValidas) {
           const fechas = JSON.parse(fechasGuardadas);
           $('#arrival-date').val(fechas.llegada + ' - ' + fechas.salida);
@@ -913,70 +936,96 @@
           $('#arrival-date').val('Fecha Inicio - Fecha Fin');
       }
 
-
       function cotizarPrecios() {
-        let productSku = @json($product->sku);
-        let checkin = $('#arrival-date').data('checkin');
-        let checkout = $('#arrival-date').data('checkout');
-        serviciosExtras = [];
+          let productSku = @json($product->sku);
+          let checkin = $('#arrival-date').data('checkin');
+          let checkout = $('#arrival-date').data('checkout');
+          serviciosExtras = [];
 
-        if (!checkin || !checkout) {
-            Swal.fire({
-                title: 'Selección Fallida',
-                text: 'Por favor, selecciona un rango de fechas válido.',
-                icon: 'warning',
-            });
-            return;
-        }
+          if (!checkin || !checkout) {
+              Swal.fire({
+                  title: 'Selección Fallida',
+                  text: 'Por favor, selecciona un rango de fechas válido.',
+                  icon: 'warning',
+              });
+              return;
+          }
 
-        $('#costototal').text("Calculando...");
-        $('#btnAgregarCarritoPr').prop('disabled', true);
+          $('#costototal').text("Calculando...");
+          $('#btnAgregarCarritoPr').prop('disabled', true);
 
 
-        $('input[name="servicios_extras[]"]:checked').each(function() {
-            serviciosExtras.push($(this).val());
+          $('input[name="servicios_extras[]"]:checked').each(function() {
+              serviciosExtras.push($(this).val());
+          });
+
+
+          $.ajax({
+              url: "{{ route('producto.prices') }}",
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}',
+              },
+              data: JSON.stringify({
+                  id: productSku, // SKU del producto
+                  checkin: checkin, // Fecha de llegada
+                  checkout: checkout, // Fecha de salida
+                  servicios: serviciosExtras // Servicios extras
+              }),
+              success: function(response) {
+                  if(response) {
+                      $('#costonoches').text("$ " + response.data.totalCost);
+                      // let total = response.data.totalCost + {{ $product->preciolimpieza ?? 0.00 }};
+                      $('#costototal').text("$ " + response.data.costoTotalFinal);
+                      costoTotalFinal = response.data.costoTotalFinal;
+                  } else {
+                      $('#costonoches').text('0.00');
+                  }
+                  $('#btnAgregarCarritoPr').prop('disabled', false);
+              },
+              error: function(xhr) {
+                  Swal.fire({
+                      title: 'Error',
+                      text: 'Ocurrió un error inesperado.',
+                      icon: 'error',
+                  });
+              }
+          });
+      }
+
+      $(document).ready(function () {
+        $('.servicio-extra').on('change', function () {
+            cotizarPrecios();
         });
+      })
+  </script>
 
+  
+  <script>
 
-        $.ajax({
-            url: "{{ route('producto.prices') }}",
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            },
-            data: JSON.stringify({
-                id: productSku, // SKU del producto
-                checkin: checkin, // Fecha de llegada
-                checkout: checkout, // Fecha de salida
-                servicios: serviciosExtras // Servicios extras
-            }),
-            success: function(response) {
-                if(response) {
-                    $('#costonoches').text("$ " + response.data.totalCost);
-                    // let total = response.data.totalCost + {{ $product->preciolimpieza ?? 0.00 }};
-                    $('#costototal').text("$ " + response.data.costoTotalFinal);
-                    costoTotalFinal = response.data.costoTotalFinal;
-                } else {
-                    $('#costonoches').text('0.00');
-                }
-                $('#btnAgregarCarritoPr').prop('disabled', false);
-            },
-            error: function(xhr) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Ocurrió un error inesperado.',
-                    icon: 'error',
-                });
-            }
-        });
-     }
-
-     $(document).ready(function () {
-      $('.servicio-extra').on('change', function () {
-          cotizarPrecios();
-      });
-    });
+    function capitalizeFirstLetter(string) {
+      string = string.toLowerCase()
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    $('#disminuir').on('click', function() {
+      let cantidad = Number($('#cantidadSpan span').text())
+      if (cantidad > 1) {
+        cantidad--
+        $('#cantidadSpan span').text(cantidad)
+      }
+    })
+    
+    $('#aumentar').on('click', function() {
+      let cantidad = Number($('#cantidadSpan span').text());
+      let maxPersonas = Number($('#cantidadSpan').data('max-personas'));
+      
+      if (cantidad < maxPersonas) {
+            cantidad++;
+            $('#cantidadSpan span').text(cantidad);
+      }
+    })
   </script>
 
   <script>
@@ -999,38 +1048,10 @@
             },
       });
   </script>
+
   <script>
-    // $(document).ready(function() {
-
-
-    function capitalizeFirstLetter(string) {
-      string = string.toLowerCase()
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-    // })
-    $('#disminuir').on('click', function() {
-      let cantidad = Number($('#cantidadSpan span').text())
-      if (cantidad > 1) {
-        cantidad--
-        $('#cantidadSpan span').text(cantidad)
-      }
-
-
-    })
-    // cantidadSpan
-    $('#aumentar').on('click', function() {
-      let cantidad = Number($('#cantidadSpan span').text());
-      let maxPersonas = Number($('#cantidadSpan').data('max-personas'));
-      
-      if (cantidad < maxPersonas) {
-            cantidad++;
-            $('#cantidadSpan span').text(cantidad);
-      }
-    })
-  </script>
-  <script>
+    
     // let articulosCarrito = [];
-
     /* 
         function deleteOnCarBtn(id, operacion) {
           const prodRepetido = articulosCarrito.map(item => {
@@ -1057,19 +1078,14 @@
     //       monto = item.cantidad * Number(item.descuento)
     //     } else {
     //       monto = item.cantidad * Number(item.precio)
-
     //     }
     //     return monto
-
     //   })
     //   const suma = total.reduce((total, elemento) => total + elemento, 0);
-
     //   $('#itemsTotal').text(`S/. ${suma.toFixed(2)} `)
-
     // }
 
     /*  function addOnCarBtn(id, operacion) {
-
        const prodRepetido = articulosCarrito.map(item => {
          if (item.id === id) {
            item.cantidad += Number(1);
@@ -1083,16 +1099,11 @@
        // localStorage.setItem('carrito', JSON.stringify(articulosCarrito));
        limpiarHTML()
        PintarCarrito()
-
-
-     } */
-
-
+    } */
 
     var appUrl = <?php echo json_encode($url_env); ?>;
     $(document).ready(function() {
       articulosCarrito = Local.get('carrito') || [];
-
       // PintarCarrito();
     });
 
@@ -1100,15 +1111,12 @@
       //forma lenta 
       /* contenedorCarrito.innerHTML=''; */
       $('#itemsCarrito').html('')
-
-
     }
 
     $('#btnAgregarCombo').on('click', async function() {
       const offerId = this.getAttribute('data-id')
       const res = await fetch(`/api/offers/${offerId}`)
       const data = await res.json()
-
       let nombre = `<b>${data.producto}</b><ul class="mb-1">`
       data.products.forEach(product => {
         nombre +=
@@ -1118,8 +1126,6 @@
 
       let newcarrito
       articulosCarrito = Local.get('carrito') ?? []
-
-
       const index = articulosCarrito.findIndex(item => item.id == data.id && item.isCombo)
 
       if (index != -1) {
@@ -1146,9 +1152,7 @@
 
       }
 
-
       Local.set('carrito', articulosCarrito)
-
       limpiarHTML()
       PintarCarrito()
       mostrarTotalItems()
@@ -1160,8 +1164,6 @@
       });
     })
 
-
-
     $('#addWishlist').on('click', function() {
       $.ajax({
         url: `{{ route('wishlist.store') }}`,
@@ -1171,8 +1173,6 @@
           product_id: '{{ $product->id }}'
         },
         success: function(response) {
-
-          // Cambiar el color del botón
 
           if (response.message === 'Producto agregado a la lista de deseos') {
             $('#addWishlist').removeClass('bg-[#99b9eb]').addClass('bg-[#0D2E5E]');

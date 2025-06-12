@@ -905,6 +905,7 @@
 
         })
     }
+    
     $(document).on('click', '#btnAgregarCarritoPr', function() {
         let url = window.location.href;
         let partesURL = url.split('/');
@@ -925,9 +926,7 @@
         let item
         let cantidad
         
-
         item = partesURL[partesURL.length - 1]
-        
         //cantidad = Number($('#cantidadSpan span').text())
         cantidad = 1;
         item = $(this).data('id')

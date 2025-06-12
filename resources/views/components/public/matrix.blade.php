@@ -26,7 +26,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   {{-- <script src="https://cdn.sode.me/extends/notify.extend.min.js"></script> --}}
   {{-- public\js\notify.extend.min.js  --}}
@@ -55,12 +56,17 @@
   <script src="/js/tippy.all.min.js"></script>
   <script src="/js/cookies.extend.js"></script>
 
-  {{--daterange --}}
+  {{--daterange--}}
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  
+  {{--flatpick--}}
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="{{ asset('js/functions.js') }}?v={{ uniqid() }}"></script>
+  
   <style>
     .select2-container .select2-selection--single {
       margin-top: 0.25rem;

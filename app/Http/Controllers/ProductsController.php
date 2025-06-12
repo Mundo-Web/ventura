@@ -418,19 +418,29 @@ class ProductsController extends Controller
       if ($request->hasFile($field)) {
         $file = $request->file($field);
         $route = "storage/images/productos/{$request->categoria_id}/";
-        // $route = "storage/images/productos/$request->categoria_id/";
-        $nombreImagen = Str::random(10) . '_' . $field . '.' . $file->getClientOriginalExtension();
-        // $nombreImagen = $request->sku.'.png';
+
+        // $nombreImagen = Str::random(10) . '_' . $field . '.' . $file->getClientOriginalExtension();
+        $nombreImagen = Str::random(10) . '_' . $field . '.webp';
+  
         $manager = new ImageManager(new Driver());
         $img =  $manager->read($file);
-        // $img->coverDown(340, 340, 'center');
+
+        $encoded = $img->toWebp(75);
 
         if (!file_exists($route)) {
           mkdir($route, 0777, true);
         }
 
-        // $img->save($route . $nombreImagen);
-        $img->save($route . $nombreImagen);
+        $encoded->save($route . $nombreImagen);
+
+        $fileSize = filesize($route . $nombreImagen);
+        $maxSize = 1000000;
+
+        if ($fileSize > $maxSize) {
+          $encoded = $img->toWebp(60);
+          $encoded->save($route . $nombreImagen);
+        }
+
         return $route . $nombreImagen;
       }
       return null;

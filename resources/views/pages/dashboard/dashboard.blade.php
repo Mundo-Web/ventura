@@ -8,10 +8,10 @@
 
       <!-- Line chart (Acme Plus) -->
       <x-dashboard.simplecard title="Reporte de ventas" sub-title="{{ $salesLastMonth->month }}"
-        amount="S/. {{ number_format($salesLastMonth ? $salesLastMonth->total : 0, 2, '.', ',') }}"
+        amount="$ {{ number_format($salesLastMonth ? $salesLastMonth->total : 0, 2, '.', ',') }}"
         badge="{{ $salesLastMonth ? $salesLastMonth->quantity : 0 }} ventas" />
       <x-dashboard.simplecard title="Reporte de ventas" sub-title="{{ $salesThisMonth->month }}"
-        amount="S/. {{ number_format($salesThisMonth->total, 2, '.', ',')  }}" badge="{{ $salesThisMonth->quantity }} ventas" />
+        amount="$ {{ number_format($salesThisMonth->total, 2, '.', ',')  }}" badge="{{ $salesThisMonth->quantity }} ventas" />
       <x-dashboard.simplecard title="Pedidos por atender" amount="{{$pendingSales}}" >
         <x-slot name="subTitle">
           <a href="{{route('pedidos.index')}}" class="hover:underline">

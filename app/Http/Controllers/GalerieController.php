@@ -55,8 +55,8 @@ class GalerieController extends Controller
 					if ($request->hasFile($key)) {
 						$file = $request->file($key);
 						$routeImg = 'storage/images/imagen/';
-						$nombreImagen = Str::random(10) . '_' . $file->getClientOriginalName();
-
+						// $nombreImagen = Str::random(10) . '_' . $file->getClientOriginalName();
+						$nombreImagen = Str::random(10) . '_' . $file . '.webp';
 						$this->saveImg($file, $routeImg, $nombreImagen);
 
 						$data['imagen'] = $routeImg . $nombreImagen;
@@ -82,13 +82,22 @@ class GalerieController extends Controller
 			$nombreImagen = Crypto::randomUUID() . '.' . $file->getClientOriginalExtension();
 			$manager = new ImageManager(new Driver());
 			$img =  $manager->read($file);
-			// $img->coverDown(340, 340, 'center');
+			$encoded = $img->toWebp(75);
+			
 
 			if (!file_exists($route)) {
 				mkdir($route, 0777, true);
 			}
 
-			$img->save($route . $nombreImagen);
+			
+			$encoded->save($route . $nombreImagen);
+			$fileSize = filesize($route . $nombreImagen);
+        	$maxSize = 1000000;
+
+			if ($fileSize > $maxSize) {
+				$encoded = $img->toWebp(60);
+				$encoded->save($route . $nombreImagen);
+			  }
 
 			$response->status = 200;
 			$response->message = 'Operacion correcta';
@@ -107,14 +116,21 @@ class GalerieController extends Controller
 	{
 		$manager = new ImageManager(new Driver());
 		$img =  $manager->read($file);
-		$img->coverDown(340, 340, 'center');
+		$encoded = $img->toWebp(75);
 
 		if (!file_exists($route)) {
 			mkdir($route, 0777, true); // Se crea la ruta con permisos de lectura, escritura y ejecución
 		}
 
-		$img->save($route . $nombreImagen);
-	}
+		$encoded->save($route . $nombreImagen);
+		$fileSize = filesize($route . $nombreImagen);
+		$maxSize = 1000000;
+
+		if ($fileSize > $maxSize) {
+			$encoded = $img->toWebp(60);
+			$encoded->save($route . $nombreImagen);
+		}
+}
 
 	/**
 	 * Display the specified resource.
@@ -164,8 +180,8 @@ class GalerieController extends Controller
 							if ($request->hasFile($key)) {
 								$file = $request->file($key);
 								$routeImg = 'storage/images/imagen/';
-								$nombreImagen = Str::random(10) . '_' . $file->getClientOriginalName();
-
+								//$nombreImagen = Str::random(10) . '_' . $file->getClientOriginalName();
+								$nombreImagen = Str::random(10) . '_' . $file . '.webp';
 								$this->saveImg($file, $routeImg, $nombreImagen);
 
 								$datos['imagen'] = $routeImg . $nombreImagen;
