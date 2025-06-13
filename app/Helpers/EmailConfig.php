@@ -3,11 +3,12 @@
 namespace App\Helpers;
 
 use PHPMailer\PHPMailer\PHPMailer;
-
+use App\Models\General;
 class EmailConfig
 {
     static  function config($name, $mensaje): PHPMailer
     {
+        $general = General::first();
         $mail = new PHPMailer(true);
         // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
         $mail->isSMTP();
@@ -20,6 +21,7 @@ class EmailConfig
         $mail->Subject = '' . $name . ', '.$mensaje. '';
         $mail->CharSet = 'UTF-8';
         $mail->setFrom('info@venturabnb.pe', 'Ventura');
+        $mail->addBCC($general->email, 'Atencion al cliente' );
         return $mail;
     }
 }

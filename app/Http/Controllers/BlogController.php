@@ -97,11 +97,11 @@ class BlogController extends Controller
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Mundo web</title>
+          <title>Ventura</title>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
           <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
             rel="stylesheet"
           />
           <style>
@@ -120,7 +120,7 @@ class BlogController extends Controller
                 height: 1050px;
                 margin: 0 auto;
                 text-align: center;
-                background-image:url(' . $appUrl . '/images/Ellipse_18.png),  url(' . $appUrl . '/images/Tabpanel.png);
+                background-image:url(' . $appUrl . '/mail/fondo.png);
                 background-repeat: no-repeat, no-repeat;
                 background-position: center bottom , center bottom;;
                 background-size: fit , fit;
@@ -138,38 +138,26 @@ class BlogController extends Controller
                       margin: 40px;
                     "
                   >
-                    <img src="' . $appUrl . '/images/Group1.png" alt="Boost_Peru"  style="
-                    margin: auto;
-                  "/>
+                    <a href="' .
+                    $appUrl .
+                    '" target="_blank" style="text-align:center" ><img src="' .
+                    $appUrl .
+                    '/mail/logo.png"/></a>
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td style="height: 10px">
-                    <p
-                      style="
-                        
-                        font-weight: 500;
-                        font-size: 18px;
-                        text-align: center;
-                        width: 500px;
-                        margin: 0 auto;
-                        font-family: Montserrat, sans-serif;
-                        line-height: 30px;
-                      "
-                    >
-                      <span style="display: block">Hola </span>
-                    </p>
                   </td>
                 </tr>
                 <tr>
                   <td style="height: 10px">
                     <p
                       style="
-                        
+                        color: #002677;
                         font-size: 40px;
-                        font-family: Montserrat, sans-serif;
+                        font-family: Roboto, sans-serif;
                         line-height: 60px;
                       "
                     >
@@ -181,9 +169,9 @@ class BlogController extends Controller
                   <td style="height: 10px">
                     <p
                       style="
-                        color: #006bf6;
+                        color: #002677;
                         font-size: 40px;
-                        font-family: Montserrat, sans-serif;
+                        font-family: Roboto, sans-serif;
                         font-weight: bold;
                         line-height: 60px;
                       "
@@ -191,7 +179,7 @@ class BlogController extends Controller
                      Acaba de ser publicado 
                       <span ></span>
                     </p>
-                    <img src="'. $appUrl .'/'. $post->url_image . $post->name_image.'" alt="Boost_Peru"  style="
+                    <img src="'. $appUrl .'/'. $post->url_image . $post->name_image.'"  style="
                     margin: auto; width: 500px; height: 300px; object-fit: cover; border-radius: 10px; margin-top: 20px; margin-bottom: 20px;
                   "/>
                   </td>
@@ -200,13 +188,13 @@ class BlogController extends Controller
                   <td style="height: 10px">
                     <p
                       style="
-                        
+                        color: #002677;
                         font-weight: 500;
                         font-size: 18px;
                         text-align: center;
                         width: 370px;
                         margin: 0 auto;
-                        font-family: Montserrat, sans-serif;
+                        font-family: Roboto, sans-serif;
                         line-height: 30px;
                       "
                     >
@@ -224,17 +212,18 @@ class BlogController extends Controller
                       href="' . $appUrl .'post/'.$post->id. '"
                       style="
                         text-decoration: none;
-                        background-color: #006bf6;
-                        color: white;
-                        padding: 10px 16px;
+                        background: #00897B;
+                        color: #73F7AD;
+                        padding: 13px 20px;
                         display: inline-flex;
                         justify-content: center;
+                        border-radius: 16px;
                         align-items: center;
                         gap: 10px;
                         font-weight: 600;
-                        font-family: Montserrat, sans-serif;
+                        font-family: Roboto;
                         font-size: 16px;
-                        border-radius: 30px;
+                        margin-bottom: 350px;
                       "
                     >
                       <span>Sigue Leyendo </span>
