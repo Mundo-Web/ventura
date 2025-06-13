@@ -62,7 +62,7 @@
                                 <button
                                     class="px-10 py-3 text-[#009A84] font-FixelText_Semibold border-b-[2.5px] border-[#009A84] focus:outline-none tab-button flex-1"
                                     >
-                                    Elige unas Fechas 
+                                    {{$textoshome->titledate1section ?? ''}}
                                 </button>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                         
                          <!-- Pequeño slogan  -->
                         <p class="font-FixelText_Regular underline text-sm text-white mt-2">
-                            Propietario, anuncia tu propiedad gratis
+                            {{$textoshome->subtitle1section ?? ''}}
                         </p>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                     <div class="flex flex-col sm:flex-row gap-10 mt-2">
                         <a href="{{ route('nosotros') }}"
                             class="bg-[#00897B] text-[#73F7AD] px-4 py-3 rounded-xl font-FixelText_Semibold">
-                            Sobre Nosotros
+                            {{$textoshome->button2section ?? ''}}
                         </a>
                     </div>
                 </div>
@@ -197,15 +197,13 @@
             <section class="w-full px-[5%] xl:px-[8%] pb-12 overflow-visible" style="overflow-x: visible">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-10">
                     <div class="flex flex-col gap-3 max-w-2xl">
-                        <h1 class="text-3xl lg:text-4xl font-Homie_Bold text-[#002677]">Nuestras propiedades</h1>
-                        <p class="text-lg text-[#000929] font-FixelText_Regular">Conoce acá todas las propiedades exclusivas
-                            que tenemos disponibles.
-                            Disfruta de una estadía perfecta en las mejores zonas de Lima.</p>
+                        <h1 class="text-3xl lg:text-4xl font-Homie_Bold text-[#002677]">{{$textoshome->title8section ?? ''}}</h1>
+                        <p class="text-lg text-[#000929] font-FixelText_Regular">{{$textoshome->description8section ?? ''}}</p>
                     </div>
                     <div>
                         <a href="/catalogo"
                             class="bg-[#00897B] text-[#73F7AD] px-4 py-4 rounded-xl font-FixelText_Semibold">
-                            Ver todos los departamentos</a>
+                            {{$textoshome->button8section ?? ''}}</a>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:flex-row gap-4 lg:gap-8 mt-7 w-full">
@@ -296,7 +294,7 @@
                                 </div>
                                 <a href="{{route('contacto')}}"
                                     class="px-4 self-end py-2.5 mt-2 text-xs font-FixelText_Semibold text-center text-[#009A84] bg-[#73F7AD] rounded-xl">
-                                    Ponte en contacto
+                                    {{$textoshome->button4section ?? ''}}
                                 </a>
                             </div>
 
@@ -347,7 +345,7 @@
                                 aria-label="Introduce tu correo electrónico" required>
                             <input type="hidden" name="tipo" value="Inicio" />
                             <button type="submit"
-                                class="self-end px-10 py-3 text-base font-FixelText_Semibold text-center text-[#73F7AD] bg-[#009A84] rounded-lg">Enviar</button>
+                                class="self-end px-10 py-3 text-base font-FixelText_Semibold text-center text-[#73F7AD] bg-[#009A84] rounded-lg">{{$textoshome->button5section ?? ''}}</button>
                         </form>
                     </div>
                     <p class="text-base text-center font-FixelText_Regular text-[#000929]">
@@ -392,7 +390,7 @@
                     </div>
                     <button type="submit"
                         class="px-4 py-3.5 mt-10 w-full text-base font-FixelText_Semibold text-emerald-300 bg-[#006258] rounded-xl ">
-                        Enviar solicitud
+                        {{$textoshome->button6section ?? ''}}
                     </button>
                 </form>
             </div>
@@ -409,7 +407,7 @@
                         <img loading="lazy" src="{{ asset('images/img/geo_vt.png') }}"
                             class="object-contain shrink-0 w-6 aspect-square" alt="Icono de dirección">
                         <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
-                            <h3 class="text-lg font-FixelText_Bold text-[#002677]">Dirección</h3>
+                            <h3 class="text-lg font-FixelText_Bold text-[#002677]">{{$textoshome->address6section ?? ''}}</h3>
                             <p class="mt-2 text-base font-FixelText_Regular text-[#000929]">
                                 @php
                                     $locations = [];
@@ -441,7 +439,7 @@
                             <img loading="lazy" src="{{ asset('images/img/phone_vt.png') }}"
                                 class="object-contain shrink-0 w-6 aspect-square" alt="Icono de teléfono">
                             <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
-                                <h3 class="text-lg font-FixelText_Bold text-[#002677]">Número de Teléfono</h3>
+                                <h3 class="text-lg font-FixelText_Bold text-[#002677]">{{$textoshome->number6section ?? ''}}</h3>
                                 <p class="mt-2 text-base font-FixelText_Regular text-[#000929]">{{ $general->cellphone }}
                                 </p>
                             </div>
@@ -453,7 +451,7 @@
                             <img loading="lazy" src="{{ asset('images/img/mail_vt.png') }}"
                                 class="object-contain shrink-0 w-6 aspect-square" alt="Icono de correo electrónico">
                             <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
-                                <h3 class="text-lg font-FixelText_Bold text-[#002677]">Correo Electrónico</h3>
+                                <h3 class="text-lg font-FixelText_Bold text-[#002677]">{{$textoshome->mail6section ?? ''}}</h3>
                                 <p class="mt-2 text-base font-FixelText_Regular text-[#000929]">{{ $general->email }}</p>
                             </div>
                         </div>
@@ -464,7 +462,7 @@
                             <img loading="lazy" src="{{ asset('images/img/reloj_vt.png') }}"
                                 class="object-contain shrink-0 w-6 aspect-square" alt="Icono de horario de atención">
                             <div class="flex flex-col flex-1 shrink basis-0 min-w-[240px]">
-                                <h3 class="text-lg font-FixelText_Bold text-[#002677]">Horario de Atención</h3>
+                                <h3 class="text-lg font-FixelText_Bold text-[#002677]">{{$textoshome->atencion6section ?? ''}}</h3>
                                 <p class="mt-2 text-base font-FixelText_Regular text-[#000929]">
                                     @foreach(explode(',', $general->schedule) as $item)
                                     {{ $item }}<br>

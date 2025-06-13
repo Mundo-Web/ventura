@@ -9,10 +9,10 @@
 <main class="bg-[#FAFCFE]">
     <section class="grid grid-cols-1 text-center gap-8 items-center max-w-4xl mx-auto px-[5%] py-8 lg:py-16">
       <h2 class="text-4xl lg:text-5xl font-bold text-[#006258] px-0 lg:px-[3%] font-Homie_Bold">
-        ¿Tienes un viaje en mente? Escríbenos.
+        {{$textoshome->titledate9section ?? 'Ingrese un texto'}}
       </h2>
       <p class="text-lg text-[#000929] font-FixelText_Regular">
-        ¿Tienes un viaje? Escríbenos si necesitas nuestra ayuda? No dudes en contactarnos.
+        {{$textoshome->description9section ?? 'Ingrese un texto'}}
       </p>
     </section>
       

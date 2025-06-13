@@ -53,8 +53,8 @@ class DatabaseSeeder extends Seeder
             TestimonySeeder::class,
             StrengthSeeder::class,
             HomeViewSeeder::class,
-            AboutUsSeeder::class
-            
+            AboutUsSeeder::class,
+            HomeViewSecondSeeder::class
             //ServiceSeeder::class,
         ]);
         

@@ -1037,6 +1037,7 @@
         calendar.render();
       });
   </script> --}}
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -1438,5 +1439,41 @@
           });         
            
   </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Inicializa SortableJS
+      const sortable = new Sortable(document.getElementById('imagenes_sortable'), {
+          animation: 150,
+          ghostClass: 'bg-blue-50',
+          onEnd: function() {
+              updateImageOrder();
+          }
+      });
+
+      // Función para actualizar los índices de orden
+      function updateImageOrder() {
+          const containers = document.querySelectorAll('#imagenes_sortable > div');
+          containers.forEach((container, index) => {
+              const input = container.querySelector('input[name="galery[]"]');
+              if (input) {
+                  const valueParts = input.value.split('|');
+                  if (valueParts.length >= 3) {
+                      // Actualiza el índice (tercera parte)
+                      valueParts[2] = index;
+                      input.value = valueParts.join('|');
+                  }
+              }
+          });
+      }
+
+      // Si necesitas manejar la subida de nuevas imágenes, también deberías actualizar el orden
+      document.getElementById('galery').addEventListener('change', function(e) {
+          // Tu lógica para manejar nuevas imágenes...
+          // Después de agregar nuevas imágenes, llama a:
+          // updateImageOrder();
+      });
+  });
+</script>
 
 </x-app-layout>
