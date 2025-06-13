@@ -48,14 +48,18 @@ class ProductsController extends Controller
    */
   public function index()
   {
-    $products =  Products::where("status", "=", true)->get();
+    $products = Products::where('status', true)
+    ->orderByRaw('ISNULL(`order`), `order` ASC, `id` DESC')
+    ->get();
 
     return view('pages.products.index', compact('products'));
   }
 
   public function reactView()
   {
-    $products = Products::all();
+    $products = Products::where('status', true)
+    ->orderByRaw('ISNULL(`order`), `order` ASC, `id` DESC')
+    ->get();
 
     return Inertia::render('Admin/Products', [
       'products' => $products,
@@ -118,7 +122,7 @@ class ProductsController extends Controller
           );
         }
       } else {
-        $instance->orderBy('products.id', 'DESC');
+        $instance->orderByRaw('ISNULL(`order`), `order` ASC, `id` DESC');
       }
 
       $totalCount = 0;
@@ -555,7 +559,7 @@ class ProductsController extends Controller
       }
 
        $cleanedData['description'] = $data['description'];
-      // $cleanedData['order'] = $data['order'];
+      //  $cleanedData['order'] = $data['order'];
        $cleanedData['extract'] = $data['extract'];
       // $cleanedData['especificacion'] = $data['especificacion'];
        $cleanedData['cuartos'] = $data['cuartos'];
@@ -893,5 +897,19 @@ class ProductsController extends Controller
   {
       $distritos = DB::table('districts')->where('province_id', $id)->get();
       return response()->json($distritos);
+  }
+
+  public function updateOrder(Request $request)
+  {
+    $product = Products::find($request->id);
+    
+    if ($product) {
+        $product->order = $request->order;
+        $product->save();
+        
+        return response()->json(['success' => true]);
+    }
+    
+    return response()->json(['success' => false, 'message' => 'Product not found'], 404);
   }
 }

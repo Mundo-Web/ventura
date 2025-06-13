@@ -232,6 +232,7 @@ Route::middleware(['auth:sanctum', 'verified', 'can:Admin'])->group(function () 
         Route::post('/products/sync', [ProductsController::class, 'synchronization'])->name('products.synchronization');
         Route::post('/products/updateVisible', [ProductsController::class, 'updateVisible'])->name('products.updateVisible');
         Route::post('/products/borrar', [ProductsController::class, 'borrar'])->name('products.borrar');
+        Route::post('/products/update-order', [ProductsController::class, 'updateOrder'])->name('products.updateOrder');
         /* depa - prov - district */
         Route::get('/products/provincias/{id}', [ProductsController::class, 'getProvincias'])->name('products.getProvincias');
         Route::get('/products/distritos/{id}', [ProductsController::class, 'getDistritos'])->name('products.getDistritos');

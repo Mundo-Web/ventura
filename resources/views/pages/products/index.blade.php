@@ -70,123 +70,6 @@
 
         <!-- Table -->
         <div class="overflow-x-auto">
-          {{-- 
-          <table id="tabladatos" class="display text-lg" style="width:100%">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Descuento</th>
-                <th>Stock</th>
-                <th>Imagen</th>
-                <th>Destacar</th>
-                <th>Recomendar</th>
-                <th>Visible</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-
-              @foreach ($products as $item)
-                <tr>
-                  <td>{{ $item->producto }} @if ($item->color)
-                      - {{ $item->color }}
-                    @endif
-                  </td>
-                  <td>{{ $item->precio }}</td>
-                  <td>{{ $item->descuento }}</td>
-                  <td>{{ $item->stock }}</td>
-                  <td class="px-3 py-2"><img class="bg-[#f2f2f2] w-20 h-20 object-cover object-center"
-                      src="{{ asset($item->imagen) }}" alt=""></td>
-                  <td>
-                    <form method="POST" action="">
-                      @csrf
-                      <input type="checkbox" id="hs-basic-usage"
-                        class="check_v btn_swithc relative w-[3.25rem] h-7 p-px bg-gray-100 border-transparent text-transparent 
-                              rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-transparent disabled:opacity-50 disabled:pointer-events-none 
-                              checked:bg-none checked:text-blue-600 checked:border-blue-600 focus:checked:border-blue-600 dark:bg-gray-800 dark:border-gray-700 
-                              dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-600 before:inline-block before:size-6
-                              before:bg-white checked:before:bg-blue-200 before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow 
-                              before:transform before:ring-0 before:transition before:ease-in-out before:duration-200 dark:before:bg-gray-400 dark:checked:before:bg-blue-200"
-                        id='{{ 'v_' . $item->id }}' data-field='destacar' data-idService='{{ $item->id }}'
-                        data-titleService='{{ $item->producto }}' {{ $item->destacar == 1 ? 'checked' : '' }}>
-                      <label for="{{ 'v_' . $item->id }}"></label>
-                    </form>
-
-
-
-                  </td>
-                  <td>
-                    <form method="POST" action="">
-                      @csrf
-                      <input type="checkbox" id="hs-basic-usage"
-                        class="check_v btn_swithc relative w-[3.25rem] h-7 p-px bg-gray-100 border-transparent text-transparent 
-                              rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-transparent disabled:opacity-50 disabled:pointer-events-none 
-                              checked:bg-none checked:text-blue-600 checked:border-blue-600 focus:checked:border-blue-600 dark:bg-gray-800 dark:border-gray-700 
-                              dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-600 before:inline-block before:size-6
-                              before:bg-white checked:before:bg-blue-200 before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow 
-                              before:transform before:ring-0 before:transition before:ease-in-out before:duration-200 dark:before:bg-gray-400 dark:checked:before:bg-blue-200"
-                        id='{{ 'v_' . $item->id }}' data-field='recomendar' data-idService='{{ $item->id }}'
-                        data-titleService='{{ $item->producto }}' {{ $item->recomendar == 1 ? 'checked' : '' }}>
-                      <label for="{{ 'v_' . $item->id }}"></label>
-                    </form>
-
-
-
-                  </td>
-
-
-                  <td>
-                    <form method="POST" action="">
-                      @csrf
-                      <input type="checkbox" id="switch_visible"
-                        class="check_v btn_swithc relative w-[3.25rem] h-7 p-px bg-gray-100 border-transparent text-transparent 
-                              rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-transparent disabled:opacity-50 disabled:pointer-events-none 
-                              checked:bg-none checked:text-blue-600 checked:border-blue-600 focus:checked:border-blue-600 dark:bg-gray-800 dark:border-gray-700 
-                              dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-600 before:inline-block before:size-6
-                              before:bg-white checked:before:bg-blue-200 before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow 
-                              before:transform before:ring-0 before:transition before:ease-in-out before:duration-200 dark:before:bg-gray-400 dark:checked:before:bg-blue-200"
-                        id='{{ 'v_' . $item->id }}' data-field='visible' data-idService='{{ $item->id }}'
-                        data-titleService='{{ $item->producto }}' {{ $item->visible == 1 ? 'checked' : '' }}>
-                      <label for="{{ 'v_' . $item->id }}"></label>
-                    </form>
-
-
-
-                  </td>
-
-                  <td>
-                    <div class="flex justify-center items-center gap-2 text-center sm:text-right h-full w-full">
-                      <a href="{{ route('products.edit', $item->id) }}"
-                        class="bg-yellow-400 px-3 py-2 rounded text-white  "><i
-                          class="fa-regular fa-pen-to-square"></i></a>
-
-                      <form action="" method="POST">
-                        @csrf
-                        <a data-idService='{{ $item->id }}'
-                          class="btn_delete bg-red-600 px-3 py-2 rounded text-white cursor-pointer"><i
-                            class="fa-regular fa-trash-can"></i></a>
-                      </form>
-                    </div>
-                  </td>
-                </tr>
-              @endforeach
-
-            </tbody>
-            <tfoot>
-              <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Descuento</th>
-                <th>Stock</th>
-                <th>Imagen</th>
-                <th>Destacar</th>
-                <th>Recomendar</th>
-                <th>Visible</th>
-                <th>Acciones</th>
-              </tr>
-            </tfoot>
-          </table> --}}
 
           <div id="gridContainer"></div>
 
@@ -249,6 +132,13 @@
     searchPanel: {
       visible: true
     },
+    editing: {
+      mode: 'cell',
+      allowUpdating: true,
+      refreshMode: 'reshape',
+      selectTextOnEditStart: true,
+      startEditAction: 'click'
+    },
     // headerFilter: {
     //   visible: true,
     //   search: {
@@ -275,10 +165,21 @@
       preloadEnabled: true,
       rowRenderingMode: 'standard'
     },
-    columns: [{
+    
+    columns: [
+      {
+        dataField: 'order',
+        caption: 'ORDEN',
+        dataType: 'number',
+        width: 65,
+        allowEditing: true,
+        validationRules: [{ type: 'numeric' }]
+      },
+      {
         dataField: 'producto',
         caption: 'PRODUCTO',
-        width: '60%'
+        width: '60%',
+        allowEditing: false
       },
       // {
       //   dataField: 'precio',
@@ -294,6 +195,7 @@
       // },
       {
         caption: 'IMAGEN',
+        allowEditing: false,
         cellTemplate: (container, {
           data
         }) => {
@@ -307,6 +209,7 @@
       {
         dataField: 'destacar',
         caption: 'DESTACAR',
+        allowEditing: false,
         cellTemplate: (container, {
           data
         }) => {
@@ -349,6 +252,7 @@
       {
         dataField: 'visible',
         caption: 'VISIBLE',
+        allowEditing: false,
         cellTemplate: (container, {
           data
         }) => {
@@ -369,6 +273,7 @@
       },
       {
         caption: 'ACCIONES',
+        allowEditing: false,
         cellTemplate: (container, {
           data
         }) => {
@@ -393,6 +298,31 @@
         }
       }
     ],
+    onRowUpdating: function(e) {
+        e.cancel = true; 
+        $.ajax({
+            url: "{{ route('products.updateOrder') }}",
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: JSON.stringify({
+                id: e.key.id, // Cambiado de e.key.id a e.key
+                order: e.newData.order
+            }),
+            success: function() {
+                DevExpress.ui.notify('Orden actualizado correctamente', 'success', 2000);
+                // Actualiza solo el dato modificado sin recargar toda la tabla
+                e.component.cancelEditData();
+                e.component.refresh(true); // El parámetro true mantiene el estado
+            },
+            error: function(xhr) {
+                DevExpress.ui.notify(xhr.responseJSON?.message || 'Error al actualizar', 'error', 2000);
+                e.component.cancelEditData();
+            }
+        });
+    },
     onContentReady: (...props) => {
       tippy('.tippy-here', {
         arrow: true,
