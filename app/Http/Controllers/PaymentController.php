@@ -7,6 +7,7 @@ use App\Models\ExtraService;
 use App\Models\Offer;
 use App\Models\Price;
 use App\Models\Products;
+use App\Models\General;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use Culqi\Culqi;
@@ -31,6 +32,12 @@ class PaymentController extends Controller
     $culqi = new Culqi(['api_key' => env('CULQI_PRIVATE_KEY')]);
 
     $sale = new Sale();
+    $sale->code = '000000000000'; 
+    $sale->status_id = 1; 
+    $sale->status_message = 'La venta se ha creado. Aun no se ha pagado';
+
+    DB::beginTransaction();
+
     try {
 
       $products = array_filter($body['cart'], fn($x) => !(isset($x['isCombo']) && $x['isCombo'] == true));
@@ -39,19 +46,14 @@ class PaymentController extends Controller
       $productsJpa = []; 
 
       if (Auth::check() && Auth::user()->hasRole('Reseller')) {
-         
           $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'sku', 'pms', 'precio_reseller as descuento'])
             ->whereIn('id', array_map(fn($x) => $x['id'], $products))
             ->get();
-        
-        
       }else{
         $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'descuento', 'preciolimpieza', 'sku', 'pms'])
         ->whereIn('id', array_map(fn($x) => $x['id'], $products))
         ->get();
       }
-
-      
 
       $offersJpa = [];
       if (count($offers) > 0) {
@@ -130,8 +132,6 @@ class PaymentController extends Controller
 
       }
 
-      
-
       foreach ($offersJpa as $offerJpa) {
         $key = array_search($offerJpa->id, array_column($body['cart'], 'id'));
         if ($offerJpa->descuento > 0) {
@@ -151,8 +151,7 @@ class PaymentController extends Controller
       $sale->doc_number = $body['contact']['doc_number'] ?? null;
       $sale->razon_fact = $body['contact']['razon_fact'] ?? null;
       $sale->direccion_fact = $body['contact']['direccion_fact'] ?? null;
-      $sale->code = '000000000000';
-
+      
       if ($request->address) {
         $price = Price::with([
           'district',
@@ -188,9 +187,6 @@ class PaymentController extends Controller
         }
       }
 
-      $sale->status_id = 1;
-      $sale->status_message = 'La venta se ha creado. Aun no se ha pagado';
-     
       $sale->save();
 
       foreach ($productsJpa as $productJpa) {
@@ -272,16 +268,11 @@ class PaymentController extends Controller
         throw new Exception($res['user_message']);
       }
 
-      $response->status = 200;
-      $response->message = "Cargo creado correctamente";
-      $response->data = [
-        'charge' => $charge,
-        'reference_code' => $charge?->reference_code ?? null,
-        'amount' => $totalCost
-      ];
+      $sale->status_id = 3; // Pagado
+      $sale->status_message = 'La venta se ha generado y ha sido pagada';
+      $sale->code = $charge?->reference_code ?? $sale->code;
+      $sale->save();
 
-     
-      
       foreach ($productsJpa as $productJpa) {
 
         $key = array_search($productJpa->id, array_column($body['cart'], 'id'));
@@ -331,32 +322,46 @@ class PaymentController extends Controller
  
       }
 
-
-      $sale->status_id = 3;
-      $sale->status_message = 'La venta se ha generado y ha sido pagada';
-      $sale->code = $charge?->reference_code ?? null;
-
-      
       $datacorreo = [
         'nombre' => $sale->name . ' ' . $sale->lastname,
         'email' => $sale->email,
       ];
 
       $this->envioCorreoVenta($datacorreo);
+      $this->envioCorreoAdmin();
+
+      DB::commit();
+
+      $response->status = 200;
+      $response->message = "Cargo creado correctamente";
+      $response->data = [
+        'charge' => $charge,
+        'reference_code' => $charge?->reference_code ?? null,
+        'amount' => $totalCost
+      ];
+
     } catch (\Throwable $th) {
+
+      DB::rollBack();
+
+      try {
+        // Intentar guardar la venta con estado de error
+        $sale->status_id = 2; // Error en pago
+        $sale->status_message = 'Error en el pago: ' . $th->getMessage();
+        $sale->save();
+        
+      } catch (\Throwable $innerTh) {
+          error_log('Error al guardar venta fallida: ' . $innerTh->getMessage());
+      }
+
       $response->status = 400;
       $response->message = $th->getMessage();
 
-      if(!$sale->code){
-        $sale->code = '000000000000';
-      }
-      $sale->status_id = 2;
-      $sale->status_message = $th->getMessage();
-    } finally {
-      
-      $sale->save();
-      return response($response->toArray(), $response->status);
+      error_log('Error en PaymentController: ' . $th->getMessage());
+      error_log($th->getTraceAsString());
     }
+
+    return response($response->toArray(), $response->status);
   }
 
   private function envioCorreoVenta($data)
@@ -515,4 +520,164 @@ class PaymentController extends Controller
       //throw $th;
     }
   }
+
+  private function envioCorreoAdmin()
+    {
+        $emailadmin = General::first()->email;
+        $appUrl = env('APP_URL');
+        $name = 'Administrador';
+        $mensaje = 'Tienes una nueva reserva - Ventura';
+        $mail = EmailConfig::config($name, $mensaje);
+        try {
+            $mail->addAddress($emailadmin);
+            $mail->Body =
+                '<html lang="en">
+                    <head>
+                      <meta charset="UTF-8" />
+                      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                      <title>Ventura</title>
+                      <link rel="preconnect" href="https://fonts.googleapis.com" />
+                      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                      <link
+                        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+                        rel="stylesheet"
+                      />
+                      <style>
+                        * {
+                          margin: 0;
+                          padding: 0;
+                          box-sizing: border-box;
+                        }
+                      </style>
+                    </head>
+                    <body>
+                      <main>
+                        <table
+                          style="
+                            width: 600px;
+                            margin: 0 auto;
+                            text-align: center;
+                            background-image: url(' .
+                              $appUrl .
+                              '/mail/fondo.png);
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            background-size: cover;
+                          "
+                        >
+                          <thead>
+                            <tr>
+                              <th
+                                style="
+                                  display: flex;
+                                  flex-direction: row;
+                                  justify-content: center;
+                                  align-items: center;
+                                  margin-top: 40px;
+                                  padding: 0 200px;
+                                "
+                              >
+                                  <a href="' .
+                              $appUrl .
+                              '" target="_blank" style="text-align:center" ><img src="' .
+                              $appUrl .
+                              '/mail/logo.png"/></a>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p
+                                  style="
+                                    color: #002677;
+                                    font-size: 40px;
+                                    line-height: normal;
+                                    font-family: Roboto;
+                                    font-weight: bold;
+                                  "
+                                >
+                                  <span style="color: #002677">¡Reserva confirmada en venturabnb.pe!</span>
+                                </p>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td>
+                                <p
+                                  style="
+                                    color: #002677;
+                                    font-weight: 500;
+                                    font-size: 18px;
+                                    text-align: center;
+                                    width: 500px;
+                                    margin: 0 auto;
+                                    padding: 20px 0 5px 0;
+                                    font-family: Roboto;
+                                  "
+                                >
+                                  <span style="display: block">Hola ' .
+                              $name .
+                              '</span>
+                                </p>
+                              </td>
+                            </tr>
+                            
+                            <tr>
+                              <td>
+                                <p
+                                  style="
+                                    color: #002677;
+                                    font-weight: 500;
+                                    font-size: 18px;
+                                    text-align: center;
+                                    width: 500px;
+                                    margin: 0 auto;
+                                    padding: 0px 10px 5px 0px;
+                                    font-family: Roboto;
+                                  "
+                                >
+                                  Tienes una reserva confirmada, para mas detalle revisar tu panel de administración.
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <a
+                                    target="_blank"
+                                  href="' .
+                              $appUrl .
+                              '/login"
+                                  style="
+                                    text-decoration: none;
+                                    background: #00897B;
+                                    color: #73F7AD;
+                                    padding: 13px 20px;
+                                    display: inline-flex;
+                                    justify-content: center;
+                                    border-radius: 32px;
+                                    align-items: center;
+                                    gap: 10px;
+                                    font-weight: 600;
+                                    font-family: Roboto;
+                                    font-size: 16px;
+                                    margin-bottom: 350px;
+                                  "
+                                >
+                                  <span>Ir a panel de administración</span>
+                                </a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </main>
+                    </body>
+                  </html>
+                    ';
+            $mail->isHTML(true);
+            $mail->send();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }
