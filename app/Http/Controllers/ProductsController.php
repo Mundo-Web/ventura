@@ -355,53 +355,53 @@ class ProductsController extends Controller
     $valoresdeatributo = AttributeProductValues::where("product_id", "=", $id)->get();
     $galery = Galerie::where("product_id", "=", $id)->get();
 
-    $disabledDates = [];
-    $startDate = null;
-    $endDate = null;
-    $icalUrl =  $product->airbnb_url;
+    // $disabledDates = [];
+    // $startDate = null;
+    // $endDate = null;
+    // $icalUrl =  $product->airbnb_url;
     
-    if ($icalUrl) {
-      // Si hay un URL válido, obtenemos el contenido del archivo .ics
-      $icalContent = file_get_contents($icalUrl);
+    // if ($icalUrl) {
+    //   // Si hay un URL válido, obtenemos el contenido del archivo .ics
+    //   $icalContent = file_get_contents($icalUrl);
      
-      $lines = explode("\n", $icalContent);
+    //   $lines = explode("\n", $icalContent);
 
-    // Procesar las líneas del archivo .ics
-      foreach ($lines as $line) {
-          $line = trim($line); // Eliminar espacios en blanco
+    // // Procesar las líneas del archivo .ics
+    //   foreach ($lines as $line) {
+    //       $line = trim($line); // Eliminar espacios en blanco
 
-          // Buscar las líneas que contienen las fechas de inicio (DTSTART) y fin (DTEND)
-          if (strpos($line, 'DTSTART') === 0) {
-              // Extraer la fecha de inicio
-              $startDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
-          } elseif (strpos($line, 'DTEND') === 0) {
-              // Extraer la fecha de fin
-              $endDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
-              $endDate->subDay(); // Restar un día porque el check-out ocurre en esta fecha
-          }
+    //       // Buscar las líneas que contienen las fechas de inicio (DTSTART) y fin (DTEND)
+    //       if (strpos($line, 'DTSTART') === 0) {
+    //           // Extraer la fecha de inicio
+    //           $startDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
+    //       } elseif (strpos($line, 'DTEND') === 0) {
+    //           // Extraer la fecha de fin
+    //           $endDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
+    //           $endDate->subDay(); // Restar un día porque el check-out ocurre en esta fecha
+    //       }
 
-          // Si tenemos las fechas de inicio y fin, generar las fechas entre ese rango
-          if ($startDate && $endDate) {
-              while ($startDate->lte($endDate)) {
-                  $disabledDates[] = $startDate->format('Y-m-d');
-                  $startDate->addDay();
-              }
+    //       // Si tenemos las fechas de inicio y fin, generar las fechas entre ese rango
+    //       if ($startDate && $endDate) {
+    //           while ($startDate->lte($endDate)) {
+    //               $disabledDates[] = $startDate->format('Y-m-d');
+    //               $startDate->addDay();
+    //           }
 
-              // Reiniciar las variables para el siguiente evento
-              $startDate = null;
-              $endDate = null;
-          }
-      }
-    } else {
-      $disabledDates = [];
-    }
+    //           // Reiniciar las variables para el siguiente evento
+    //           $startDate = null;
+    //           $endDate = null;
+    //       }
+    //   }
+    // } else {
+    //   $disabledDates = [];
+    // }
 
     
     $departamentos = Department::where('active', '=', 1)->get();
     $provincias = Province::where('active', '=', 1)->where('department_id', $product->departamento_id)->get();
     $distritos  = District::where('active', '=', 1)->where('province_id', $product->provincia_id)->get();
 
-    return view('pages.products.save', compact('disabledDates','servicios','product', 'atributos', 'valorAtributo', 'tags', 'categoria', 'especificacion', 'subcategories', 'galery', 'valoresdeatributo', 'departamentos', 'provincias', 'distritos'));
+    return view('pages.products.save', compact('servicios','product', 'atributos', 'valorAtributo', 'tags', 'categoria', 'especificacion', 'subcategories', 'galery', 'valoresdeatributo', 'departamentos', 'provincias', 'distritos'));
   }
 
   private function saveImg(Request $request, string $field)

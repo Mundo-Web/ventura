@@ -1007,11 +1007,11 @@
           </div>
 
 
-          <div class="grid grid-cols-1 md:grid-cols-5 gap-2 p-3 ">
+          {{-- <div class="grid grid-cols-1 md:grid-cols-5 gap-2 p-3 ">
               <div class="col-span-5">
                 <div id='calendar'></div>
               </div>
-          </div>  
+          </div>   --}}
 
         </div>
       </div>
@@ -1037,9 +1037,10 @@
         calendar.render();
       });
   </script> --}}
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
-  <script>
+  {{-- <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script> --}}
+
+  {{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
       let disabledDates = @json($disabledDates);
      
@@ -1057,7 +1058,7 @@
       });
       calendar.render();
     });
-  </script>
+  </script> --}}
 
   <script>
     $('#tags_id').select2({
