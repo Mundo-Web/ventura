@@ -12,16 +12,15 @@ class EmailConfig
         $mail = new PHPMailer(true);
         // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
         $mail->isSMTP();
-        $mail->Host = 'mail.venturabnb.pe';
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'info@venturabnb.pe';
-        $mail->Password = 'ventura2025#';
+        $mail->Username = 'hola@mundoweb.pe';
+        $mail->Password = 'ejzouhgnohvvbdwa';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port = 465;
         $mail->Subject = '' . $name . ', '.$mensaje. '';
         $mail->CharSet = 'UTF-8';
         $mail->setFrom('info@venturabnb.pe', 'Ventura');
-        $mail->addBCC($general->email, 'Atencion al cliente' );
         return $mail;
     }
 }
