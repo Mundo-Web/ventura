@@ -69,6 +69,7 @@ use App\Models\NosotrosView;
 // Route::get('/login-rev', [AuthController::class, 'loginView'])->name('Login.jsx');
 Route::get('/register-rev', [AuthController::class, 'registerView'])->name('Register.jsx');
 Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('/demo', [IndexController::class, 'demo'])->name('demo');
 Route::get('/nosotros', [IndexController::class, 'nosotros'])->name('nosotros');
 Route::get('/servicios', [IndexController::class, 'servicios'])->name('servicios');
 Route::get('/comentario', [IndexController::class, 'comentario'])->name('comentario');
@@ -230,6 +231,7 @@ Route::middleware(['auth:sanctum', 'verified', 'can:Admin'])->group(function () 
         Route::resource('/products', ProductsController::class);
         Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
         Route::post('/products/sync', [ProductsController::class, 'synchronization'])->name('products.synchronization');
+        Route::post('/products/regenerate', [ProductsController::class, 'regenerate'])->name('products.regenerate');
         Route::post('/products/updateVisible', [ProductsController::class, 'updateVisible'])->name('products.updateVisible');
         Route::post('/products/borrar', [ProductsController::class, 'borrar'])->name('products.borrar');
         Route::post('/products/update-order', [ProductsController::class, 'updateOrder'])->name('products.updateOrder');

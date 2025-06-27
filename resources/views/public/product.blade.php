@@ -9,13 +9,7 @@
 @stop
 
 @section('content')
-  <?php
-  // Definición de la función capitalizeFirstLetter()
-  // function capitalizeFirstLetter($string)
-  // {
-  //     return ucfirst($string);
-  // }
-  ?>
+
   <style>
     /* imagen de fondo transparente para calcar el dise;o */
     .clase_table {
@@ -50,30 +44,6 @@
       z-index: 9999;
     }
     
-    /* Flatpickr custom styles */
-    .check-in-date:not(.check-in-out-date) {
-        background: linear-gradient(to right, white 50%, #e2e8f0 50%) !important;
-        border-radius: 0 !important;
-    }
-    
-    .check-out-date:not(.check-in-out-date) {
-        background: linear-gradient(to right, #e2e8f0 50%, white 50%) !important;
-        border-radius: 0 !important;
-    }
-    
-    .check-in-out-date {
-        background: #e2e8f0 !important;
-        border-radius: 0 !important;
-    }
-    
-    .flatpickr-day.selected.startRange {
-        border-radius: 50% 0 0 50% !important;
-    }
-    
-    .flatpickr-day.selected.endRange {
-        border-radius: 0 50% 50% 0 !important;
-    }
-
     @media (min-width: 600px) {
       #offers .swiper-slide {
         margin-right: 100px !important;
@@ -100,6 +70,98 @@
       }
 
     }
+
+  </style>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+  <style>
+    
+    .date-input-container {
+        display: flex;
+        align-items: center;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.375rem;
+        padding: 0.5rem;
+    }
+    
+    .date-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .selected-range {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        background-color: #f7fafc;
+        border-radius: 0.375rem;
+    }
+    
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.375rem;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    /* Flatpickr custom styles */
+    .check-in-date:not(.check-in-out-date) {
+        /* background: linear-gradient(to right, white 50%, #e2e8f0 50%) !important;
+        border-radius: 0 !important; */
+        background: linear-gradient(to right, transparent 50%, #E2E8F0 50%) !important;
+        color: #adb5bd !important;
+        cursor: not-allowed;
+        position: relative;
+    }
+    
+    .check-out-date:not(.check-in-out-date) {
+        /* background: linear-gradient(to right, #e2e8f0 50%, white 50%) !important;
+        border-radius: 0 !important; */
+        background: linear-gradient(to left, transparent 50%, #E2E8F0 50%) !important;
+        color: #adb5bd !important;
+        cursor: not-allowed;
+        position: relative;
+    }
+    
+    .check-in-out-date {
+        /* background: #e2e8f0 !important;
+        border-radius: 0 !important; */
+        background: #f8f9fa !important;
+        color: #adb5bd !important;
+        cursor: not-allowed;
+    }
+    
+    .flatpickr-day.selected.startRange {
+        border-radius: 50% 0 0 50% !important;
+    }
+    
+    .flatpickr-day.selected.endRange {
+        border-radius: 0 50% 50% 0 !important;
+    }
+
+    .blocked-date {
+        background-color: #e2e8f0 !important;
+        border-radius: 0 !important;
+        color: #64748b !important;
+        cursor: not-allowed !important;
+    }
+
+    .flatpickr-disabled{
+        background: #e2e8f0 !important;
+        border-radius: 100%!important;
+        color: #64748b !important;
+    }
+
+    .flatpickr-day:hover{
+        background-color: #e2e8f0 !important;
+        color: #64748b !important;
+    }
+
   </style>
 
   @php
@@ -324,6 +386,7 @@
             @endif
           </div>
         </section>
+
         <section class="galeriatotal flex flex-row justify-start w-full px-[5%] mt-5 relative"><div><a class="bg-[#006258] text-white px-6 py-3 md:py-4 rounded-3xl text-sm font-FixelText_Semibold">Ver todas las imágenes</a></div></section>
 
         <section class="flex flex-col lg:flex-row gap-10 justify-between items-start px-[5%] mt-8 lg:mt-16">
@@ -546,18 +609,36 @@
                 <section class="flex flex-col p-0 lg:p-6 bg-white rounded-2xl">
                   {{-- <h2 class="gap-10 self-stretch w-full text-lg font-FixelText_Bold text-[#006258]">S/ 333,00 / noche</h2> --}}
                   <div class="flex flex-row gap-4 items-start mt-4 w-full font-medium px-4 justify-center">
-                      <div class="flex flex-col w-full">
+                      {{-- <div class="flex flex-col w-full">
                           <label for="arrival-date" class="text-lg font-FixelText_Medium text-[#000929]">Seleccione fechas</label>
                           <div class="flex gap-3 justify-center items-center px-4 py-1 mt-2 w-full text-sm rounded-lg border border-solid border-teal-600 border-opacity-30">
                               <input type="text" id="arrival-date" class="flex-1 shrink font-FixelText_Medium self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30" value="2024-07-13" aria-label="Fecha de llegada" />
                           </div>
-                      </div>
-                      {{-- <div class="flex flex-col w-1/2">
-                          <label for="departure-date" class="text-sm font-FixelText_Medium text-[#000929]">Salida</label>
-                          <div class="flex gap-3 justify-center items-center px-4 py-1 mt-2 w-full text-sm rounded-lg border border-solid border-teal-600 border-opacity-30 text-teal-800 text-opacity-30">
-                              <input type="date" id="departure-date" class="flex-1 shrink self-stretch my-auto basis-0 bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] text-[#006258] placeholder:text-opacity-30" value="2024-07-13" aria-label="Fecha de salida" />
-                          </div>
                       </div> --}}
+
+                      <div class="flex flex-col w-full">
+                            <label for="date-range-picker" class="text-lg font-FixelText_Medium text-[#000929] mb-2">Seleccione fechas</label>
+                            <div class="date-input-container flex flex-row gap-1 justify-center items-center px-4 mt-2 w-full text-sm rounded-lg border border-solid border-teal-600 border-opacity-80">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" text-gray-500">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <line x1="16" x2="16" y1="2" y2="6"></line>
+                                    <line x1="8" x2="8" y1="2" y2="6"></line>
+                                    <line x1="3" x2="21" y1="10" y2="10"></line>
+                                </svg>
+                                <input 
+                                    id="date-range-picker" 
+                                    type="text" 
+                                    placeholder="Fecha de llegada - salida" 
+                                    class="date-input mt-1 text-sm font-FixelText_Medium bg-transparent focus:ring-0 focus:border-0 border-none selection:text-[#000929] placeholder:text-[#006258] text-[#006258] placeholder:text-opacity-80" 
+                                    readonly
+                                >
+                            </div>
+                            <div id="selected-range-container" class="selected-range mt-2" style="display: none;">
+                              <p class="text-sm font-medium">Rango seleccionado:</p>
+                              <p id="selected-range-text" class="text-sm"></p>
+                            </div>
+                      </div>
+                        
                   </div>
                   <div class="flex gap-3 items-center mt-8 w-full text-sm font-medium text-center text-teal-800">
                       <div class="flex justify-center items-center cursor-pointer rounded-l-3xl">
@@ -649,7 +730,7 @@
                   </section>
                   <div class="flex flex-col mt-8 w-full text-sm font-bold">
                     @if ($product->status == 1 && $product->visible == 1)
-                      <button href="{{route('carrito')}}" id="btnAgregarCarritoPr" data-id="{{ $product->id }}" class="gap-2.5 self-stretch px-6 py-3 w-full font-FixelText_Semibold text-base text-[#73F7AD] bg-[#009A84] rounded-xl">
+                      <button id="btnAgregarCarritoPr" data-id="{{ $product->id }}" class="gap-2.5 self-stretch px-6 py-3 w-full font-FixelText_Semibold text-base text-[#73F7AD] bg-[#009A84] rounded-xl">
                           Reservar ahora
                       </button>
                     @endif
@@ -661,8 +742,6 @@
           </div>
           
         </section>
-
-
 
         <section class="w-full px-[5%] py-12 overflow-visible mt-4 lg:mt-8" style="overflow-x: visible">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-10">
@@ -726,7 +805,8 @@
   </div>
 
 @section('scripts_importados')
- 
+  
+
   <script>
     document.addEventListener("DOMContentLoaded", function() {
         const latitude = parseFloat("{{ $product->latitud }}") ?? 0;
@@ -743,7 +823,7 @@
   <script>
     function copiarEnlace() {
         // Obtener la URL actual
-        const url = window.location.href;
+        var url = window.location.href;
         // Crear un elemento temporal para copiar
         const inputTemp = document.createElement('input');
         inputTemp.value = url;
@@ -754,7 +834,13 @@
         // Eliminar el elemento temporal
         document.body.removeChild(inputTemp);
         // Mostrar notificación (opcional)
-        alert('Enlace copiado: ' + url);
+       
+        Swal.fire({
+            title: 'Enlace copiado', 
+            text: 'Enlace copiado al portapapeles: '. url,
+            icon: 'warning'
+        });
+        
     }
   </script>
 
@@ -801,145 +887,294 @@
       let serviciosExtras = [];
       let costoTotalFinal = 0;
       let disabledDates = @json($disabledDates);
-      let formattedDisabledDates = (Array.isArray(disabledDates) ? disabledDates : []).map(date =>
-          moment(date, 'DD/MM/YYYY')
-      );
-
       const fechasGuardadas = localStorage.getItem('fechasBusqueda');
-      let fechaInicio = moment();
-      let fechaFin = moment().add(1, 'days');
+      let fechaInicio;
+      let fechaFin;
       let fechasValidas = false;
+      let dateRange = [];
 
-      if (fechasGuardadas) {
-          const fechas = JSON.parse(fechasGuardadas);
-          fechaInicio = moment(fechas.llegada, 'DD/MM/YYYY');
-          fechaFin = moment(fechas.salida, 'DD/MM/YYYY');
-      }
+      document.addEventListener('DOMContentLoaded', function() {
+        // Convertir formattedDisabledDates a formato compatible con Flatpickr
+        let blockedDates = disabledDates;
 
-      if (fechasGuardadas) {
-          try {
-              const fechas = JSON.parse(fechasGuardadas);
-              
-              // Verificar si las fechas están bloqueadas
-              const llegada = moment(fechas.llegada, 'DD/MM/YYYY');
-              const salida = moment(fechas.salida, 'DD/MM/YYYY');
-              
-              let fechaBloqueadaEncontrada = false;
-              
-              // Verificar cada día en el rango guardado
-              for (let m = llegada.clone(); m.isBefore(salida); m.add(1, 'days')) {
-                  if (formattedDisabledDates.some(blockedDate => m.isSame(blockedDate, 'day'))) {
-                      fechaBloqueadaEncontrada = true;
-                      break;
-                  }
-              }
-              
-              if (!fechaBloqueadaEncontrada) {
-                  fechaInicio = llegada;
-                  fechaFin = salida;
-                  fechasValidas = true;
-              } else {
-                  // Si hay fechas bloqueadas, limpiar localStorage
-                  localStorage.removeItem('fechasBusqueda');
-                  Swal.fire({
-                      title: 'Fechas no disponibles',
-                      text: 'Algunas fechas previamente seleccionadas ya no están disponibles. Por favor, selecciona un nuevo rango.',
-                      icon: 'warning'
-                  });
-              }
-          } catch (e) {
-              console.error('Error al parsear fechas:', e);
-              localStorage.removeItem('fechasBusqueda');
-          }
-      }
-      
-      // Configuración de Flatpickr
-      $('#arrival-date').daterangepicker(
-          {
-          locale: {
-            format: 'DD/MM/YYYY',
-            cancelLabel: 'Cancelar',
-            applyLabel: 'Aplicar'
-          },
-          startDate: fechaInicio,
-          endDate: fechaFin,
-          minDate: moment(),
-          maxDate: moment().add(9, 'months'),
-          minSpan: {
-            days: 1  // Mínimo 2 noches, es decir, 1 día de diferencia entre start y end
-          },
-          isInvalidDate: function(date) {
-            // Verificar si la fecha está en las fechas bloqueadas
-            return formattedDisabledDates.some(blockedDate => 
-                date.isSame(blockedDate, 'day')
+        // Función para obtener todas las fechas entre dos fechas (inclusive)
+        function getDatesBetween(startDate, endDate) {
+            const dates = [];
+            let currentDate = new Date(startDate);
+            const end = new Date(endDate);
+            
+            while (currentDate <= end) {
+                dates.push(new Date(currentDate).toISOString().split('T')[0]);
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            return dates;
+        }
+        
+        // Obtenga todas las fechas reservadas (incluidas las fechas de entrada y salida)
+        function getBookedDates() {
+            const bookedDates = new Set();
+            
+            blockedDates.forEach(booking => {
+                // Get all dates in the booking range
+                const datesInRange = getDatesBetween(booking.checkIn, booking.checkOut);
+                // Add all dates to the set
+                datesInRange.forEach(date => bookedDates.add(date));
+            });
+            
+            return Array.from(bookedDates);
+        }
+
+        // Función para comprobar si una fecha es una fecha de entrada o de salida
+        function isCheckInOrCheckOut(date) {
+            return blockedDates.some(booking => 
+                booking.checkIn === date || booking.checkOut === date
             );
         }
-      }, function(start, end) {
-          let nights = end.diff(start, 'days');
-          // Verificar si el rango de fechas seleccionado incluye fechas reservadas
-          let rangeBlocked = false;
-          
-           for (let m = start.clone(); m.isBefore(end); m.add(1, 'days')) {
-          //  for (let m = start.clone(); m.isBefore(end.clone().subtract(1, 'days')); m.add(1, 'days')) {
-              if (formattedDisabledDates.some(blockedDate => m.isSame(blockedDate, 'day'))) {
-              // if (!m.isSame(end, 'day') && formattedDisabledDates.some(blockedDate => m.isSame(blockedDate, 'day'))) {
-                  rangeBlocked = true;
-                  break;
-              }
-          }
 
-        if (rangeBlocked) {
-            Swal.fire({
-                title: 'Selección Fallida',
-                text: 'No se puede seleccionar un rango que incluya fechas reservadas.',
-                icon: 'warning',
-            });
-            $('#arrival-date').data('daterangepicker').setStartDate(start);
-            $('#arrival-date').data('daterangepicker').setEndDate(start.clone().add(1, 'days'));
-            $('#arrival-date').val('Fecha Inicio - Fecha Fin');
-            return; // Salir para no seguir con la ejecución
-        }
+        // function shouldDisableDate(date) {
+        //     const dateStr = date.toISOString().split('T')[0];
+        //     const isCheckIn = blockedDates.some(b => b.checkIn === dateStr);
+        //     const isCheckOut = blockedDates.some(b => b.checkOut === dateStr);
+        //     const isBooked = bookedDates.includes(dateStr);
 
-        // Actualizar el input solo si la selección es válida
-        if (nights > 1) {
-            $('#arrival-date').val(start.format('DD/MM/YYYY') + ' - ' + end.clone().subtract(1, 'days').format('DD/MM/YYYY'));
-            
-            $('#arrival-date').data('checkin', start.format('YYYY-MM-DD'));
-            $('#arrival-date').data('checkout', end.clone().format('YYYY-MM-DD'));
+        //     // Caso 1: Día completamente bloqueado (reserva existente)
+        //     if (isBooked && !(isCheckIn || isCheckOut)) {
+        //         return true;
+        //     }
 
-            $('#cantidadnoches').text(nights);
-        } else {
-            $('#arrival-date').val(start.format('DD/MM/YYYY') + ' - Fecha Fin');
-            $('#arrival-date').data('daterangepicker').setEndDate(start.clone().add(1, 'days')); 
+        //     // Caso 2: Es check-in (mitad derecha bloqueada)
+        //     if (isCheckIn) {
+        //         // Permitir solo como fecha de salida (end date)
+        //         return this.isSelectingStartDate;
+        //     }
 
-            $('#arrival-date').data('checkin', start.format('YYYY-MM-DD'));
-            $('#arrival-date').data('checkout', start.clone().add(1, 'days').format('YYYY-MM-DD'));
+        //     // Caso 3: Es check-out (mitad izquierda bloqueada)
+        //     if (isCheckOut) {
+        //         // Permitir solo como fecha de entrada (start date)
+        //         return !this.isSelectingStartDate;
+        //     }
 
-            $('#cantidadnoches').text(1);  
-        }
+        //     return false;
+        // }
 
-        cotizarPrecios();
+        const bookedDates = getBookedDates();
+        console.log('Booked Dates:', bookedDates);
         
-      });
+        // Inicializar Flatpickr
+        const flatpickrInstance = flatpickr("#date-range-picker", {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            allowSameDay: false,
+            maxDate: new Date().fp_incr(9 * 30), // 9 meses
+            locale: {
+                firstDayOfWeek: 1,
+                rangeSeparator: ' a ',
+                weekdays: {
+                    shorthand: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                    longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                },
+                months: {
+                    shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                },
+            },
+            // disable: [
+            //     function(date) {
+            //         return shouldDisableDate.call(this, date);
+            //     }
+            // ],
+            disable: [
+                function(date) {
+                    const dateStr = date.toISOString().split('T')[0];
+                    // Comprueba si esta fecha ya está reservada
+                    if (bookedDates.includes(dateStr)) {
+                        // Si es una fecha de entrada o salida, necesitamos un manejo especial.
+                        if (isCheckInOrCheckOut(dateStr)) {
+                            // Encuentra todas las reservas donde esta fecha es la de entrada o la de salida
+                            const relevantBookings = blockedDates.filter(booking => 
+                                booking.checkIn === dateStr || booking.checkOut === dateStr
+                            );
+                            // Si esta fecha es tanto la fecha de salida como la de entrada para diferentes reservas,
+                            // Debería estar completamente bloqueado
+                            const isCheckOut = relevantBookings.some(booking => booking.checkOut === dateStr);
+                            const isCheckIn = relevantBookings.some(booking => booking.checkIn === dateStr);
+                            
+                            if (isCheckOut && isCheckIn) {
+                                return true; // Block completely
+                            }
+                            
+                            // Otherwise, allow it (special handling will be done in onDayCreate)
+                            return false;
+                        }
+                        
+                        // For dates that are not check-in or check-out, block completely
+                        return true;
+                    }
+                    
+                    return false;
+                }
+            ],
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
+                  const dateStr = dayElem.dateObj.toISOString().split('T')[0];
 
-      if (fechasValidas) {
-          const fechas = JSON.parse(fechasGuardadas);
-          $('#arrival-date').val(fechas.llegada + ' - ' + fechas.salida);
-          $('#arrival-date').data('checkin', moment(fechas.llegada, 'DD/MM/YYYY').format('YYYY-MM-DD'));
-          $('#arrival-date').data('checkout', moment(fechas.salida, 'DD/MM/YYYY').format('YYYY-MM-DD'));
-          
-          // Calcular noches y mostrar precio inicial
-          let nights = moment(fechas.salida, 'DD/MM/YYYY').diff(moment(fechas.llegada, 'DD/MM/YYYY'), 'days');
-          $('#cantidadnoches').text(nights);
-          cotizarPrecios(); // Llamar a la función para calcular precios con las fechas cargadas
-      } else {
-          $('#arrival-date').val('Fecha Inicio - Fecha Fin');
-      }
+                  // Style check-in dates
+                  if (blockedDates.some(booking => booking.checkIn === dateStr)) {
+                      dayElem.classList.add('check-in-date');
+                  }
+                  
+                  // Style check-out dates
+                  if (blockedDates.some(booking => booking.checkOut === dateStr)) {
+                      dayElem.classList.add('check-out-date');
+                  }
+                  
+                  // Style dates that are both check-in and check-out
+                  if (blockedDates.some(booking => booking.checkIn === dateStr) && 
+                  blockedDates.some(booking => booking.checkOut === dateStr)) {
+                      dayElem.classList.add('check-in-out-date');
+                  }
+              },
+            onChange: function(selectedDates, dateStr) {
+                
+                if (selectedDates.length === 2) {
+                    
+                    // Convertir a formato YYYY-MM-DD para el backend
+                    const checkin = selectedDates[0].toISOString().split('T')[0];
+                    const checkout = selectedDates[1].toISOString().split('T')[0];
+                   
+                    const contieneReservaCompleta = blockedDates.some(reserva => {
+                        return reserva.checkIn >= checkin && reserva.checkOut <= checkout;
+                    });
+
+                    if (contieneReservaCompleta) {
+                        Swal.fire({
+                            title: 'Rango inválido',
+                            text: 'El rango seleccionado contiene una reserva completa en medio. Selecciona fechas que no crucen reservas existentes.',
+                            icon: 'warning'
+                        });
+                        flatpickrInstance.clear();
+                        $('#cantidadnoches').text(0);
+                        return;
+                    }
+
+
+                    // const rangoSeleccionado = getDatesBetween(checkin, checkout);
+                    
+                    // let tieneCheckIn = false;
+                    // let tieneCheckOut = false;
+                    
+                    // const tieneCheckInOut = rangoSeleccionado.some(fecha =>
+                    //     blockedDates.some(b => b.checkIn === fecha || b.checkOut === fecha)
+                    // );
+                    
+                    // for (const fecha of rangoSeleccionado) {
+                    //     if (blockedDates.some(b => b.checkIn === fecha)) {
+                    //         tieneCheckIn = true;
+                    //     }
+                    //     if (blockedDates.some(b => b.checkOut === fecha)) {
+                    //         tieneCheckOut = true;
+                    //     }
+                    // }
+
+                    // if (tieneCheckIn && tieneCheckOut) {
+                    //     Swal.fire({
+                    //         title: 'Rango inválido',
+                    //         text: 'El rango seleccionado contiene una reserva completa en medio. Selecciona fechas que no crucen reservas existentes.',
+                    //         icon: 'warning'
+                    //     });
+                    //     flatpickrInstance.clear();
+                    //     $('#cantidadnoches').text(0);
+                    //     return;
+                    // }
+
+                    // Calcular noches
+                    const nights = Math.ceil((selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24));
+
+                    if (nights < 1) {
+                        Swal.fire({
+                            title: 'Rango inválido',
+                            text: 'Debe haber al menos una noche entre el check-in y el check-out',
+                            icon: 'warning'
+                        });
+                        return;
+                    }
+
+                    $('#cantidadnoches').text(nights);
+                    
+                    // Guardar fechas para el cálculo
+                    $('#date-range-picker').data('checkin', checkin);
+                    $('#date-range-picker').data('checkout', checkout);
+                    
+                    // Calcular precios
+                    cotizarPrecios();
+
+                } 
+
+                localStorage.removeItem('fechasBusqueda');
+            }
+        }); 
+
+        const formattedDisabledDates = (Array.isArray(disabledDates) ? disabledDates : [])
+        .map(date => moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+
+        if (fechasGuardadas) {
+          try {
+                const fechas = JSON.parse(fechasGuardadas);
+                
+                // Verificar formato de fechas (DD/MM/YYYY)
+                if (!/^\d{2}\/\d{2}\/\d{4}$/.test(fechas.llegada) || !/^\d{2}\/\d{2}\/\d{4}$/.test(fechas.salida)) {
+                    throw new Error('Formato de fecha inválido');
+                }
+                
+                // Verificar si hay fechas bloqueadas en el rango
+                if (!tieneFechasBloqueadas(fechas.llegada, fechas.salida, formattedDisabledDates)) {
+                    // Calcular noches válidas
+                    const noches = calcularNochesValidas(fechas.llegada, fechas.salida, formattedDisabledDates);
+                    
+                    if (noches > 0) {
+                        // Convertir fechas a formato YYYY-MM-DD para el backend
+                        const checkin = moment(fechas.llegada, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                        const checkout = moment(fechas.salida, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                        
+                        // Actualizar UI
+                        $('#cantidadnoches').text(noches);
+                        $('#date-range-picker').data('checkin', checkin);
+                        $('#date-range-picker').data('checkout', checkout);
+
+                        flatpickrInstance.setDate([checkin, checkout], false);
+
+                        // Calcular precios después de un pequeño retraso
+                        setTimeout(() => {
+                            cotizarPrecios();
+                        }, 100);
+                    } else {
+                        Swal.fire({
+                            title: 'Fechas no disponibles',
+                            text: 'Todas las fechas en el rango seleccionado están bloqueadas.',
+                            icon: 'warning'
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        title: 'Fechas no disponibles',
+                        text: 'Algunas fechas previamente seleccionadas están bloqueadas.',
+                        icon: 'warning'
+                    });
+                }
+            } catch (e) {
+                console.error('Error al procesar fechas guardadas:', e);
+                localStorage.removeItem('fechasBusqueda');
+            }
+        }
+
+      });
 
       function cotizarPrecios() {
           let productSku = @json($product->sku);
-          let checkin = $('#arrival-date').data('checkin');
-          let checkout = $('#arrival-date').data('checkout');
+          let checkin = $('#date-range-picker').data('checkin');
+          let checkout = $('#date-range-picker').data('checkout');
+          console.log(checkin, checkout,'asdas');
           serviciosExtras = [];
 
           if (!checkin || !checkout) {
@@ -994,13 +1229,40 @@
           });
       }
 
+      function tieneFechasBloqueadas(checkin, checkout, blockedDates) {
+            const fechaInicio = moment(checkin, 'DD/MM/YYYY');
+            const fechaFin = moment(checkout, 'DD/MM/YYYY');
+            
+            for (let m = fechaInicio.clone(); m.isBefore(fechaFin); m.add(1, 'days')) {
+                const fechaStr = m.format('YYYY-MM-DD');
+                if (blockedDates.includes(fechaStr)) {
+                    return true;
+                }
+            }
+            return false;
+      }
+
+      function calcularNochesValidas(checkin, checkout, blockedDates) {
+        const fechaInicio = moment(checkin, 'DD/MM/YYYY');
+        const fechaFin = moment(checkout, 'DD/MM/YYYY');
+        let nochesValidas = 0;
+        
+        for (let m = fechaInicio.clone(); m.isBefore(fechaFin); m.add(1, 'days')) {
+            const fechaStr = m.format('YYYY-MM-DD');
+            if (!blockedDates.includes(fechaStr)) {
+                nochesValidas++;
+            }
+        }
+        return nochesValidas;
+      }
+
       $(document).ready(function () {
         $('.servicio-extra').on('change', function () {
             cotizarPrecios();
         });
       })
-  </script>
 
+  </script>
   
   <script>
 
@@ -1193,7 +1455,7 @@
     })
   </script>
 
-
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @stop
 
 @stop

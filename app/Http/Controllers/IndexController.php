@@ -881,6 +881,72 @@ class IndexController extends Controller
         }
     }
 
+    function procesarIcal($url, &$bookings)
+    {
+        if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {
+            \Log::warning("URL iCal no válida: $url");
+            return;
+        }
+
+        $ch = curl_init();
+
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; YourApp/1.0)',
+        ]);
+
+        $icalContent = curl_exec($ch);
+
+        if ($icalContent === false) {
+            \Log::error('Error al obtener iCal de ' . $url . ': ' . curl_error($ch));
+            curl_close($ch);
+            return;
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode !== 200) {
+            \Log::error("Solicitud iCal fallida. Código HTTP: $httpCode");
+            return;
+        }
+
+        $lines = explode("\n", $icalContent);
+        $startDate = null;
+        $endDate = null;
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if (strpos($line, 'DTSTART') === 0) {
+                $dateStr = substr($line, strpos($line, ':') + 1);
+                $startDate = Carbon::createFromFormat('Ymd', $dateStr)->toDateString();
+            } elseif (strpos($line, 'DTEND') === 0) {
+                $dateStr = substr($line, strpos($line, ':') + 1);
+                $endDate = Carbon::createFromFormat('Ymd', $dateStr)->toDateString();
+            }
+
+            if ($startDate && $endDate) {
+                $booking = [
+                    'checkIn' => $startDate,
+                    'checkOut' => $endDate,
+                ];
+
+                // Evitar duplicados exactos
+                if (!in_array($booking, $bookings)) {
+                    $bookings[] = $booking;
+                }
+
+                $startDate = null;
+                $endDate = null;
+            }
+        }
+    }
+
     public function producto(string $id)
     {
         $product = Products::findOrFail($id);
@@ -889,162 +955,95 @@ class IndexController extends Controller
         $meta_description = $producto->meta_description ?? Str::limit(strip_tags($product->description), 160);
         $meta_keywords = $producto->meta_keywords ?? '';
        
-        
+        $bookings = [];
         $disabledDates = [];
         $startDate = null;
         $endDate = null;
-        $icalUrl = $product->airbnb_url;
+       
+        $icalUrls = [
+          $product->airbnb_url,
+          $product->booking_url
+        ];
+
         // 1. Obtener fechas bloqueadas desde la base de datos
         $fechasDB = DB::table('events')
             ->where('product_id', $product->id)
-            ->pluck('checkin', 'checkout');
+            ->get(['checkin', 'checkout']);
 
-        foreach ($fechasDB as $checkout => $checkin) {
-            $startDate = Carbon::parse($checkin)->startOfDay();
-            $endDate = Carbon::parse($checkout)->subDay()->startOfDay();
-
-            while ($startDate->lte($endDate)) {
-                $disabledDates[] = $startDate->format('d/m/Y');
-                $startDate->addDay();
-            }
+        foreach ($fechasDB as $reserva) {
+          $checkIn = Carbon::parse($reserva->checkin)->toDateString(); // formato 'Y-m-d'
+          $checkOut = Carbon::parse($reserva->checkout)->toDateString();
+         
+          $bookings[] = [
+              'checkIn' => $checkIn,
+              'checkOut' => $checkOut,
+          ];
         }
+
+        foreach ($icalUrls as $url) {
+          $this->procesarIcal($url, $bookings);
+        }
+
+        // Reindexar
+        $disabledDates = array_values($bookings);
 
         // 2. Obtener fechas bloqueadas desde el archivo .ics
-        if ($icalUrl && filter_var($icalUrl, FILTER_VALIDATE_URL)) {
-            $ch = curl_init();
+        // if ($icalUrl && filter_var($icalUrl, FILTER_VALIDATE_URL)) {
+        //     $ch = curl_init();
             
-            // Configurar opciones de cURL
-            curl_setopt_array($ch, [
-                CURLOPT_URL => $icalUrl,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_SSL_VERIFYPEER => false, // Solo desactivar para desarrollo/testing
-                CURLOPT_TIMEOUT => 10, // Tiempo máximo de espera en segundos
-                CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; YourApp/1.0)', // Algunos servidores requieren User-Agent
-            ]);
+        //     // Configurar opciones de cURL
+        //     curl_setopt_array($ch, [
+        //         CURLOPT_URL => $icalUrl,
+        //         CURLOPT_RETURNTRANSFER => true,
+        //         CURLOPT_FOLLOWLOCATION => true,
+        //         CURLOPT_SSL_VERIFYPEER => false, // Solo desactivar para desarrollo/testing
+        //         CURLOPT_TIMEOUT => 10, // Tiempo máximo de espera en segundos
+        //         CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; YourApp/1.0)', // Algunos servidores requieren User-Agent
+        //     ]);
             
-            $icalContent = curl_exec($ch);
+        //     $icalContent = curl_exec($ch);
             
-            if ($icalContent === false) {
-                // Registrar el error pero continuar sin interrumpir
-                \Log::error('Error al obtener iCal de Airbnb: ' . curl_error($ch));
-            } else {
-                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        //     if ($icalContent === false) {
+        //         // Registrar el error pero continuar sin interrumpir
+        //         \Log::error('Error al obtener iCal de Airbnb: ' . curl_error($ch));
+        //     } else {
+        //         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 
-                if ($httpCode === 200) {
-                    $lines = explode("\n", $icalContent);
-                    $startDate = null;
-                    $endDate = null;
-                    
-                    foreach ($lines as $line) {
-                        $line = trim($line);
-                        
-                        if (strpos($line, 'DTSTART') === 0) {
-                            $dateStr = substr($line, strpos($line, ':') + 1);
-                            $startDate = Carbon::createFromFormat('Ymd', $dateStr)->startOfDay();
-                        } elseif (strpos($line, 'DTEND') === 0) {
-                            $dateStr = substr($line, strpos($line, ':') + 1);
-                            $endDate = Carbon::createFromFormat('Ymd', $dateStr)->subDay()->startOfDay();
-                        }
-                        
-                        if ($startDate && $endDate) {
-                            while ($startDate->lte($endDate)) {
-                                $disabledDates[] = $startDate->format('d/m/Y');
-                                $startDate->addDay();
-                            }
-                            
-                            $startDate = null;
-                            $endDate = null;
-                        }
-                    }
-                } else {
-                    \Log::error("Solicitud iCal fallida. Código HTTP: $httpCode");
-                }
-            }
-            
-            curl_close($ch);
-        } elseif ($icalUrl) {
-            \Log::warning("URL de Airbnb no válida: $icalUrl");
-        }
-
-        // Si no hay fechas de Airbnb, usar rango por defecto
-        if (empty($disabledDates)) {
-            $startDate = Carbon::now();
-            $endDate = Carbon::now()->addYears(5);
-            
-            while ($startDate->lte($endDate)) {
-                $disabledDates[] = $startDate->format('d/m/Y');
-                $startDate->addDay();
-            }
-        }
-
-        // Eliminar duplicados y reindexar
-        $disabledDates = array_values(array_unique($disabledDates));
-
-        
-        // $disabledDates = [];
-
-        // // 1. Obtener fechas bloqueadas desde la base de datos
-        // $fechasDB = DB::table('events')->where('product_id', $product->id)->pluck('checkin', 'checkout');
-
-        // foreach ($fechasDB as $checkout => $checkin) {
-        //     $startDate = Carbon::parse($checkin)->startOfDay();
-        //     $endDate = Carbon::parse($checkout)->subDay()->startOfDay(); // Restar un día al checkout
-
-        //     while ($startDate->lte($endDate)) {
-        //         $disabledDates[] = $startDate->format('d/m/Y');
-        //         $startDate->addDay();
-        //     }
-        // }
-
-        // // 2. Obtener fechas bloqueadas desde el archivo .ics
-        // $icalUrl = $product->airbnb_url;
-
-        // if ($icalUrl) {
-        //     // Si hay un URL válido, obtenemos el contenido del archivo .ics
-        //     $icalContent = file_get_contents($icalUrl);
-        //     $lines = explode("\n", $icalContent);
-        //     $startDate = null;
-        //     $endDate = null;
-
-        //     // Procesar las líneas del archivo .ics
-        //     foreach ($lines as $line) {
-        //         $line = trim($line); // Eliminar espacios en blanco
-
-        //         // Buscar las líneas que contienen las fechas de inicio (DTSTART) y fin (DTEND)
-        //         if (strpos($line, 'DTSTART') === 0) {
-        //             // Extraer la fecha de inicio
-        //             $startDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
-        //         } elseif (strpos($line, 'DTEND') === 0) {
-        //             // Extraer la fecha de fin
-        //             $endDate = Carbon::createFromFormat('Ymd', substr($line, strpos($line, ':') + 1))->startOfDay();
-        //             //$endDate->subDay(); // Restar un día porque el check-out ocurre en esta fecha
-        //             $endDate->subDay();
-        //         }
-
-        //         // Si tenemos las fechas de inicio y fin, generar las fechas entre ese rango
-        //         if ($startDate && $endDate) {
-        //             while ($startDate->lte($endDate)) {
-        //                 $disabledDates[] = $startDate->format('d/m/Y');
-        //                 $startDate->addDay();
-        //             }
-
-        //             // Reiniciar las variables para el siguiente evento
+        //         if ($httpCode === 200) {
+        //             $lines = explode("\n", $icalContent);
         //             $startDate = null;
         //             $endDate = null;
+                    
+        //             foreach ($lines as $line) {
+        //                 $line = trim($line);
+                        
+        //                 if (strpos($line, 'DTSTART') === 0) {
+        //                     $dateStr = substr($line, strpos($line, ':') + 1);
+        //                     $startDate = Carbon::createFromFormat('Ymd', $dateStr)->toDateString();
+        //                 } elseif (strpos($line, 'DTEND') === 0) {
+        //                     $dateStr = substr($line, strpos($line, ':') + 1);
+        //                     $endDate = Carbon::createFromFormat('Ymd', $dateStr)->toDateString();
+        //                 }
+                        
+        //                 if ($startDate && $endDate) {
+        //                   $bookings[] = [
+        //                       'checkIn' => $startDate,
+        //                       'checkOut' => $endDate, 
+        //                   ];
+          
+        //                   $startDate = null;
+        //                   $endDate = null;
+        //               }
+        //             }
+        //         } else {
+        //             \Log::error("Solicitud iCal fallida. Código HTTP: $httpCode");
         //         }
         //     }
-        // } else {
-        //     $startDate = Carbon::now();
-        //     $endDate = Carbon::now()->addYears(5); // Puedes ajustar este rango según tus necesidades
-
-        //     while ($startDate->lte($endDate)) {
-        //         $disabledDates[] = $startDate->format('d/m/Y');
-        //         $startDate->addDay();
-        //     }
+            
+        //     curl_close($ch);
+        // } elseif ($icalUrl) {
+        //     \Log::warning("URL de Airbnb no válida: $icalUrl");
         // }
-
-        // $disabledDates = array_unique($disabledDates);
 
         $is_reseller = false;
         
@@ -1819,6 +1818,12 @@ class IndexController extends Controller
         $faqs = Faqs::where('status', '=', 1)->where('visible', '=', 1)->get();
         $url_env = env('APP_URL');
         return view('public.help', compact('url_env', 'faqs'));
+    }
+
+    public function demo()
+    {
+        $url_env = env('APP_URL');
+        return view('public.demo', compact('url_env'));
     }
 }
 

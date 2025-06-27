@@ -18,10 +18,14 @@
   </style> --}}
   <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
 
-    <section class="py-4 border-b border-slate-100 dark:border-slate-700">
+    <section class="py-4 border-b border-slate-100 dark:border-slate-700 flex flex-row justify-between">
       <a id="sincronizar" href="{{ route('products.synchronization') }}"
         class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm">
         Sincronizar departamentos
+      </a>
+      <a id="regenerar" href="{{ route('products.regenerate') }}"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded text-sm">
+        Regenerar ical
       </a>
     </section>
 
@@ -43,6 +47,36 @@
               // Mostrar mensaje de éxito usando SweetAlert
               Swal.fire({
                   title: 'Departamentos sincronizados exitosamente',
+                  icon: 'success',
+              });
+          },
+          error: function(xhr) {
+              // Mostrar mensaje de error usando SweetAlert
+              Swal.fire({
+                  title: 'Error',
+                  text: 'Ocurrió un error inesperado.',
+                  icon: 'error',
+              });
+          }
+      });
+  });
+
+  $('#regenerar').on('click', function(event) {
+      event.preventDefault();
+      console.log('Regenerando icals...');
+
+      $.ajax({
+          url: "{{ route('products.regenerate') }}",
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': '{{ csrf_token() }}',
+
+          },
+          success: function() {
+              // Mostrar mensaje de éxito usando SweetAlert
+              Swal.fire({
+                  title: 'Ical regenerados exitosamente',
                   icon: 'success',
               });
           },

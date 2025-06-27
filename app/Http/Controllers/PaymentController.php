@@ -19,9 +19,12 @@ use SoDe\Extend\JSON;
 use SoDe\Extend\Response;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
+use Spatie\IcalendarGenerator\Properties\Property;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
 use App\Helpers\EmailConfig;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -65,7 +68,7 @@ class PaymentController extends Controller
       $totalXReserva = [];
       $totalCost = 0;
       $extras = [];
-
+     
       foreach ($productsJpa as $productJpa) {
         $key = array_search($productJpa->id, array_column($body['cart'], 'id'));
         $checkin = $body['cart'][$key]['checkin']; 
@@ -262,7 +265,7 @@ class PaymentController extends Controller
       ];
 
       $charge = $culqi->Charges->create($config);
-
+      
       if (gettype($charge) == 'string') {
         $res = JSON::parse($charge);
         throw new Exception($res['user_message']);
@@ -283,10 +286,6 @@ class PaymentController extends Controller
           continue;
         }
 
-        $checkinDate = new \DateTime($checkin);
-        $checkoutDate = new \DateTime($checkout);
-        $checkoutDate->modify('-1 day');
-        
         $calendarPath = public_path('storage/calendars/' . $productJpa->sku . '.ics');
 
         DB::table('events')->insert([
@@ -301,18 +300,23 @@ class PaymentController extends Controller
         ->where('product_id', $productJpa->id)
         ->get();
 
-        $calendar = Calendar::create($productJpa->producto . ' Calendar');
+        $calendar = Calendar::create($productJpa->producto . ' Calendar')
+            ->appendProperty(TextProperty::create('PRODID', '-//' . env('APP_NAME') . '//Calendario Reservas//ES'))
+            ->name($productJpa->producto . ' Calendar')
+            ->description('Calendario de reservas para ' . $productJpa->producto)
+            ->refreshInterval(30)
+            ->appendProperty(TextProperty::create('CALSCALE', 'GREGORIAN'));
         
         foreach ($eventos as $evento) {
 
-          $checkinDate = new \DateTime($evento->checkin);
-          $checkoutDate = new \DateTime($evento->checkout);
-          $checkoutDate->modify('-1 day');
+          $checkinDate = Carbon::parse($evento->checkin)->startOfDay();
+          $checkoutDate = Carbon::parse($evento->checkout)->endOfDay();
 
           $event = Event::create('Reserva para ' . $productJpa->producto)
-              ->startsAt($checkinDate)
-              ->endsAt($checkoutDate)
-              ->description($evento->description);
+            ->startsAt($checkinDate)
+            ->endsAt($checkoutDate)
+            ->description($evento->description ?? 'Reserva sin descripción')
+            ->fullDay();
   
           $calendar->event($event);
         }

@@ -36,6 +36,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
+use Spatie\IcalendarGenerator\Properties\Property;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
@@ -261,6 +263,61 @@ class ProductsController extends Controller
     return view('pages.products.save', compact('servicios','product', 'atributos', 'valorAtributo', 'categoria', 'tags', 'especificacion', 'subcategories', 'galery', 'distritos', 'provincias', 'departamentos'));
   }
 
+  public function regenerate(Request $request)
+  { 
+      
+      try {
+
+            $productos = Products::where('status', true)->get();
+
+            if (!File::exists(public_path('storage/calendars'))) {
+              File::makeDirectory(public_path('storage/calendars'), 0755, true, true);
+            }
+
+            foreach ($productos as $productJpa) {
+              
+              $calendarPath = public_path('storage/calendars/' . $productJpa->sku . '.ics');
+              
+              $eventos = DB::table('events')
+              ->where('product_id', $productJpa->id)
+              ->whereNotNull('checkin')
+              ->whereNotNull('checkout')
+              ->get();
+      
+              $calendar = Calendar::create($productJpa->producto . ' Calendar')
+                  ->appendProperty(TextProperty::create('PRODID', '-//' . env('APP_NAME') . '//Calendario Reservas//ES'))
+                  ->name($productJpa->producto . ' Calendar')
+                  ->description('Calendario de reservas para ' . $productJpa->producto)
+                  ->refreshInterval(30)
+                  ->appendProperty(TextProperty::create('CALSCALE', 'GREGORIAN'));
+              
+              foreach ($eventos as $evento) {
+                
+                $checkinDate = Carbon::parse($evento->checkin)->startOfDay();
+                $checkoutDate = Carbon::parse($evento->checkout)->endOfDay();
+               
+                $event = Event::create('Reserva para ' . $productJpa->producto)
+                    ->startsAt($checkinDate)
+                    ->endsAt($checkoutDate)
+                    ->description($evento->description ?? 'Reserva sin descripción')
+                    ->fullDay();
+        
+                $calendar->event($event);
+              }
+      
+              // Guardar el calendario actualizado
+              file_put_contents($calendarPath, $calendar->get());
+       
+            }
+            
+            return response()->json(['message' => 'Calendarios .ics generados correctamente'], 200);
+
+      } catch (Exception $e) {
+          // Manejar errores
+          return response()->json(['error' => $e->getMessage()], 500);
+      }
+  }
+
   public function synchronization(Request $request)
   {
       try {
@@ -272,7 +329,7 @@ class ProductsController extends Controller
 
           // Decodificar la respuesta JSON
           $data = $response->json();
-          // dd($data);
+         
           // Verificar si la solicitud fue exitosa
           if (!$response->successful()) {
               throw new Exception($data['message'] ?? 'Ocurrió un error inesperado al recuperar los datos.');
@@ -295,17 +352,24 @@ class ProductsController extends Controller
                       ]);
                   } else {
 
-                      $calendar = Calendar::create($departamento['name'] . ' Calendar');
-                      $calendarUrl = 'storage/calendars/' . $departamento['id'] . '.ics';
-                      
                       // Verificar y crear la carpeta si no existe
                       if (!File::exists(public_path('storage/calendars'))) {
                         File::makeDirectory(public_path('storage/calendars'), 0755, true, true);
                       }
 
                       // Crear el calendario
-                      $calendar = Calendar::create($departamento['name'] . ' Calendar');
+                      $calendar = Calendar::create($departamento['name']  . ' Calendar')
+                        ->appendProperty(TextProperty::create('PRODID', '-//' . env('APP_NAME') . '//Calendario Reservas//ES'))
+                        ->name($departamento['name']  . ' Calendar')
+                        ->description('Calendario de reservas para ' . $departamento['name'] )
+                        ->refreshInterval(30)
+                        ->appendProperty(TextProperty::create('CALSCALE', 'GREGORIAN'));
+
+                      //para guardar ical en carpeta
                       $calendarPath = public_path('storage/calendars/' . $departamento['id'] . '.ics');
+
+                      //para guardar ruta de ical en bd
+                      $calendarUrl = 'storage/calendars/' . $departamento['id'] . '.ics';
 
                       // Guardar el archivo en la carpeta public/calendars/
                       file_put_contents($calendarPath, $calendar->get());
@@ -592,7 +656,6 @@ class ProductsController extends Controller
       $producto = Products::find($request->id);
       if ($producto) {
         
-          
           if ($producto->sku !== $cleanedData['sku']) {
             // Obtener la ruta actual del archivo iCal
             $oldCalendarPath = public_path('storage/calendars/' . $producto->sku . '.ics');

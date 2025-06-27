@@ -69,6 +69,7 @@ class Products extends Model
     'meta_keywords',
     'latitud',
     'longitud',
+    'booking_url',
 
   ];
   

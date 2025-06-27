@@ -792,9 +792,11 @@
 
     function agregarAlCarrito(item, cantidad, servicios) {
         let costototal = costoTotalFinal;
-        let checkin = $('#arrival-date').data('checkin');
-        let checkout = $('#arrival-date').data('checkout');
-       
+        let checkin = $('#date-range-picker').data('checkin');
+        let checkout = $('#date-range-picker').data('checkout');
+      
+        // checkin = moment(checkin, 'DD-MM-YYYY');
+        // checkout = moment(checkout, 'DD-MM-YYYY');
         $.ajax({
 
             url: `{{ route('carrito.buscarProducto') }}`,
@@ -911,17 +913,17 @@
         let partesURL = url.split('/');
         let productoEncontrado = partesURL.find(parte => parte === 'producto');
        
-        let checkin = $('#arrival-date').data('checkin');
-        let checkout = $('#arrival-date').data('checkout');
+        // let checkin = $('#date-range-picker').data('checkin');
+        // let checkout = $('#date-range-picker').data('checkout');
 
-        if (!checkin || !checkout) {
-            Swal.fire({
-                title: 'Selección Fallida',
-                text: 'Por favor, selecciona un rango de fechas válido.',
-                icon: 'warning',
-            });
-            return;
-        }
+        // if (!checkin || !checkout) {
+        //     Swal.fire({
+        //         title: 'Selección Fallida',
+        //         text: 'Por favor, selecciona un rango de fechas válido.',
+        //         icon: 'warning',
+        //     });
+        //     return;
+        // }
 
         let item
         let cantidad

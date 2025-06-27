@@ -24,7 +24,7 @@
         "phpmailer/phpmailer": "^6.9",
         "rmccue/requests": "^2.0",
         "sode/extend": "dev-master",
-        "spatie/icalendar-generator": "^2.8",
+        "spatie/icalendar-generator": "^3.0",
         "spatie/laravel-permission": "^6.7"
     },
     "require-dev": {

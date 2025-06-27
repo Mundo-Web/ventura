@@ -353,27 +353,34 @@
                       // Iteramos sobre los departamentos recibidos
                       response.data.forEach(function(item) {
                           htmlContent += `
-                          <div class="flex flex-col relative w-full bg-white" data-aos="zoom-in-left">
-                              <div class="bg-white product_container basis-4/5 flex flex-col justify-center relative border">
-                                  <div>
-                                      <div class="relative flex justify-center items-center h-max">
-                                          <img 
-                                              src="${item.imagen ? item.imagen : 'images/img/noimagen.jpg'}"
-                                              alt="${item.producto}"
-                                              onerror="this.src='${noImageUrl}';"
-                                              class="transition ease-out duration-300 transform w-full aspect-square object-cover inset-0"
-                                          />
-                                      </div>
-                                  </div>
-                              </div>
-                              
-                              <a href="/producto/${item.id}" class="px-1 py-2 flex flex-col gap-3">
-                                  <h2 class="block text-lg text-left overflow-hidden font-Homie_Bold text-[#002677]" 
-                                      style="display: -webkit-box; -webkit-line-clamp: 2; text-overflow: ellipsis; -webkit-box-orient: vertical; height: 51px;">
-                                      ${item.producto}
-                                  </h2>
-                              </a>
-                          </div>`;
+                           
+                                <div class="flex flex-col relative w-full bg-white" data-aos="zoom-in-left">
+                                    
+                                    <div class="bg-white product_container basis-4/5 flex flex-col justify-center relative border">
+                                            <a href="/producto/${item.id}">
+                                                <div class="relative flex justify-center items-center h-max">
+                                                    <img 
+                                                        src="${item.imagen ? item.imagen : 'images/img/noimagen.jpg'}"
+                                                        alt="${item.producto}"
+                                                        onerror="this.src='${noImageUrl}';"
+                                                        class="transition ease-out duration-300 transform w-full aspect-square object-cover inset-0"
+                                                    />
+                                                </div>
+                                            </a>
+                                    </div>
+                                    
+                               
+                                    
+                                    <a class="px-1 py-2 flex flex-col gap-3">
+                                        <h2 class="block text-lg text-left overflow-hidden font-Homie_Bold text-[#002677]" 
+                                            style="display: -webkit-box; -webkit-line-clamp: 2; text-overflow: ellipsis; -webkit-box-orient: vertical; height: 51px;">
+                                            ${item.producto}
+                                        </h2>
+                                    </a>
+                                
+                                </div>
+                           `;
+                            
                       });
   
                       // Agregamos el contenido generado al contenedor
