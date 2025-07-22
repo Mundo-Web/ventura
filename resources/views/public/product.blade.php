@@ -70,6 +70,12 @@
       }
 
     }
+    @media (max-width: 600px) {
+      .flatpickr-calendar {
+        left: 50% !important;
+      }
+    }
+    
 
   </style>
   
