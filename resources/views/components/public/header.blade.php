@@ -790,13 +790,11 @@
         padre.innerHTML = '';
     }
 
-    function agregarAlCarrito(item, cantidad, servicios) {
+    function agregarAlCarrito(item, cantidad, servicios, cantidadPersonas) {
         let costototal = costoTotalFinal;
         let checkin = $('#date-range-picker').data('checkin');
         let checkout = $('#date-range-picker').data('checkout');
-      
-        // checkin = moment(checkin, 'DD-MM-YYYY');
-        // checkout = moment(checkout, 'DD-MM-YYYY');
+        
         $.ajax({
 
             url: `{{ route('carrito.buscarProducto') }}`,
@@ -805,8 +803,8 @@
                 _token: $('input[name="_token"]').val(),
                 id: item,
                 cantidad,
-                servicios
-
+                servicios,
+                cantidadPersonas
             },
             success: function(success) {
                 let {
@@ -829,6 +827,7 @@
                 let cantidad = Number(success.cantidad)
                 let services = success.servicios
                 let nombresServicios = success.nombresServicios
+                let cantidadPersonas = success.cantidadPersonas
                 
                 let detalleProducto = {
                     id,
@@ -844,7 +843,8 @@
                     costototal,
                     color,
                     services,
-                    nombresServicios
+                    nombresServicios,
+                    cantidadPersonas
 
                 }
                 let existeArticulo = articulosCarrito.some(item => item.id === detalleProducto.id && item
@@ -874,7 +874,7 @@
                     mensaje = "Reserva se agregó correctamente al carrito";
                 }
 
-                // console.log(articulosCarrito);   
+                console.log(articulosCarrito);   
 
                 Local.set('carrito', articulosCarrito)
                 let itemsCarrito = $('#itemsCarrito')
@@ -892,14 +892,6 @@
                     type: tipoalerta,
                 })
 
-                /* Swal.fire({
-
-                  icon: "success",
-                  title: `Producto agregado correctamente`,
-                  showConfirmButton: true
-
-
-                }); */
             },
             error: function(error) {
                 console.log(error)
@@ -912,29 +904,17 @@
         let url = window.location.href;
         let partesURL = url.split('/');
         let productoEncontrado = partesURL.find(parte => parte === 'producto');
-       
-        // let checkin = $('#date-range-picker').data('checkin');
-        // let checkout = $('#date-range-picker').data('checkout');
-
-        // if (!checkin || !checkout) {
-        //     Swal.fire({
-        //         title: 'Selección Fallida',
-        //         text: 'Por favor, selecciona un rango de fechas válido.',
-        //         icon: 'warning',
-        //     });
-        //     return;
-        // }
-
         let item
         let cantidad
-        
+        let personas
+       
         item = partesURL[partesURL.length - 1]
-        //cantidad = Number($('#cantidadSpan span').text())
+        personas = parseInt($('#cantidadSpan span').text());
         cantidad = 1;
         item = $(this).data('id')
 
         try {
-            agregarAlCarrito(item, cantidad, serviciosExtras)
+            agregarAlCarrito(item, cantidad, serviciosExtras, personas)
 
         } catch (error) {
             console.log(error)

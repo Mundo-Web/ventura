@@ -531,7 +531,8 @@ class ProductsController extends Controller
       $especificaciones = [];
       $extraservice = [];
       $data = $request->all();
-      
+      $calendarUrls = [];
+      $personRanges = [];
       $atributos = null;
       $tagsSeleccionados = $request->input('tags_id');
       // $valorprecio = $request->input('precio') - 0.1;
@@ -546,7 +547,7 @@ class ProductsController extends Controller
       $data['descuento'] = $data['descuento'] ?? 0;
       $data['preciolimpieza'] = $data['preciolimpieza'] ?? 0;
       $data['precioservicio'] = $data['precioservicio'] ?? 0;
-
+      
      
 
       if ($request->hasFile('imagen')) {
@@ -567,9 +568,35 @@ class ProductsController extends Controller
       if ($request->hasFile('imagen_4')) {
         $data['imagen_4'] = $this->saveImg($request, 'imagen_4');
       }
-      // $data['imagen_2'] = $this->saveImg($request, 'imagen_2');
-      // $data['imagen_3'] = $this->saveImg($request, 'imagen_3');
-      // $data['imagen_4'] = $this->saveImg($request, 'imagen_4');
+
+      if ($request->has('calendar_platforms') && $request->has('calendar_urls')) {
+        foreach ($request->calendar_platforms as $index => $platform) {
+            if (!empty($platform)) {
+                $url = $request->calendar_urls[$index] ?? '';
+                $calendarUrls[$platform] = $url;
+            }
+        }
+      }
+
+      $data['calendar_urls'] = $calendarUrls;
+
+      if ($request->has('person_ranges')) {
+          foreach ($request->person_ranges as $range) {
+              if (!empty($range['min']) && !empty($range['max']) && isset($range['price'])) {
+                  $personRanges[] = [
+                      'min' => (int)$range['min'],
+                      'max' => (int)$range['max'],
+                      'price' => (float)$range['price']
+                  ];
+              }
+          }
+      }
+
+      usort($personRanges, function($a, $b) {
+          return $a['min'] <=> $b['min'];
+      });
+
+     $data['person_ranges'] = $personRanges;
         
       foreach ($data as $key => $value) {
         if (strstr($key, '-')) {

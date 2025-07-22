@@ -19,5 +19,7 @@ class SaleDetail extends Model
         'extras',
         'quantity',
         'price',
+        'cantidad_personas',
+        'extra_personas',
     ];
 }

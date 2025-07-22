@@ -71,6 +71,7 @@ class CarritoController extends Controller
        $id =  $request->id; 
        $cantidad =  (int)$request->cantidad; 
        $servicios =  $request->servicios; 
+       $cantidadPersonas = (int)$request->cantidadPersonas ?? 0;
 
        if (is_array($servicios) && count($servicios) > 0) {
             $nombresServicios = ExtraService::whereIn('id', $servicios)->pluck('service');
@@ -89,6 +90,6 @@ class CarritoController extends Controller
 
         $producto = Products::find($id);
 
-        return response()->json(['message' => 'Producto encontrado ', 'data' => $producto , 'servicios'=> $servicios, 'nombresServicios' => $nombresServicios, 'cantidad'=> $cantidad, 'is_reseller' => $is_reseller] );
+        return response()->json(['message' => 'Producto encontrado ', 'data' => $producto , 'cantidadPersonas' => $cantidadPersonas, 'servicios'=> $servicios, 'nombresServicios' => $nombresServicios, 'cantidad'=> $cantidad, 'is_reseller' => $is_reseller] );
     }
 }

@@ -441,6 +441,7 @@ function PintarCarrito() {
     const formattedCheckin = formatDate(element.checkin);
     const formattedCheckout = formatDate(element.checkout);
     let nombresServicios = '';
+    let cantidadPersonas = element.cantidadPersonas ? element.cantidadPersonas : 1;
     
     if (element.nombresServicios && element.nombresServicios.length > 0) {
         nombresServicios = element.nombresServicios.join(', '); 
@@ -461,6 +462,9 @@ function PintarCarrito() {
             
             ${nombresServicios ? `<p class="font-semibold text-[12px] text-[#151515]">Extras: ${nombresServicios}</p>` : ''}
             
+            <p class="font-semibold text-[12px] text-[#151515]">
+              Huéspedes: ${cantidadPersonas}
+            </p>
           </td>
           <td class="p-2 text-end lg:flex lg:flex-row h-24 items-center gap-2">
             <p class="font-semibold text-base text-[#151515] w-max">

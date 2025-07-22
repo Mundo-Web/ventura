@@ -336,13 +336,15 @@
   <script src="https://checkout.culqi.com/js/v4"></script>
   <script>
     $('#direccionContainer').fadeOut(0)
-
+    const carrito = Local.get('carrito') ?? []
+    console.log(carrito);
     const hasDefaultAddress = {{ $hasDefaultAddress ? 'true' : 'false' }};
     Culqi.publicKey = "{{ $culqi_public_key }}";
 
     const culqi = async () => {
       try {
         const carrito = Local.get('carrito') ?? []
+        
         if (Culqi.token) {
           const body = {
             _token: $('[name="_token"]').val(),
@@ -352,6 +354,7 @@
               checkout: x.checkout,
               quantity: x.cantidad,
               extras: x.services,
+              personas: x.cantidadPersonas,
               isCombo: x.isCombo || false
             })),
             contact: {

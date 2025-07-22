@@ -792,8 +792,9 @@ class IndexController extends Controller
         $serviciosseleccionados = [];
         $client = new Client();
         $serviciosseleccionados = $request->servicios;
+        $cantidadPersonas = $request->personas;
         $department = Products::where('sku', '=', $request['id'])->first();
-
+        
         $checkin = $request->input('checkin');
         $checkout = $request->input('checkout');
 
@@ -825,7 +826,7 @@ class IndexController extends Controller
             ]);
 
             $data = json_decode($response->getBody(), true);
-
+           
             // Preparar fechas para la comparación
             $checkinDate = new \DateTime($checkin);
             $checkoutDate = new \DateTime($checkout);
@@ -867,6 +868,7 @@ class IndexController extends Controller
                     'tazaLimpieza' => $tasaLimpieza,
                     'totalCost' => $totalCost,
                     'costoTotalFinal' => $costoTotalFinal,
+                    'cantidadPersonas' => $cantidadPersonas,
                     // 'datos' => $data,
                 ],
             ]);
@@ -960,11 +962,6 @@ class IndexController extends Controller
         $startDate = null;
         $endDate = null;
        
-        $icalUrls = [
-          $product->airbnb_url,
-          $product->booking_url
-        ];
-
         // 1. Obtener fechas bloqueadas desde la base de datos
         $fechasDB = DB::table('events')
             ->where('product_id', $product->id)
@@ -980,8 +977,12 @@ class IndexController extends Controller
           ];
         }
 
-        foreach ($icalUrls as $url) {
-          $this->procesarIcal($url, $bookings);
+        if (!empty($product->calendar_urls)) {
+          foreach ($product->calendar_urls as $url) {
+              if (!empty($url)) {
+                  $this->procesarIcal($url, $bookings);
+              }
+          }
         }
 
         // Reindexar

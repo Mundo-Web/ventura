@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class Products extends Model
 {
   use HasFactory;
+  
+  protected $casts = [
+    'calendar_urls' => 'array',
+    'person_ranges' => 'array',
+  ];
+
   protected $fillable = [
     'producto',
     'precio',
@@ -63,15 +69,27 @@ class Products extends Model
     'provincia_id',
     'distrito_id',
     'calendar_url',
-    'airbnb_url',
+    // 'airbnb_url',
     'meta_title', 
     'meta_description', 
     'meta_keywords',
     'latitud',
     'longitud',
-    'booking_url',
+    // 'booking_url',
+    'calendar_urls',
+    'person_ranges',
 
   ];
+
+  public function getCalendarUrlsAttribute($value)
+  {
+      return json_decode($value, true) ?? [];
+  }
+
+  public function setCalendarUrlsAttribute($value)
+  {
+      $this->attributes['calendar_urls'] = json_encode($value);
+  }
   
   public function events()
   {

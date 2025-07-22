@@ -49,11 +49,11 @@ class PaymentController extends Controller
       $productsJpa = []; 
 
       if (Auth::check() && Auth::user()->hasRole('Reseller')) {
-          $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'sku', 'pms', 'precio_reseller as descuento'])
+          $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'sku', 'pms', 'precio_reseller as descuento', 'person_ranges'])
             ->whereIn('id', array_map(fn($x) => $x['id'], $products))
             ->get();
       }else{
-        $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'descuento', 'preciolimpieza', 'sku', 'pms'])
+        $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'descuento', 'preciolimpieza', 'sku', 'pms', 'person_ranges'])
         ->whereIn('id', array_map(fn($x) => $x['id'], $products))
         ->get();
       }
@@ -74,6 +74,7 @@ class PaymentController extends Controller
         $checkin = $body['cart'][$key]['checkin']; 
         $checkout = $body['cart'][$key]['checkout'];
         $extras = $body['cart'][$key]['extras'];
+        $cantidadPersonas = $body['cart'][$key]['personas'];
         
         if (!$checkin || !$checkout) {
           continue;
@@ -125,9 +126,12 @@ class PaymentController extends Controller
                   $extrasCost = 0; // Valor predeterminado si no hay extras
               }
 
+              $personRanges = $productJpa->person_ranges ?? '[]';
+              $extraPersonas = $this->calcularCostoPorPersonas($cantidadPersonas, $personRanges);
+
               //$totalCost += ($productCost + $productJpa->preciolimpieza) * $body['cart'][$key]['quantity'];
-              $totalCost += $productCost + $productJpa->preciolimpieza + $extrasCost;
-              $totalXReserva[$productJpa->id] = $productCost + $productJpa->preciolimpieza + $extrasCost;
+              $totalCost += $productCost + $productJpa->preciolimpieza + $extrasCost + $extraPersonas;
+              $totalXReserva[$productJpa->id] = $productCost + $productJpa->preciolimpieza + $extrasCost + $extraPersonas;
 
           } catch (\Exception $e) {
               continue;
@@ -198,6 +202,7 @@ class PaymentController extends Controller
         $checkin = $body['cart'][$key]['checkin'];
         $checkout = $body['cart'][$key]['checkout'];
         $extras = $body['cart'][$key]['extras'];
+        $cantidadPersonas = $body['cart'][$key]['personas'];
     
         if (is_array($extras) && count($extras) > 0) {
           $nombresServicios = ExtraService::whereIn('id', $extras)->pluck('service');
@@ -209,7 +214,9 @@ class PaymentController extends Controller
 
         //$price = $productJpa->descuento > 0 ? $productJpa->descuento : $productJpa->precio;
         $price = $totalXReserva[$productJpa->id]; 
-
+        $personRanges = $productJpa->person_ranges ?? '[]';
+        $extraPersonas = $this->calcularCostoPorPersonas($cantidadPersonas, $personRanges);
+        
         SaleDetail::create([
           'sale_id' => $sale->id,
           'product_image' => $productJpa->imagen,
@@ -219,7 +226,9 @@ class PaymentController extends Controller
           'checkout' => $checkout,
           'extras' => $extrasStr,
           'quantity' => $quantity,
-          'price' => $price
+          'price' => $price,
+          'cantidad_personas' => $cantidadPersonas,
+          'extra_personas' => $extraPersonas,
         ]);
       }
 
@@ -526,162 +535,196 @@ class PaymentController extends Controller
   }
 
   private function envioCorreoAdmin()
-    {
-        $emailadmin = General::first()->email;
-        $appUrl = env('APP_URL');
-        $name = 'Administrador';
-        $mensaje = 'Tienes una nueva reserva - Ventura';
-        $mail = EmailConfig::config($name, $mensaje);
-        try {
-            $mail->addAddress($emailadmin);
-            $mail->Body =
-                '<html lang="en">
-                    <head>
-                      <meta charset="UTF-8" />
-                      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                      <title>Ventura</title>
-                      <link rel="preconnect" href="https://fonts.googleapis.com" />
-                      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-                      <link
-                        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-                        rel="stylesheet"
-                      />
-                      <style>
-                        * {
-                          margin: 0;
-                          padding: 0;
-                          box-sizing: border-box;
-                        }
-                      </style>
-                    </head>
-                    <body>
-                      <main>
-                        <table
-                          style="
-                            width: 600px;
-                            margin: 0 auto;
-                            text-align: center;
-                            background-image: url(' .
-                              $appUrl .
-                              '/mail/fondo.png);
-                            background-repeat: no-repeat;
-                            background-position: center;
-                            background-size: cover;
-                          "
-                        >
-                          <thead>
-                            <tr>
-                              <th
+  {
+      $emailadmin = General::first()->email;
+      $appUrl = env('APP_URL');
+      $name = 'Administrador';
+      $mensaje = 'Tienes una nueva reserva - Ventura';
+      $mail = EmailConfig::config($name, $mensaje);
+      try {
+          $mail->addAddress($emailadmin);
+          $mail->Body =
+              '<html lang="en">
+                  <head>
+                    <meta charset="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <title>Ventura</title>
+                    <link rel="preconnect" href="https://fonts.googleapis.com" />
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                    <link
+                      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+                      rel="stylesheet"
+                    />
+                    <style>
+                      * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                      }
+                    </style>
+                  </head>
+                  <body>
+                    <main>
+                      <table
+                        style="
+                          width: 600px;
+                          margin: 0 auto;
+                          text-align: center;
+                          background-image: url(' .
+                            $appUrl .
+                            '/mail/fondo.png);
+                          background-repeat: no-repeat;
+                          background-position: center;
+                          background-size: cover;
+                        "
+                      >
+                        <thead>
+                          <tr>
+                            <th
+                              style="
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: center;
+                                align-items: center;
+                                margin-top: 40px;
+                                padding: 0 200px;
+                              "
+                            >
+                                <a href="' .
+                            $appUrl .
+                            '" target="_blank" style="text-align:center" ><img src="' .
+                            $appUrl .
+                            '/mail/logo.png"/></a>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <p
                                 style="
-                                  display: flex;
-                                  flex-direction: row;
-                                  justify-content: center;
-                                  align-items: center;
-                                  margin-top: 40px;
-                                  padding: 0 200px;
+                                  color: #002677;
+                                  font-size: 40px;
+                                  line-height: normal;
+                                  font-family: Roboto;
+                                  font-weight: bold;
                                 "
                               >
-                                  <a href="' .
-                              $appUrl .
-                              '" target="_blank" style="text-align:center" ><img src="' .
-                              $appUrl .
-                              '/mail/logo.png"/></a>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <p
-                                  style="
-                                    color: #002677;
-                                    font-size: 40px;
-                                    line-height: normal;
-                                    font-family: Roboto;
-                                    font-weight: bold;
-                                  "
-                                >
-                                  <span style="color: #002677">¡Reserva confirmada en venturabnb.pe!</span>
-                                </p>
-                              </td>
-                            </tr>
+                                <span style="color: #002677">¡Reserva confirmada en venturabnb.pe!</span>
+                              </p>
+                            </td>
+                          </tr>
 
-                            <tr>
-                              <td>
-                                <p
-                                  style="
-                                    color: #002677;
-                                    font-weight: 500;
-                                    font-size: 18px;
-                                    text-align: center;
-                                    width: 500px;
-                                    margin: 0 auto;
-                                    padding: 20px 0 5px 0;
-                                    font-family: Roboto;
-                                  "
-                                >
-                                  <span style="display: block">Hola ' .
-                              $name .
-                              '</span>
-                                </p>
-                              </td>
-                            </tr>
-                            
-                            <tr>
-                              <td>
-                                <p
-                                  style="
-                                    color: #002677;
-                                    font-weight: 500;
-                                    font-size: 18px;
-                                    text-align: center;
-                                    width: 500px;
-                                    margin: 0 auto;
-                                    padding: 0px 10px 5px 0px;
-                                    font-family: Roboto;
-                                  "
-                                >
-                                  Tienes una reserva confirmada, para mas detalle revisar tu panel de administración.
-                                </p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <a
-                                    target="_blank"
-                                  href="' .
-                              $appUrl .
-                              '/login"
-                                  style="
-                                    text-decoration: none;
-                                    background: #00897B;
-                                    color: #73F7AD;
-                                    padding: 13px 20px;
-                                    display: inline-flex;
-                                    justify-content: center;
-                                    border-radius: 32px;
-                                    align-items: center;
-                                    gap: 10px;
-                                    font-weight: 600;
-                                    font-family: Roboto;
-                                    font-size: 16px;
-                                    margin-bottom: 350px;
-                                  "
-                                >
-                                  <span>Ir a panel de administración</span>
-                                </a>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </main>
-                    </body>
-                  </html>
-                    ';
-            $mail->isHTML(true);
-            $mail->send();
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-    }
+                          <tr>
+                            <td>
+                              <p
+                                style="
+                                  color: #002677;
+                                  font-weight: 500;
+                                  font-size: 18px;
+                                  text-align: center;
+                                  width: 500px;
+                                  margin: 0 auto;
+                                  padding: 20px 0 5px 0;
+                                  font-family: Roboto;
+                                "
+                              >
+                                <span style="display: block">Hola ' .
+                            $name .
+                            '</span>
+                              </p>
+                            </td>
+                          </tr>
+                          
+                          <tr>
+                            <td>
+                              <p
+                                style="
+                                  color: #002677;
+                                  font-weight: 500;
+                                  font-size: 18px;
+                                  text-align: center;
+                                  width: 500px;
+                                  margin: 0 auto;
+                                  padding: 0px 10px 5px 0px;
+                                  font-family: Roboto;
+                                "
+                              >
+                                Tienes una reserva confirmada, para mas detalle revisar tu panel de administración.
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <a
+                                  target="_blank"
+                                href="' .
+                            $appUrl .
+                            '/login"
+                                style="
+                                  text-decoration: none;
+                                  background: #00897B;
+                                  color: #73F7AD;
+                                  padding: 13px 20px;
+                                  display: inline-flex;
+                                  justify-content: center;
+                                  border-radius: 32px;
+                                  align-items: center;
+                                  gap: 10px;
+                                  font-weight: 600;
+                                  font-family: Roboto;
+                                  font-size: 16px;
+                                  margin-bottom: 350px;
+                                "
+                              >
+                                <span>Ir a panel de administración</span>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </main>
+                  </body>
+                </html>
+                  ';
+          $mail->isHTML(true);
+          $mail->send();
+      } catch (\Throwable $th) {
+          //throw $th;
+      }
+  }
+
+  function calcularCostoPorPersonas($cantidadPersonas, $personRanges) {
+      // Si no hay rangos definidos, no hay costo extra
+      if (empty($personRanges)) {
+          return 0;
+      }
+      
+      // Ordenar los rangos por cantidad mínima (ascendente)
+      usort($personRanges, function($a, $b) {
+          return $a['min'] - $b['min'];
+      });
+      
+      $costoExtra = 0;
+      
+      // Recorremos cada rango para calcular el costo
+      foreach ($personRanges as $i => $range) {
+          $nextRange = $personRanges[$i + 1] ?? null;
+          
+          // Determinar el límite superior del rango actual
+          $upperLimit = $nextRange ? $nextRange['min'] - 1 : PHP_INT_MAX;
+          
+          // Si la cantidad de personas está dentro de este rango
+          if ($cantidadPersonas >= $range['min'] && $cantidadPersonas <= $upperLimit) {
+              // Calcular cuántas personas están por encima del mínimo base
+              $personasExtras = max(0, $cantidadPersonas - $range['min'] + 1);
+              
+              // Aplicar el precio del rango a las personas extras
+              $costoExtra = $personasExtras * $range['price'];
+              break;
+          }
+      }
+      
+      return $costoExtra;
+  }
 }

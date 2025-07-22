@@ -541,6 +541,90 @@
                   </div>
                 </div>
 
+                <div class="md:col-span-5 mt-2">
+                  <div class="flex items-end justify-between gap-2">
+                      <label>Rangos de personas y costos</label>
+                      <button type="button" id="AddPersonRange"
+                          class="text-blue-500 hover:underline focus:outline-none font-medium">
+                          <i class="fa fa-plus"></i>
+                          Agregar Rango
+                      </button>
+                  </div>
+                  
+                  <div id="person_ranges_container" class="space-y-2 mt-2">
+                        @foreach(old('person_ranges', $product->person_ranges ?? []) as $range)
+                            <div class="flex gap-2 person-range-item">
+                                <div class="relative flex-1">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-user text-gray-500"></i>
+                                    </div>
+                                    <input type="number" name="person_ranges[{{ $loop->index }}][min]" 
+                                        value="{{ $range['min'] }}"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Mínimo" min="1" required>
+                                </div>
+                                <div class="relative flex-1">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-user text-gray-500"></i>
+                                    </div>
+                                    <input type="number" name="person_ranges[{{ $loop->index }}][max]" 
+                                        value="{{ $range['max'] }}"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Máximo" min="1" required>
+                                </div>
+                                <div class="relative flex-1">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-dollar-sign text-gray-500"></i>
+                                    </div>
+                                    <input type="number" name="person_ranges[{{ $loop->index }}][price]" 
+                                        value="{{ $range['price'] }}"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Precio" min="0" step="0.01" required>
+                                </div>
+                                <button type="button" class="px-3 text-red-500 hover:text-red-700 remove-person-range">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        @endforeach
+                        
+                        @if(!old('person_ranges') && empty($product->person_ranges))
+                            <!-- Rango inicial -->
+                            <div class="flex gap-2 person-range-item">
+                                <div class="relative flex-1">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-user text-gray-500"></i>
+                                    </div>
+                                    <input type="number" name="person_ranges[0][min]" 
+                                        value="1"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Mínimo" min="1" required>
+                                </div>
+                                <div class="relative flex-1">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-user text-gray-500"></i>
+                                    </div>
+                                    <input type="number" name="person_ranges[0][max]" 
+                                        value="2"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Máximo" min="1" required>
+                                </div>
+                                <div class="relative flex-1">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <i class="fas fa-dollar-sign text-gray-500"></i>
+                                    </div>
+                                    <input type="number" name="person_ranges[0][price]" 
+                                        value="0"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Precio" min="0" step="0.01" required>
+                                </div>
+                                <button type="button" class="px-3 text-red-500 hover:text-red-700 remove-person-range">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
                 <div class="md:col-span-5 flex justify-between gap-4">
                   <div class="w-full">
                     <label for="cuartos">Nro. de cuartos</label>
@@ -804,7 +888,7 @@
                   </div>
                 </div>
 
-                <div class="md:col-span-5 mt-2">
+                {{-- <div class="md:col-span-5 mt-2">
                   <label for="airbnb_url">Ical Calendario Airbnb</label>
                   <div class="relative mb-2">
                       <div
@@ -816,9 +900,9 @@
                           class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="Ical Calendario Airbnb">
                   </div>
-                </div>
+                </div> --}}
 
-                <div class="md:col-span-5 mt-2">
+                {{-- <div class="md:col-span-5 mt-2">
                   <label for="booking_url">Ical Calendario Booking</label>
                   <div class="relative mb-2">
                       <div
@@ -829,6 +913,70 @@
                           value="{{ $product->booking_url }}"
                           class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="Ical Calendario Booking">
+                  </div>
+                </div> --}}
+
+                <div class="md:col-span-5 mt-2">
+                  <div class="flex items-end justify-between gap-2">
+                      <label for="calendar_urls">URLs de Calendarios Externos</label>
+                      <button type="button" id="AddCalendarUrl"
+                          class="text-blue-500 hover:underline focus:outline-none font-medium">
+                          <i class="fa fa-plus"></i>
+                          Agregar
+                      </button>
+                  </div>
+                  
+                  <div id="calendar_urls_container" class="space-y-2 mt-2">
+                      @foreach(old('calendar_platforms', $product->calendar_urls ?? []) as $platform => $url)
+                          <div class="flex gap-2 calendar-url-item">
+                              <div class="relative flex-1">
+                                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                      <i class="fas fa-tag text-gray-500"></i>
+                                  </div>
+                                  <input type="text" name="calendar_platforms[]" 
+                                      value="{{ $platform }}"
+                                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                      placeholder="Nombre (ej: Airbnb)" >
+                              </div>
+                              <div class="relative flex-1">
+                                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                      <i class="fas fa-link text-gray-500"></i>
+                                  </div>
+                                  <input type="url" name="calendar_urls[]" 
+                                      value="{{ $url }}"
+                                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                      placeholder="URL del calendario" >
+                              </div>
+                              <button type="button" class="px-3 text-red-500 hover:text-red-700 remove-calendar-url">
+                                  <i class="fas fa-trash"></i>
+                              </button>
+                          </div>
+                      @endforeach
+                      
+                      @if(!old('calendar_platforms') && empty($product->calendar_urls))
+                          <!-- Campo inicial si no hay datos -->
+                          <div class="flex gap-2 calendar-url-item">
+                              <div class="relative flex-1">
+                                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                      <i class="fas fa-tag text-gray-500"></i>
+                                  </div>
+                                  <input type="text" name="calendar_platforms[]"
+                                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                      placeholder="Nombre (ej: Airbnb)" >
+                              </div>
+                              <div class="relative flex-1">
+                                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                      <i class="fas fa-link text-gray-500"></i>
+                                  </div>
+                                  <input type="url" name="calendar_urls[]"
+                                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                      placeholder="URL del calendario" >
+                              </div>
+                              <button type="button" class="px-3 text-red-500 hover:text-red-700 remove-calendar-url">
+                                  <i class="fas fa-trash"></i>
+                              </button>
+                          </div>
+                      @endif
                   </div>
                 </div>
 
@@ -1455,38 +1603,235 @@
            
   </script>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializa SortableJS
+        const sortable = new Sortable(document.getElementById('imagenes_sortable'), {
+            animation: 150,
+            ghostClass: 'bg-blue-50',
+            onEnd: function() {
+                updateImageOrder();
+            }
+        });
+
+        // Función para actualizar los índices de orden
+        function updateImageOrder() {
+            const containers = document.querySelectorAll('#imagenes_sortable > div');
+            containers.forEach((container, index) => {
+                const input = container.querySelector('input[name="galery[]"]');
+                if (input) {
+                    const valueParts = input.value.split('|');
+                    if (valueParts.length >= 3) {
+                        // Actualiza el índice (tercera parte)
+                        valueParts[2] = index;
+                        input.value = valueParts.join('|');
+                    }
+                }
+            });
+        }
+
+        // Si necesitas manejar la subida de nuevas imágenes, también deberías actualizar el orden
+        document.getElementById('galery').addEventListener('change', function(e) {
+            // Tu lógica para manejar nuevas imágenes...
+            // Después de agregar nuevas imágenes, llama a:
+            // updateImageOrder();
+        });
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Agregar nuevo campo
+        document.getElementById('AddCalendarUrl').addEventListener('click', function() {
+            const container = document.getElementById('calendar_urls_container');
+            const newItem = document.createElement('div');
+            newItem.className = 'flex gap-2 calendar-url-item';
+            newItem.innerHTML = `
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fas fa-tag text-gray-500"></i>
+                    </div>
+                    <input type="text" name="calendar_platforms[]"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Nombre (ej: Airbnb)" required>
+                </div>
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fas fa-link text-gray-500"></i>
+                    </div>
+                    <input type="url" name="calendar_urls[]"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="URL del calendario" required>
+                </div>
+                <button type="button" class="px-3 text-red-500 hover:text-red-700 remove-calendar-url">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            container.appendChild(newItem);
+        });
+
+        // Eliminar campo
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-calendar-url') || 
+                e.target.closest('.remove-calendar-url')) {
+                const item = e.target.closest('.calendar-url-item');
+                if (item && document.querySelectorAll('.calendar-url-item').length > 1) {
+                    item.remove();
+                }
+            }
+        });
+    });
+  </script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-      // Inicializa SortableJS
-      const sortable = new Sortable(document.getElementById('imagenes_sortable'), {
-          animation: 150,
-          ghostClass: 'bg-blue-50',
-          onEnd: function() {
-              updateImageOrder();
+      let personRangeCounter = {{ isset($product->person_ranges) ? count($product->person_ranges) : 1 }};
+      
+      // Función para validar todos los rangos
+      function validateRanges() {
+          const ranges = [];
+          const items = document.querySelectorAll('.person-range-item');
+          
+          // Recolectar todos los rangos
+          items.forEach(item => {
+              const min = parseInt(item.querySelector('[name$="[min]"]').value);
+              const max = parseInt(item.querySelector('[name$="[max]"]').value);
+              ranges.push({ min, max });
+          });
+          
+          // Ordenar por mínimo
+          ranges.sort((a, b) => a.min - b.min);
+          
+          // Validación 1: No ceros
+          if (ranges.some(range => range.min === 0 || range.max === 0)) {
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: 'Los valores no pueden ser 0',
+                  confirmButtonColor: '#3085d6',
+              });
+              return false;
+          }
+          
+          // Validación 2: Consecutivos y ordenados
+          for (let i = 0; i < ranges.length; i++) {
+              // Validar que min <= max
+              if (ranges[i].min > ranges[i].max) {
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: `El mínimo (${ranges[i].min}) no puede ser mayor que el máximo (${ranges[i].max})`,
+                      confirmButtonColor: '#3085d6',
+                  });
+                  return false;
+              }
+              
+              // Validar consecutividad (excepto el primero)
+              if (i > 0 && ranges[i].min !== ranges[i-1].max + 1) {
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      html: `Los rangos deben ser consecutivos:<br>
+                             Rango anterior: ${ranges[i-1].min}-${ranges[i-1].max}<br>
+                             Siguiente debe comenzar en ${ranges[i-1].max + 1}`,
+                      confirmButtonColor: '#3085d6',
+                  });
+                  return false;
+              }
+          }
+          
+          return true;
+      }
+      
+      // Validar antes de enviar el formulario
+      document.getElementById('product-form').addEventListener('submit', function(e) {
+          if (!validateRanges()) {
+              e.preventDefault();
           }
       });
-
-      // Función para actualizar los índices de orden
-      function updateImageOrder() {
-          const containers = document.querySelectorAll('#imagenes_sortable > div');
-          containers.forEach((container, index) => {
-              const input = container.querySelector('input[name="galery[]"]');
-              if (input) {
-                  const valueParts = input.value.split('|');
-                  if (valueParts.length >= 3) {
-                      // Actualiza el índice (tercera parte)
-                      valueParts[2] = index;
-                      input.value = valueParts.join('|');
-                  }
+      
+      // Agregar nuevo rango (modificado para validar)
+      document.getElementById('AddPersonRange').addEventListener('click', function() {
+          if (!validateRanges()) return;
+          
+          const container = document.getElementById('person_ranges_container');
+          const items = document.querySelectorAll('.person-range-item');
+          let lastMax = 0;
+          
+          // Obtener el último máximo si hay rangos
+          if (items.length > 0) {
+              const lastItem = items[items.length - 1];
+              lastMax = parseInt(lastItem.querySelector('[name$="[max]"]').value);
+          }
+          
+          const newItem = document.createElement('div');
+          newItem.className = 'flex gap-2 person-range-item';
+          newItem.innerHTML = `
+              <div class="relative flex-1">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <i class="fas fa-user text-gray-500"></i>
+                  </div>
+                  <input type="number" name="person_ranges[${personRangeCounter}][min]" 
+                      value="${lastMax + 1}"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Mínimo" min="1" required>
+              </div>
+              <div class="relative flex-1">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <i class="fas fa-user text-gray-500"></i>
+                  </div>
+                  <input type="number" name="person_ranges[${personRangeCounter}][max]" 
+                      value="${lastMax + 2}"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Máximo" min="1" required>
+              </div>
+              <div class="relative flex-1">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <i class="fas fa-dollar-sign text-gray-500"></i>
+                  </div>
+                  <input type="number" name="person_ranges[${personRangeCounter}][price]" 
+                      value="0"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Precio" min="0" step="0.01" required>
+              </div>
+              <button type="button" class="px-3 text-red-500 hover:text-red-700 remove-person-range">
+                  <i class="fas fa-trash"></i>
+              </button>
+          `;
+          container.appendChild(newItem);
+          personRangeCounter++;
+      });
+      
+      // Eliminar rango (con validación)
+      document.addEventListener('click', function(e) {
+          if (e.target.classList.contains('remove-person-range') || 
+              e.target.closest('.remove-person-range')) {
+              const item = e.target.closest('.person-range-item');
+              const items = document.querySelectorAll('.person-range-item');
+              
+              if (items.length <= 1) {
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: 'Debe haber al menos un rango definido',
+                      confirmButtonColor: '#3085d6',
+                  });
+                  return;
               }
-          });
-      }
-
-      // Si necesitas manejar la subida de nuevas imágenes, también deberías actualizar el orden
-      document.getElementById('galery').addEventListener('change', function(e) {
-          // Tu lógica para manejar nuevas imágenes...
-          // Después de agregar nuevas imágenes, llama a:
-          // updateImageOrder();
+              
+              if (item) {
+                  item.remove();
+                  // Revalidar después de eliminar
+                  validateRanges();
+              }
+          }
+      });
+      
+      // Validación en tiempo real al cambiar valores
+      document.addEventListener('change', function(e) {
+          if (e.target && (e.target.name.includes('[min]') || e.target.name.includes('[max]'))) {
+              validateRanges();
+          }
       });
   });
 </script>

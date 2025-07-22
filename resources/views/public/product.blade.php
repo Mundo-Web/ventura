@@ -668,6 +668,12 @@
                                   
                                   <span id="costonoches" class="self-stretch my-auto">Calculando</span>
                               </div>
+                              <div class="flex gap-10 justify-between items-center w-full">
+                                <div class="flex gap-1 items-center self-stretch my-auto">
+                                    <span id="cantidad-personas-resumen">1</span> persona(s)
+                                </div>
+                                <span id="costo-personas" class="self-stretch my-auto">$ 0</span>
+                              </div>
                               @if ($product->preciolimpieza && $product->preciolimpieza > 0)
                                 <div class="flex gap-10 justify-between items-center mt-1 w-full">
                                   <div class="flex gap-1 items-center self-stretch my-auto">
@@ -980,11 +986,6 @@
                     longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 },
             },
-            // disable: [
-            //     function(date) {
-            //         return shouldDisableDate.call(this, date);
-            //     }
-            // ],
             disable: [
                 function(date) {
                     const dateStr = date.toISOString().split('T')[0];
@@ -1008,8 +1009,6 @@
                             // Otherwise, allow it (special handling will be done in onDayCreate)
                             return false;
                         }
-                        
-                        // For dates that are not check-in or check-out, block completely
                         return true;
                     }
                     
@@ -1057,36 +1056,6 @@
                         $('#cantidadnoches').text(0);
                         return;
                     }
-
-
-                    // const rangoSeleccionado = getDatesBetween(checkin, checkout);
-                    
-                    // let tieneCheckIn = false;
-                    // let tieneCheckOut = false;
-                    
-                    // const tieneCheckInOut = rangoSeleccionado.some(fecha =>
-                    //     blockedDates.some(b => b.checkIn === fecha || b.checkOut === fecha)
-                    // );
-                    
-                    // for (const fecha of rangoSeleccionado) {
-                    //     if (blockedDates.some(b => b.checkIn === fecha)) {
-                    //         tieneCheckIn = true;
-                    //     }
-                    //     if (blockedDates.some(b => b.checkOut === fecha)) {
-                    //         tieneCheckOut = true;
-                    //     }
-                    // }
-
-                    // if (tieneCheckIn && tieneCheckOut) {
-                    //     Swal.fire({
-                    //         title: 'Rango inválido',
-                    //         text: 'El rango seleccionado contiene una reserva completa en medio. Selecciona fechas que no crucen reservas existentes.',
-                    //         icon: 'warning'
-                    //     });
-                    //     flatpickrInstance.clear();
-                    //     $('#cantidadnoches').text(0);
-                    //     return;
-                    // }
 
                     // Calcular noches
                     const nights = Math.ceil((selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24));
@@ -1170,13 +1139,50 @@
 
       });
 
+      function calcularCostoPorPersonas(cantidadPersonas) {
+          // Obtener los rangos de personas desde el backend
+          const personRanges = @json($product->person_ranges ?? []);
+          
+          // Si no hay rangos definidos, no hay costo extra
+          if (personRanges.length === 0) {
+              return 0;
+          }
+          
+          // Ordenar los rangos por cantidad mínima (ascendente)
+          personRanges.sort((a, b) => a.min - b.min);
+          
+          let costoExtra = 0;
+          
+          // Recorremos cada rango para calcular el costo
+          for (let i = 0; i < personRanges.length; i++) {
+              const range = personRanges[i];
+              const nextRange = personRanges[i + 1];
+              
+              // Determinar el límite superior del rango actual
+              const upperLimit = nextRange ? nextRange.min - 1 : Infinity;
+              
+              // Si la cantidad de personas está dentro de este rango
+              if (cantidadPersonas >= range.min && cantidadPersonas <= upperLimit) {
+                  // Calcular cuántas personas están por encima del mínimo base (generalmente 2)
+                  const personasExtras = Math.max(0, cantidadPersonas - range.min + 1);
+                  
+                  // Aplicar el precio del rango a las personas extras
+                  costoExtra = personasExtras * range.price;
+                  break;
+              }
+          }
+          
+          return costoExtra;
+      }
+
       function cotizarPrecios() {
           let productSku = @json($product->sku);
           let checkin = $('#date-range-picker').data('checkin');
           let checkout = $('#date-range-picker').data('checkout');
-          console.log(checkin, checkout,'asdas');
+          let cantidadPersonas = parseInt($('#cantidadSpan span').text());
           serviciosExtras = [];
-
+          
+        
           if (!checkin || !checkout) {
               Swal.fire({
                   title: 'Selección Fallida',
@@ -1186,6 +1192,7 @@
               return;
           }
 
+          $('#cantidad-personas-resumen').text(cantidadPersonas);
           $('#costototal').text("Calculando...");
           $('#btnAgregarCarritoPr').prop('disabled', true);
 
@@ -1206,16 +1213,22 @@
                   id: productSku, // SKU del producto
                   checkin: checkin, // Fecha de llegada
                   checkout: checkout, // Fecha de salida
-                  servicios: serviciosExtras // Servicios extras
+                  servicios: serviciosExtras, // Servicios extras
+                  personas: cantidadPersonas
               }),
               success: function(response) {
                   if(response) {
                       $('#costonoches').text("$ " + response.data.totalCost);
                       // let total = response.data.totalCost + {{ $product->preciolimpieza ?? 0.00 }};
-                      $('#costototal').text("$ " + response.data.costoTotalFinal);
-                      costoTotalFinal = response.data.costoTotalFinal;
+                      const costoPorPersonas = calcularCostoPorPersonas(cantidadPersonas);
+                      $('#costo-personas').text("$ " + costoPorPersonas);
+
+                      const totalConPersonas = response.data.costoTotalFinal + costoPorPersonas;
+                      $('#costototal').text("$ " + totalConPersonas);
+                      costoTotalFinal = totalConPersonas;
                   } else {
                       $('#costonoches').text('0.00');
+                      $('#costo-personas').text('0.00');
                   }
                   $('#btnAgregarCarritoPr').prop('disabled', false);
               },
@@ -1272,20 +1285,28 @@
     }
     
     $('#disminuir').on('click', function() {
-      let cantidad = Number($('#cantidadSpan span').text())
+      let cantidad = parseInt($('#cantidadSpan span').text());
       if (cantidad > 1) {
-        cantidad--
-        $('#cantidadSpan span').text(cantidad)
+        cantidad--;
+        $('#cantidadSpan span').text(cantidad);
+        cotizarPrecios();
       }
     })
     
     $('#aumentar').on('click', function() {
-      let cantidad = Number($('#cantidadSpan span').text());
-      let maxPersonas = Number($('#cantidadSpan').data('max-personas'));
+      let cantidad = parseInt($('#cantidadSpan span').text());
+      let maxPersonas = parseInt($('#cantidadSpan').data('max-personas'));
       
       if (cantidad < maxPersonas) {
-            cantidad++;
-            $('#cantidadSpan span').text(cantidad);
+          cantidad++;
+          $('#cantidadSpan span').text(cantidad);
+          cotizarPrecios(); 
+      }else {
+        Swal.fire({
+            title: 'Límite alcanzado',
+            text: `El máximo de personas permitido es ${maxPersonas}`,
+            icon: 'warning'
+        });
       }
     })
   </script>

@@ -85,9 +85,9 @@
           <th scope="col" class="px-6 py-3">
             P. Unit.
           </th>
-          <th scope="col" class="px-6 py-3">
+          {{-- <th scope="col" class="px-6 py-3">
             Cant.
-          </th>
+          </th> --}}
           <th scope="col" class="px-6 py-3">
             P. total
           </th>
@@ -172,21 +172,28 @@
 
           $('#invoice-products').append(`<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <th scope="row" class="flex flex-col px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              <span> ${item.product_name} </span>
+              <span class="truncate max-w-[300px] break-words whitespace-normal"> ${item.product_name} </span>
               <span class="font-normal text-sm text-black"> Ingreso: ${formattedCheckin} - Salida: ${formattedCheckout} </span>
+              ${item.cantidad_personas ? `<span class="font-normal text-sm text-black dark:text-gray-300"> Personas: ${item.cantidad_personas}</span>` : ''}
               ${item.extras ? `<span class="font-normal text-sm text-black"> Extras: ${item.extras} </span> ` : ''}
             </th>
             <td class="px-6 py-4">
-              $ ${Number(item.price).toFixed(2)}
-            </td>
-            <td class="px-6 py-4">
-              ${item.quantity}
+              <div class="flex flex-col">
+                <span>$ ${Number(item.price).toFixed(2)}</span>
+                ${item.extra_personas > 0 ? `
+                  <span class="text-xs text-gray-500 dark:text-gray-400">
+                    (Reserva: $${Number(item.price).toFixed(2) - Number(item.extra_personas).toFixed(2) } + Huéspedes: ${Number(item.extra_personas).toFixed(2)})
+                  </span>` : ''}
+              </div>
             </td>
             <td class="px-6 py-4">
               $ ${(item.price * item.quantity).toFixed(2)}
             </td>
           </tr>`)
         })
+        // <td class="px-6 py-4">
+        //       ${item.quantity}
+        //     </td>
         // $('#invoice-products').append(`<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         //     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
         //       Envio 
@@ -259,4 +266,6 @@
       salesDataGrid.refresh()
     })
   })
+
 </script>
+
